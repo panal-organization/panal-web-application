@@ -1,11 +1,12 @@
 import { Box } from "@mui/material"
-import { Page } from "../templates"
+import { Page } from "../../templates"
+import { TitleComponent } from "../../components/shared"
 
 const HomePage: React.FC = () => {
     return (
         <Page children={
             <Box>
-                Main
+                <TitleComponent title="Inicio" />
             </Box>
         } />
     )

@@ -94,6 +94,7 @@ const SidemenuStyle = {
         textDecoration: 'none',
         borderRadius: '5px',
         transition: 'background-color 0.3s ease',
+        opacity: '0.6',
     },
     /**
      * Link activo del item del menu de la sección
@@ -101,6 +102,7 @@ const SidemenuStyle = {
     sectionMenuItemLinkActive: {
         color: '#FFF',
         background: '#FFFFFF0D',
+        opacity: '1',
     },
     /**
      * Icono del link del item del menu de la sección

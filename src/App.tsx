@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import HomePage from './pages/HomePage'
+import HomePage from './pages/main/HomePage'
 import { Box } from '@mui/material'
 import img from './assets/images/QubeFlex.png'
 
