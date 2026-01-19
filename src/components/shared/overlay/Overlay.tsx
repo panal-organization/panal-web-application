@@ -1,8 +1,12 @@
 import { Box } from "@mui/material"
 import OverlayStyle from "./OverlayStyle"
 
-export const Overlay: React.FC = () => {
+interface OverlayProps {
+    onClick?: () => void
+}
+
+export const Overlay: React.FC<OverlayProps> = ({ onClick }) => {
     return (
-        <Box sx={OverlayStyle.main}></Box>
+        <Box sx={OverlayStyle.main} onClick={onClick}></Box>
     )
 }

@@ -11,7 +11,7 @@ const Page: React.FC<PageProps> = ({ children }) => {
     const [open, setOpen] = React.useState(true)
     return (
         <Box sx={PageStyle.container}>
-            <Sidemenu open={open} />
+            <Sidemenu open={open} setOpen={setOpen} />
             <Box sx={PageStyle.body}>
                 <Header open={open} setOpen={setOpen} />
                 <Content children={children} />
