@@ -563,3 +563,15 @@ FOOTER
   text-decoration: none;
   color: inherit;
 }
+
+.login,
+.register{
+  text-decoration: none;
+  display: inline-block;
+}
+
+.start,
+.cta-button{
+  text-decoration: none;
+  display: inline-block;
+}

@@ -32,15 +32,17 @@ const HeaderLanding = () => {
           Senti muy saturado el header, se cancelaaaa*/}
         </nav>
 
-        <div className="buttons">
-          <button className="login">
-            Iniciar sesión
-          </button>
+       <div className="buttons">
 
-          <button className="register">
-            Registrarse
-          </button>
-        </div>
+  <Link to="/login" className="login">
+    Iniciar sesión
+  </Link>
+
+  <Link to="/register" className="register">
+    Registrarse
+  </Link>
+
+</div>
 
       </div>
 

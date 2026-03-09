@@ -9,25 +9,32 @@ import PricingPage from "./pages/public/PricingPage/PricingPage"
 import ContactPage from "./pages/public/ContactPage/ContactPage"
 import ScrollToTop from "./components/ScrollToTop"
 
+import LoginPage from "./pages/public/LoginPage/LoginPage"
+import RegisterPage from "./pages/public/RegisterPage/RegisterPage"
+
+
 const App: React.FC = () => {
     return (
         <>
-        <ScrollToTop />
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<Navigate to="/landing" replace />} />
                 <Route path="/landing" element={<LandingPage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
-                <Route path="/about" element={<AboutPage />} />
-<Route path="/features" element={<FeaturesPage />} />
-<Route path="/pricing" element={<PricingPage />} />
-<Route path="/contact" element={<ContactPage />} />
+
+                <Route path="/features" element={<FeaturesPage />} />
+                <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
             </Routes>
 
-           {/* <Box component="img" src={img} alt="QubeFlex" sx={style.img} /> */}
+            {/* <Box component="img" src={img} alt="QubeFlex" sx={style.img} /> */}
         </>
     )
-} 
+}
 
 
 

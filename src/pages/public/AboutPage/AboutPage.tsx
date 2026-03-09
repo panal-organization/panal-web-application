@@ -1,6 +1,8 @@
 import HeaderLanding from "../../../components/landing/HeaderLanding"
 import FooterLanding from "../../../components/landing/FooterLanding"
 import "./AboutPage.css"
+import { NavLink } from "react-router-dom"
+
 
 import jona from "../../../assets/images/1jona.png"
 import jose from "../../../assets/images/2jose.png"
@@ -257,9 +259,9 @@ const AboutPage = () => {
     inventario y procesos de soporte desde una sola plataforma.
   </p>
 
-  <button className="about-cta-button">
-    Crear cuenta gratuita
-  </button>
+  <NavLink to="/login" className="about-cta-button">
+  Crear cuenta gratuita
+</NavLink>
 
 </div>
 

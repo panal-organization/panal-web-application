@@ -8,6 +8,8 @@
     import { FaBolt, FaUserClock, FaRocket, FaRobot } from "react-icons/fa"
 
     import panalIA from "../../../assets/images/IA.png"
+    import { Link } from "react-router-dom"
+
 
     import "./LandingPage.css"
 
@@ -35,10 +37,9 @@
                 y mejora tu soporte técnico fácilmente.
               </p>
 
-              <button className="start">
-                Comenzar gratis
-              </button>
-
+              <Link to="/register" className="start">
+  Comenzar gratis
+</Link>
             </div>
 
             <div className="hero-right">
@@ -309,9 +310,9 @@
         desde una sola plataforma.
       </p>
 
-      <button className="cta-button">
-        Crear cuenta gratis
-      </button>
+     <Link to="/register" className="cta-button">
+  Crear cuenta gratis
+</Link>
 
     </div>
 
