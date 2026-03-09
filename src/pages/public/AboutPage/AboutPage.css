@@ -251,6 +251,259 @@ MISSION SECTION
   margin-right:auto;
 }
 
+.about-section{
+  padding:80px 20px;
+  display:flex;
+  justify-content:center;
+}
+
+.about-container{
+  background:#14224a;
+  border-radius:24px;
+  padding:20px 50px;
+  max-width:1100px;
+  width:100%;
+  margin-bottom:-100px;
+  margin-top: 20px;
+}
+
+.about-container2{
+  background:#14224a;
+  border-radius:24px;
+  padding:60px 50px;
+  max-width:1100px;
+  width:100%;
+  margin-bottom:-30px;
+  
+}
+
+.about-title{
+  color:white;
+  text-align:center;
+  font-size:32px;
+  margin-bottom:20px;
+}
+
+.about-title3{
+  color:white;
+  text-align:center;
+  font-size:32px;
+  margin-bottom:40px;
+  margin-top: -10px
+}
+
+
+
+.about-title2{
+  color:#14224a;
+  text-align:center;
+  font-size:32px;
+  margin-bottom:20px;
+  margin-top: -30px;
+}
+.about-intro{
+  max-width:1050px;
+  margin:0 auto 50px auto;
+  text-align:center;
+  line-height:1.6;
+  color:#cbd5e1;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+
+/* GRID 2x2 */
+
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:30px;
+}
+
+
+/* TARJETAS */
+
+.team-card{
+  background:white;
+  border-radius:16px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,0.15);
+  transition:transform .25s ease;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.team-card:hover{
+  transform:translateY(-6px);
+}
+
+
+/* ICONO */
+
+.team-icon{
+  font-size:50px;
+  color:#14224a;
+  margin-bottom:15px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+}
+
+
+/* TEXTO */
+
+.team-name{
+  font-size:18px;
+  margin-bottom:5px;
+  color:#14224a;
+}
+
+.team-role{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:12px;
+  color:#1976d2;
+}
+
+.team-description{
+  font-size:14px;
+  color:#4b5563;
+  line-height:1.5;
+}
+
+
+/* ===============================
+MISSION SECTION
+================================= */
+
+.mission-section{
+  padding:80px 20px;
+  display:flex;
+  justify-content:center;
+}
+
+.mission-container{
+  max-width:1100px;
+  width:100%;
+}
+
+.mission-title{
+  text-align:center;
+  font-size:32px;
+  color:#14224a; /* azul */
+  margin-bottom:15px;
+}
+
+.mission-intro{
+  text-align:center;
+  max-width:950px;
+  margin:0 auto 50px auto;
+  color:#14224a; /* azul */
+  line-height:1.6;
+  margin-bottom:60px;
+}
+
+
+/* GRID */
+
+.mission-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:25px;
+}
+
+
+/* CARD */
+
+.mission-card{
+  background:#14224a;
+  color:white;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.15);
+  transition:transform .25s ease;
+  border-left:6px solid #f4b400;
+}
+
+.mission-card:hover{
+  transform:translateY(-6px);
+}
+
+.mission-card h3{
+  color:#f4b400;
+  margin-bottom:10px;
+}
+
+.mission-card p{
+  font-size:14px;
+  line-height:1.6;
+}
+
+
+/* RECTÁNGULOS */
+
+.about-container-intro{
+  background:#14224a;
+  color:white;
+}
+
+.about-container-philosophy{
+  background:white;
+}
+
+.about-container-team{
+  background:#14224a;
+}
+
+
+
+
+.team-photo{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:15px;
+  border:4px solid #f4b400;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  transition:all .3s ease;
+}
+
+.team-card:hover .team-photo{
+  transform:scale(1.05);
+}
+
+
+.team-photo-jose{
+  object-position:center 5%;
+
+
+
+}
+
+
+.about-cta{
+  margin-top:10px;
+  text-align:center;
+  margin-bottom: 80px;
+}
+
+.about-cta-title{
+  font-size:26px;
+  color: #14224a;
+  margin-bottom:10px;
+}
+
+.about-cta-text{
+  color:#000000;
+  margin-bottom:25px;
+  max-width:600px;
+
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .about-cta-button{
   background:#f4b400;
   color:#14224a;
@@ -260,13 +513,17 @@ MISSION SECTION
   border-radius:10px;
   font-weight:600;
   cursor:pointer;
-  transition:all .25s ease;
+  transition:all .25s ease; 
 }
 
 .about-cta-button:hover{
   transform:translateY(-2px);
-  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+ 
+  background:#e6a200;
+
+  
 }
+
 .about-cta-button{
   text-decoration:none;
 }

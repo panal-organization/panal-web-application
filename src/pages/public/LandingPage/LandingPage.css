@@ -155,7 +155,7 @@ HERO
   padding:12px 22px;
   background:#f4b400;
   color:#1b1b1b;
-  border:1px solid #000;
+
   border-radius:8px;
   font-weight:600;
   cursor:pointer;
@@ -163,6 +163,8 @@ HERO
 
 .start:hover{
   background:#e6a200;
+  transform:translateY(-2px);
+
 }
 
 .hero-right img{
@@ -530,6 +532,9 @@ FOOTER
 
 .cta-button:hover{
   background:#e6a200;
+
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
 
