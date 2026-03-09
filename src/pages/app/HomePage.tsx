@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import { Page } from "../templates"
+import { Page } from "../../templates"
 
 const HomePage: React.FC = () => {
     return (

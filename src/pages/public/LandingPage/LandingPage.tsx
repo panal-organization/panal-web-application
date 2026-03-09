@@ -1,13 +1,13 @@
-    import HeaderLanding from "../../components/landing/HeaderLanding"
-    import FooterLanding from "../../components/landing/FooterLanding"
-    import squares from "../../assets/images/squares.png"
+    import HeaderLanding from "../../../components/landing/HeaderLanding"
+    import FooterLanding from "../../../components/landing/FooterLanding"
+    import squares from "../../../assets/images/squares.png"
 
     import { FaMobileAlt, FaDesktop } from "react-icons/fa"
     import { HiOutlineLightningBolt } from "react-icons/hi"
 
     import { FaBolt, FaUserClock, FaRocket, FaRobot } from "react-icons/fa"
 
-    import panalIA from "../../assets/images/IA.png"
+    import panalIA from "../../../assets/images/IA.png"
 
     import "./LandingPage.css"
 
