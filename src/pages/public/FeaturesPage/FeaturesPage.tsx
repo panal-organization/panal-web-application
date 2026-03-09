@@ -7,8 +7,15 @@ import { FaCloud, FaLayerGroup, FaMobileAlt, FaShieldAlt } from "react-icons/fa"
 import { FiCpu } from "react-icons/fi"
 
 import "./FeaturesPage.css"
+import { useEffect } from "react"
 
 const FeaturesPage = () => {
+
+  
+     useEffect(() => {
+        document.title = "Características"
+      }, [])
+  
   return (
     <div>
 

@@ -8,7 +8,16 @@ import "./RegisterPage.css"
 
 import robot from "../../../assets/images/Robot3.png"
 
+import { useEffect } from "react"
+
 const RegisterPage = () => {
+
+
+
+
+     useEffect(() => {
+        document.title = "Registrarse"
+      }, [])
 
   const navigate = useNavigate()
 

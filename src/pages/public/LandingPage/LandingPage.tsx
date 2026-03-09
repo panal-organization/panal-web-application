@@ -1,10 +1,10 @@
 import HeaderLanding from "../../../components/landing/HeaderLanding"
 import FooterLanding from "../../../components/landing/FooterLanding"
 import squares from "../../../assets/images/squares.png"
+import usePWAInstall from "../../../hooks/usePWAInstall"
 
 import { FaMobileAlt, FaDesktop } from "react-icons/fa"
 import { HiOutlineLightningBolt } from "react-icons/hi"
-
 import { FaBolt, FaUserClock, FaRocket, FaRobot } from "react-icons/fa"
 
 import panalIA from "../../../assets/images/IA.png"
@@ -15,6 +15,20 @@ import { useEffect, useRef } from "react"
 import "./LandingPage.css"
 
 const LandingPage = () => {
+
+ 
+
+
+
+  useEffect(() => {
+    document.title = "Inicio"
+  }, [])
+
+
+
+
+
+  const { canInstall, install } = usePWAInstall()
 
   const statsRef = useRef<HTMLDivElement | null>(null)
 
@@ -70,9 +84,19 @@ const LandingPage = () => {
             y mejora tu soporte técnico fácilmente.
           </p>
 
-          <Link to="/register" className="start">
-            Comenzar gratis
-          </Link>
+          <div className="hero-buttons">
+
+  <Link to="/register" className="start">
+    Comenzar gratis
+  </Link>
+
+  {canInstall && (
+    <button className="install-button" onClick={install}>
+      Instalar aplicación
+    </button>
+  )}
+
+</div>
 
         </div>
 
@@ -175,8 +199,6 @@ const LandingPage = () => {
 
         <div className="stats-container">
 
-          {/* CARD 1 */}
-
           <div className="stat-card">
 
             <div className="stat-gauge">
@@ -198,8 +220,6 @@ const LandingPage = () => {
 
           </div>
 
-
-          {/* CARD 2 */}
 
           <div className="stat-card">
 
@@ -223,8 +243,6 @@ const LandingPage = () => {
           </div>
 
 
-          {/* CARD 3 */}
-
           <div className="stat-card">
 
             <div className="stat-gauge">
@@ -246,8 +264,6 @@ const LandingPage = () => {
 
           </div>
 
-
-          {/* CARD 4 */}
 
           <div className="stat-card">
 
@@ -281,8 +297,8 @@ const LandingPage = () => {
 
         <div className="cta-container">
 
-          <img src={squares} className="cta-bg" />
-          <img src={squares} className="cta-bg-right" />
+          <img src={squares} className="cta-bg" alt="" />
+          <img src={squares} className="cta-bg-right" alt="" />
 
           <h2 className="cta-title">
             <span className="arrow-left">«</span>

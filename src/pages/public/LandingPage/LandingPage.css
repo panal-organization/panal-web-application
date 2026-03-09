@@ -600,3 +600,42 @@ FOOTER
   top:0;
   z-index:1000;
 }
+
+
+.install-button{
+
+  margin-top:25px;   /* igual que .start */
+
+  padding:12px 22px;
+
+  background:#1976d2;
+  color:white;
+
+  border:none;
+  border-radius:8px;
+
+  font-weight:600;
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.install-button:hover{
+
+  background:#1565c0;
+
+  transform:translateY(-2px);
+
+}
+
+
+.hero-buttons{
+  display:flex;
+  gap:14px;
+  margin-top:25px;
+}
+
+.start,
+.install-button{
+  margin-top:0;
+}

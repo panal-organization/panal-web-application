@@ -6,9 +6,21 @@ import { FaCube, FaRocket } from "react-icons/fa"
 
 import { NavLink } from "react-router-dom"
 
+import { useEffect } from "react"
+
 import "./PricingPage.css"
 
 const PricingPage = () => {
+
+
+
+  
+     useEffect(() => {
+        document.title = "Suscripciones"
+      }, [])
+  
+
+
   return (
     <div>
 

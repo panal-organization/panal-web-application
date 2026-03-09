@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import HomePage from "./pages/app/HomePage"
 //import { Box } from '@mui/material'
 //import img from './assets/images/QubeFlex.png'
@@ -19,9 +19,11 @@ const App: React.FC = () => {
         <>
             <ScrollToTop />
             <Routes>
-                <Route path="/" element={<Navigate to="/landing" replace />} />
-                <Route path="/landing" element={<LandingPage />} />
+              
 
+
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/landing" element={<LandingPage />} />
 
                 <Route
                     path="/home"

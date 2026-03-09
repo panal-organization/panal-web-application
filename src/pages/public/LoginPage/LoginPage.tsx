@@ -4,8 +4,17 @@ import HeaderLanding from "../../../components/landing/HeaderLanding"
 import FooterLanding from "../../../components/landing/FooterLanding"
 import "./LoginPage.css"
 import robot from "../../../assets/images/Robot2.png"
+import { useEffect } from "react"
+
 
 const LoginPage = () => {
+
+
+
+     useEffect(() => {
+        document.title = "Inicio de sesión"
+      }, [])
+  
 
   const navigate = useNavigate()
 

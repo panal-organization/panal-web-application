@@ -9,7 +9,15 @@ import jose from "../../../assets/images/2jose.png"
 import merli from "../../../assets/images/1merli.png"
 import ponce from "../../../assets/images/1ponce.png"
 
+import { useEffect } from "react"
+
 const AboutPage = () => {
+
+   useEffect(() => {
+      document.title = "Quiénes somos"
+    }, [])
+
+
   return (
     <div>
 
