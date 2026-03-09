@@ -9,6 +9,8 @@ import { FaBolt, FaUserClock, FaRocket, FaRobot } from "react-icons/fa"
 
 import panalIA from "../../../assets/images/IA.png"
 import { Link } from "react-router-dom"
+import { useAuth } from "../../../context/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 import { useEffect, useRef } from "react"
 
@@ -16,17 +18,21 @@ import "./LandingPage.css"
 
 const LandingPage = () => {
 
- 
-
-
+  const { token, loading } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     document.title = "Inicio"
   }, [])
 
+  // 🔹 REDIRECCIÓN AUTOMÁTICA SI YA HAY SESIÓN
+  useEffect(() => {
 
+    if (!loading && token) {
+      navigate("/home")
+    }
 
-
+  }, [token, loading, navigate])
 
   const { canInstall, install } = usePWAInstall()
 
@@ -86,17 +92,17 @@ const LandingPage = () => {
 
           <div className="hero-buttons">
 
-  <Link to="/register" className="start">
-    Comenzar gratis
-  </Link>
+            <Link to="/register" className="start">
+              Comenzar gratis
+            </Link>
 
-  {canInstall && (
-    <button className="install-button" onClick={install}>
-      Instalar aplicación
-    </button>
-  )}
+            {canInstall && (
+              <button className="install-button" onClick={install}>
+                Instalar aplicación
+              </button>
+            )}
 
-</div>
+          </div>
 
         </div>
 

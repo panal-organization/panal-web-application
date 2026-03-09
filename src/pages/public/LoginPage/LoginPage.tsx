@@ -6,6 +6,7 @@ import "./LoginPage.css"
 import robot from "../../../assets/images/Robot2.png"
 import { useEffect } from "react"
 
+import { useAuth } from "../../../context/AuthContext"
 
 const LoginPage = () => {
 
@@ -21,6 +22,7 @@ const LoginPage = () => {
   const [correo, setCorreo] = useState("")
   const [contrasena, setContrasena] = useState("")
   const [loading, setLoading] = useState(false)
+  const { login } = useAuth()
 
   const handleLogin = async (e:any) => {
 
@@ -48,11 +50,7 @@ const LoginPage = () => {
 
       if(response.ok){
 
-        // guardar token
-        localStorage.setItem("token", data.token.token)
-
-        // guardar usuario
-        localStorage.setItem("user", JSON.stringify(data.user))
+        login(data.token.token, data.user)
 
         // redirigir
         navigate("/home")
