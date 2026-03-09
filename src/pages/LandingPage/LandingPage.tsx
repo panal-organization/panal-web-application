@@ -1,6 +1,8 @@
 import HeaderLanding from "../../components/landing/HeaderLanding"
 import FooterLanding from "../../components/landing/FooterLanding"
 
+import panalIA from "../../assets/images/IA.png"
+
 import "./LandingPage.css"
 
 const LandingPage = () => {
@@ -8,21 +10,30 @@ const LandingPage = () => {
   return (
     <div className="landing">
 
-      <HeaderLanding /> 
+      <HeaderLanding />
 
-      <section className="hero">
+      <div className="hero">
 
-        <h1>Panal</h1>
+        <div className="hero-left">
+      <h1>
+  El futuro del soporte técnico comienza con 
+  <br />
+    <span>Inteligencia Artificial</span>
+</h1>
+          <p>
+Gestiona solicitudes, automatiza respuestas con Inteligencia Artificial y mejora tu soporte técnico fácilmente.
+</p>
 
-        <p>
-          Plataforma SaaS para gestión de tickets de soporte técnico
-        </p>
+          <button className="start">
+            Comenzar gratis
+          </button>
+        </div>
 
-        <button className="start">
-          Comenzar
-        </button>
+        <div className="hero-right">
+          <img src={panalIA} alt="Panal preview" />
+        </div>
 
-      </section>
+      </div>
 
       <FooterLanding />
 

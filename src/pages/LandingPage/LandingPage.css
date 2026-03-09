@@ -1,9 +1,13 @@
+/* -------- LAYOUT -------- */
+
 .landing{
   min-height:100vh;
   display:flex;
   flex-direction:column;
 }
-/* HEADER */
+
+
+/* -------- HEADER -------- */
 
 .header{
   display:flex;
@@ -14,72 +18,61 @@
   box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
-.logo{
-  font-weight:bold;
-  font-size:20px;
-  color:white;
-}
-
 .header-right{
   display:flex;
   align-items:center;
   gap:30px;
 }
 
+
+/* -------- LOGO -------- */
+
+.logo-container{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:white;
+  font-weight:bold;
+  font-size:20px;
+  padding:4px 8px;
+  border-radius:6px;
+  transition:background 0.2s;
+}
+
+.logo-container:hover{
+  background:#2a3a73;
+}
+
+.logo-img{
+  height:20px;
+  width:auto;
+}
+
+
+/* -------- NAVIGATION -------- */
+
 .nav{
   display:flex;
   gap:25px;
 }
 
-
 .nav-item{
   color:white;
   cursor:pointer;
   font-weight:500;
+  font-size:15px;
   padding:6px 12px;
   border-radius:6px;
-  transition:background 0.2s, color 0.2s;
+  transition:background 0.2s;
 }
 
 .nav-item:hover{
   background:#2a3a73;
-  color:#ffffff;
-}
-/* HERO */
-
-.hero{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  gap:20px;
-}
-
-.hero h1{
-  font-size:48px;
-}
-
-.start{
-  padding:12px 20px;
-  border:none;
-  background:#1976d2;
-  color:white;
-  border-radius:8px;
-}
-
-/* FOOTER */
-
-.footer{
-  text-align:center;
-  padding:20px;
-  border-top:1px solid #e5e5e5;
 }
 
 
-
-
+/* -------- BUTTONS -------- */
 
 .buttons{
   display:flex;
@@ -93,13 +86,176 @@
   color:white;
   border-radius:6px;
   cursor:pointer;
+  font-weight:600;
   transition:0.2s;
+}
+
+.login:hover{
+  background:#1565c0;
 }
 
 .register{
   padding:8px 14px;
   border:none;
-  background:#a259ff;
-  color:white;
+  background:#f4b400;
+  color:#1b1b1b;
   border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.2s;
+}
+
+.register:hover{
+  background:#e6a200;
+}
+
+
+
+/* HERO */
+
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:center;   /* centra el contenido */
+  padding:70px 120px;
+  gap:110px;                /* espacio entre texto e imagen */
+  max-width:1200px;         /* ancho máximo del hero */
+  margin:0 auto;            /* centra todo el bloque */
+}
+
+/* TEXTO */
+
+.hero-left span{
+  color:#1976d2;
+  font-style:italic;
+  font-weight:600;
+}
+
+
+.hero-left h1{
+  font-size:42px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.hero-left span{
+  font-style:italic;
+}
+
+.hero-left p{
+  margin-top:18px;
+  color:#6b7280;
+  font-size:16px;
+}
+
+/* BOTON */
+
+.start{
+  margin-top:25px;
+  padding:12px 22px;
+  background:#f4b400;
+  color:#1b1b1b;
+  border:0.2px solid #000;   /* borde negro ligero */
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+
+
+.start:hover{
+  background:#e6a200;
+}
+
+/* IMAGEN */
+
+.hero-right img{
+  width:420px;
+  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.25));
+}
+
+
+
+
+
+/* -------- FOOTER -------- */
+
+.footer{
+  background:#14224a;
+  color:white;
+  padding:10px 40px 0 20px;
+}
+
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(4,220px);
+  gap:80px;
+  margin-left:40px;
+}
+
+.footer-col h3,
+.footer-col h4{
+  margin-bottom:10px;
+}
+
+.footer-col p{
+  font-size:14px;
+  opacity:0.8;
+}
+
+.footer-col ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.footer-col li{
+  margin-bottom:8px;
+  font-size:13px;
+  cursor:pointer;
+  opacity:0.8;
+}
+
+.footer-col li:hover{
+  color:#f4b400;
+  opacity:1;
+}
+
+
+/* -------- SOCIAL ICONS -------- */
+
+.socials li{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.socials svg{
+  font-size:16px;
+}
+
+
+/* -------- FOOTER DESCRIPTION -------- */
+
+.footer-description{
+  text-align:justify;
+  text-justify:inter-word;
+  max-width:350px;
+  font-size:13px;
+}
+
+
+/* -------- FOOTER BOTTOM BAR -------- */
+
+.footer-bottom{
+  background:#0d162f;
+  text-align:center;
+  padding:18px 0;
+  font-size:14px;
+  color:#cbd5e1;
+  margin-top:40px;
+
+  width:100vw;
+  margin-left:calc(-50vw + 50%);
 }

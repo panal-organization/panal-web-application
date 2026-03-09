@@ -1,18 +1,23 @@
+import logo from "../../assets/images/logo.png";
+import { Link } from "react-router-dom";
+
 const HeaderLanding = () => {
   return (
     <header className="header">
 
-      <div className="logo">
-        PANAL
-      </div>
+      <Link to="/landing" className="logo-container">
+        <img src={logo} alt="Panal logo" className="logo-img" />
+        <span>Panal®</span>
+      </Link>
 
       <div className="header-right">
 
         <nav className="nav">
           <span className="nav-item">Inicio</span>
+          <span className="nav-item">¿Quiénes somos?</span>
           <span className="nav-item">Características</span>
           <span className="nav-item">Precios</span>
-          <span className="nav-item">Soporte</span>
+          <span className="nav-item">Contáctanos</span>
         </nav>
 
         <div className="buttons">
