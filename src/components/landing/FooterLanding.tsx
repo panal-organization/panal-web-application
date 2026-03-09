@@ -1,3 +1,5 @@
+import panal from "../../assets/images/logo.png";
+
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
 function FooterLanding() {
   return (
@@ -20,7 +22,7 @@ Gestión inteligente de soporte técnico con IA, desde cualquier plataforma.
             <li>Precios</li>
             <li>Contáctanos </li>
           </ul>
-        </div>
+        </div>  
 
         <div className="footer-col">
           <h4>Medios de contacto</h4>
@@ -43,6 +45,7 @@ Gestión inteligente de soporte técnico con IA, desde cualquier plataforma.
 
 
       </div>
+<img src={panal} className="footer-bg" alt="panal background"/>
 
       <div className="footer-bottom">
          © 2026 Panal - 10C / IDGS - Todos los derechos reservados
