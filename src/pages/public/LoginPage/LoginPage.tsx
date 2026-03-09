@@ -139,8 +139,8 @@ const LoginPage = () => {
               </div>
 
               <p>
-                Tu sistema de soporte inteligente
-              </p>
+  "<i>Tu sistema de soporte inteligente</i>"
+</p>
 
             </div>
 

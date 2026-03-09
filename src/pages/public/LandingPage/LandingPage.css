@@ -329,6 +329,7 @@ GAUGE CIRCULAR
   stroke-width:10;
 }
 
+
 .gauge-fill{
   fill:none;
   stroke:#1976d2;
@@ -336,6 +337,9 @@ GAUGE CIRCULAR
   stroke-linecap:round;
   stroke-dasharray:314;
   stroke-dashoffset:314;
+}
+
+.gauge-animate{
   animation:fillGauge 1.8s ease forwards;
 }
 
@@ -579,4 +583,20 @@ FOOTER
 .cta-button{
   text-decoration: none;
   display: inline-block;
+}
+
+
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 40px;
+  background:#14224a;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+
+  position:sticky;
+  top:0;
+  z-index:1000;
 }

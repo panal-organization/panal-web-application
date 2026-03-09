@@ -12,6 +12,7 @@ import ScrollToTop from "./components/ScrollToTop"
 import LoginPage from "./pages/public/LoginPage/LoginPage"
 import RegisterPage from "./pages/public/RegisterPage/RegisterPage"
 
+import { ProtectedRoute } from "./components/ProtectedRoute"
 
 const App: React.FC = () => {
     return (
@@ -20,7 +21,17 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Navigate to="/landing" replace />} />
                 <Route path="/landing" element={<LandingPage />} />
-                <Route path="/home" element={<HomePage />} />
+
+
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute>
+                            <HomePage />
+                        </ProtectedRoute>
+                    }
+                />
+
                 <Route path="/about" element={<AboutPage />} />
 
                 <Route path="/features" element={<FeaturesPage />} />

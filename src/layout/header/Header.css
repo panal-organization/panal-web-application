@@ -1,0 +1,70 @@
+/* ===============================
+HEADER
+================================= */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:12px 22px;
+
+  background:#1b2f6b;
+  color:white;
+
+  border-bottom:3px solid #f4b400;
+
+  box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* ===============================
+USER AREA
+================================= */
+
+.header-user{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+/* avatar */
+
+.header-avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.3);
+}
+
+/* nombre */
+
+.header-user span{
+  font-weight:500;
+}
+
+/* ===============================
+LOGOUT BUTTON
+================================= */
+
+.header-logout{
+  padding:8px 14px;
+
+  border:none;
+
+  background:#f4b400;
+  color:#1b1b1b;
+
+  border-radius:6px;
+
+  font-size:13px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.header-logout:hover{
+  background:#e6a200;
+
+}
