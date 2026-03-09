@@ -16,7 +16,7 @@ const HeaderLanding = () => {
           <span className="nav-item">Inicio</span>
           <span className="nav-item">¿Quiénes somos?</span>
           <span className="nav-item">Características</span>
-          <span className="nav-item">Precios</span>
+          <span className="nav-item">Suscripciones</span>
           <span className="nav-item">Contáctanos</span>
         </nav>
 

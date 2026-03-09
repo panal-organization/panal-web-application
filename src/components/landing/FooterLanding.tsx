@@ -19,7 +19,7 @@ Gestión inteligente de soporte técnico con IA, desde cualquier plataforma.
             <li>Inicio</li>
              <li>¿Quiénes somos?</li>
             <li>Características</li>
-            <li>Precios</li>
+            <li>Suscripciones</li>
             <li>Contáctanos </li>
           </ul>
         </div>  
