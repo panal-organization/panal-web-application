@@ -552,3 +552,14 @@ FOOTER
   font-weight:700;
   margin:0 15px;
 }
+
+
+
+.nav-item {
+  text-decoration: none;
+}
+
+.footer-link{
+  text-decoration: none;
+  color: inherit;
+}

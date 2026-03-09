@@ -3,14 +3,25 @@ import HomePage from "./pages/app/HomePage"
 //import { Box } from '@mui/material'
 //import img from './assets/images/QubeFlex.png'
 import LandingPage from "./pages/public/LandingPage/LandingPage";
+import AboutPage from "././pages/public/AboutPage/AboutPage"
+import FeaturesPage from "./pages/public/FeaturesPage/FeaturesPage"
+import PricingPage from "./pages/public/PricingPage/PricingPage"
+import ContactPage from "./pages/public/ContactPage/ContactPage"
+import ScrollToTop from "./components/ScrollToTop"
 
 const App: React.FC = () => {
     return (
         <>
+        <ScrollToTop />
             <Routes>
                 <Route path="/" element={<Navigate to="/landing" replace />} />
                 <Route path="/landing" element={<LandingPage />} />
                 <Route path="/home" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/about" element={<AboutPage />} />
+<Route path="/features" element={<FeaturesPage />} />
+<Route path="/pricing" element={<PricingPage />} />
+<Route path="/contact" element={<ContactPage />} />
             </Routes>
 
            {/* <Box component="img" src={img} alt="QubeFlex" sx={style.img} /> */}

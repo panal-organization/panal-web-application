@@ -1,6 +1,8 @@
 import panal from "../../assets/images/logo.png";
+import { Link } from "react-router-dom";
 
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+
 function FooterLanding() {
   return (
     <footer className="footer">
@@ -8,19 +10,46 @@ function FooterLanding() {
 
         <div className="footer-col">
           <h3>Panal®</h3>
-         <p className="footer-description">
-Gestión inteligente de soporte técnico con IA, desde cualquier plataforma.
-</p>
+          <p className="footer-description">
+            Gestión inteligente de soporte técnico con IA, desde cualquier plataforma.
+          </p>
         </div>
 
         <div className="footer-col">
           <h4>Explora</h4>
+
           <ul>
-            <li>Inicio</li>
-             <li>¿Quiénes somos?</li>
-            <li>Características</li>
-            <li>Suscripciones</li>
-            <li>Contáctanos </li>
+
+            <li>
+              <Link to="/landing" className="footer-link">
+                Inicio
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/about" className="footer-link">
+                ¿Quiénes somos?
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/features" className="footer-link">
+                Características
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/pricing" className="footer-link">
+                Suscripciones
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/contact" className="footer-link">
+                Contáctanos
+              </Link>
+            </li>
+
           </ul>
         </div>  
 
@@ -36,20 +65,21 @@ Gestión inteligente de soporte técnico con IA, desde cualquier plataforma.
           <h4>Síguenos</h4>
 
           <ul className="socials">
-  <li><FaTwitter /> Twitter</li>
-  <li><FaLinkedin /> LinkedIn</li>
-  <li><FaGithub /> GitHub</li>
-</ul>
+            <li><FaTwitter /> Twitter</li>
+            <li><FaLinkedin /> LinkedIn</li>
+            <li><FaGithub /> GitHub</li>
+          </ul>
 
         </div>
 
-
       </div>
-<img src={panal} className="footer-bg" alt="panal background"/>
+
+      <img src={panal} className="footer-bg" alt="panal background"/>
 
       <div className="footer-bottom">
-         © 2026 Panal - 10C / IDGS - Todos los derechos reservados
+        © 2026 Panal - 10C / IDGS - Todos los derechos reservados
       </div>
+
     </footer>
   )
 }

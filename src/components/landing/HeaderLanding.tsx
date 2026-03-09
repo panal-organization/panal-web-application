@@ -13,11 +13,21 @@ const HeaderLanding = () => {
       <div className="header-right">
 
         <nav className="nav">
-          <span className="nav-item">Inicio</span>
-          <span className="nav-item">¿Quiénes somos?</span>
-          <span className="nav-item">Características</span>
-          <span className="nav-item">Suscripciones</span>
-          <span className="nav-item">Contáctanos</span>
+          <Link to="/landing" className="nav-item">
+            Inicio
+          </Link>
+
+
+          <Link to="/about" className="nav-item">
+            ¿Quiénes somos?
+          </Link>
+
+
+
+
+          <Link to="/features" className="nav-item">Características</Link>
+          <Link to="/pricing" className="nav-item">Suscripciones</Link>
+          <Link to="/contact" className="nav-item">Contáctanos</Link>
         </nav>
 
         <div className="buttons">
