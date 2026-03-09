@@ -45,9 +45,13 @@ function FooterLanding() {
             </li>
 
             <li>
-              <Link to="/contact" className="footer-link">
+              {/*<Link to="/contact" className="footer-link">
                 Contáctanos
               </Link>
+              
+              senti saturado el footer, se cancela*/}
+
+              
             </li>
 
           </ul>

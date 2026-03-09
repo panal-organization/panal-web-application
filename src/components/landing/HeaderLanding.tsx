@@ -27,7 +27,9 @@ const HeaderLanding = () => {
 
           <Link to="/features" className="nav-item">Características</Link>
           <Link to="/pricing" className="nav-item">Suscripciones</Link>
-          <Link to="/contact" className="nav-item">Contáctanos</Link>
+          {/*<Link to="/contact" className="nav-item">Contáctanos</Link>
+          
+          Senti muy saturado el header, se cancelaaaa*/}
         </nav>
 
         <div className="buttons">
