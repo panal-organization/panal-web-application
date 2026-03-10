@@ -187,3 +187,56 @@ TEXT
 .sidebar-text{
   font-size:14px;
 }
+
+
+/* ===============================
+SIDEBAR TOGGLE
+================================= */
+.sidebar{
+  position:relative;
+}
+
+/* BOTÓN */
+
+.sidebar-toggle{
+  position:fixed;
+
+  top:70px;
+
+  width:18px;
+  height:18px;
+
+  background:rgb(255, 255, 255);
+  color:#14224a;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+
+  font-size:16px;
+  font-weight:600;
+
+  transition:all 0.25s ease;
+
+  z-index:2000;
+}
+
+/* CUANDO SIDEBAR ESTÁ ABIERTO */
+
+.sidebar-toggle.open{
+  left:230px;
+}
+
+/* CUANDO SIDEBAR ESTÁ CERRADO */
+
+.sidebar-toggle.closed{
+  left:-5px;
+}
+
+.sidebar-toggle:hover{
+  background:#f4b400;
+}

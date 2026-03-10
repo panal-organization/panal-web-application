@@ -3,13 +3,16 @@ import { useTheme } from "@mui/material/styles"
 import { NavLink } from "react-router-dom"
 
 import {
-  Dashboard as DashboardIcon,
-  ConfirmationNumber as TicketsIcon,
-  Build as OrdersIcon,
-  Inventory as InventoryIcon,
+  SpaceDashboard as DashboardIcon,
+    Assignment  as TicketsIcon,
+  Construction  as OrdersIcon,
   Workspaces as WorkspacesIcon,
   CreditCard as SubscriptionIcon,
   AccountBox as AccountIcon
+} from "@mui/icons-material"
+
+import {
+  Archive     as InventoryIcon
 } from "@mui/icons-material"
 
 import logo from "../../assets/images/logo.png"
@@ -30,7 +33,7 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
   const menu = [
     {
       id: 0,
-      title: "Principal",
+      title: "",
       menu: [
 
         {
@@ -107,6 +110,13 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
         }
       >
 
+        {/* BOTÓN FLECHA SIDEBAR */}
+        <button
+  className={`sidebar-toggle ${open ? "open" : "closed"}`}
+  onClick={() => setOpen(!open)}
+>
+  {open ? "‹" : "›"}
+</button>
         {/* LOGO */}
         <div className="sidebar-header">
           <img src={logo} alt="Logo" className="sidebar-logo" />

@@ -10,7 +10,7 @@ import "./OrdersPage.css"
 const OrdersPage: React.FC = () => {
 
   useEffect(() => {
-    document.title = "Panal — Órdenes de servicio"
+    document.title = "Órdenes de servicio"
   }, [])
 
   return (

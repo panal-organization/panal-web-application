@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
         <MenuIcon />
       </IconButton>
 
-      {/* área usuario */}
+      {/* área usuario */} 
       <div className="header-user">
 
         <span className="header-username">
