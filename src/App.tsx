@@ -53,23 +53,20 @@ const App: React.FC = () => {
       <Routes>
 
         {/* ===============================
-        RUTA RAÍZ INTELIGENTE
-        Si hay sesión → dashboard
-        Si no hay sesión → landing
+        RUTA RAÍZ
         ================================= */}
 
         <Route
           path="/"
           element={
-            token
-              ? <Navigate to="/dashboard" replace />
-              : <LandingPage />
+            <PublicRoute>
+              <LandingPage />
+            </PublicRoute>
           }
         />
 
         {/* ===============================
         RUTAS PRIVADAS
-        Requieren autenticación
         ================================= */}
 
         <Route
@@ -109,18 +106,8 @@ const App: React.FC = () => {
         />
 
         {/* ===============================
-        RUTAS PÚBLICAS
-        Solo accesibles si NO hay sesión
+        RUTAS PÚBLICAS (LOGIN / REGISTER)
         ================================= */}
-
-        <Route
-          path="/landing"
-          element={
-            <PublicRoute>
-              <LandingPage />
-            </PublicRoute>
-          }
-        />
 
         <Route
           path="/login"
@@ -141,14 +128,66 @@ const App: React.FC = () => {
         />
 
         {/* ===============================
-        PÁGINAS PÚBLICAS DE INFORMACIÓN
-        Siempre accesibles
+        PÁGINAS MARKETING
         ================================= */}
 
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/features" element={<FeaturesPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route
+          path="/landing"
+          element={
+            <PublicRoute>
+              <LandingPage />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/about"
+          element={
+            <PublicRoute>
+              <AboutPage />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/features"
+          element={
+            <PublicRoute>
+              <FeaturesPage />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/pricing"
+          element={
+            <PublicRoute>
+              <PricingPage />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <PublicRoute>
+              <ContactPage />
+            </PublicRoute>
+          }
+        />
+
+        {/* ===============================
+        RUTA 404
+        ================================= */}
+
+        <Route
+          path="*"
+          element={
+            token
+              ? <Navigate to="/dashboard" replace />
+              : <Navigate to="/" replace />
+          }
+        />
 
       </Routes>
 
