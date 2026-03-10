@@ -16,6 +16,9 @@ import ProfilePage from "./pages/app/ProfilePage"
 import TicketsPage from "./pages/app/TicketsPage"
 import NotificationsPage from "./pages/app/NotificationsPage"
 import OrdersPage from "./pages/app/OrdersPage"
+import InventoryPage from "./pages/app/InventoryPage"
+import WorkspacesPage from "./pages/app/WorkspacesPage"
+import SubscriptionPage from "./pages/app/SubscriptionPage"
 
 /* ===============================
 PÁGINAS PÚBLICAS (LANDING)
@@ -70,6 +73,32 @@ const App: React.FC = () => {
         RUTAS PRIVADAS
         ================================= */}
 
+<Route
+  path="/inventory"
+  element={
+    <ProtectedRoute>
+      <InventoryPage />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/workspaces"
+  element={
+    <ProtectedRoute>
+      <WorkspacesPage />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/subscription"
+  element={
+    <ProtectedRoute>
+      <SubscriptionPage />
+    </ProtectedRoute>
+  }
+/>
         <Route
           path="/dashboard"
           element={
