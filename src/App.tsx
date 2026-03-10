@@ -15,6 +15,7 @@ import HomePage from "./pages/app/HomePage"
 import ProfilePage from "./pages/app/ProfilePage"
 import TicketsPage from "./pages/app/TicketsPage"
 import NotificationsPage from "./pages/app/NotificationsPage"
+import OrdersPage from "./pages/app/OrdersPage"
 
 /* ===============================
 PÁGINAS PÚBLICAS (LANDING)
@@ -96,6 +97,14 @@ const App: React.FC = () => {
           }
         />
 
+<Route
+  path="/orders"
+  element={
+    <ProtectedRoute>
+      <OrdersPage />
+    </ProtectedRoute>
+  }
+/>
         <Route
           path="/notifications"
           element={

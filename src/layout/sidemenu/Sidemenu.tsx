@@ -1,10 +1,14 @@
 import { Box, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { NavLink } from "react-router-dom"
-import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber"
 
 import {
-  Home as HomeIcon,
+  Dashboard as DashboardIcon,
+  ConfirmationNumber as TicketsIcon,
+  Build as OrdersIcon,
+  Inventory as InventoryIcon,
+  Workspaces as WorkspacesIcon,
+  CreditCard as SubscriptionIcon,
   AccountBox as AccountIcon
 } from "@mui/icons-material"
 
@@ -28,9 +32,56 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
       id: 0,
       title: "Principal",
       menu: [
-        { id: 1, title: "Inicio", path: "/dashboard", icon: <HomeIcon /> },
-        { id: 2, title: "Perfil", path: "/account", icon: <AccountIcon /> },
-        { id: 3, title: "Tickets", path: "/tickets", icon: <ConfirmationNumberIcon /> }
+
+        {
+          id: 1,
+          title: "Dashboard",
+          path: "/dashboard",
+          icon: <DashboardIcon />
+        },
+
+        {
+          id: 2,
+          title: "Tickets",
+          path: "/tickets",
+          icon: <TicketsIcon />
+        },
+
+        {
+          id: 3,
+          title: "Órdenes de servicio",
+          path: "/orders",
+          icon: <OrdersIcon />
+        },
+
+        {
+          id: 4,
+          title: "Inventario",
+          path: "/inventory",
+          icon: <InventoryIcon />
+        },
+
+        {
+          id: 5,
+          title: "Espacios de trabajo",
+          path: "/workspaces",
+          icon: <WorkspacesIcon />
+        },
+
+        {
+          id: 6,
+          title: "Suscripción",
+          path: "/subscription",
+          icon: <SubscriptionIcon />
+        },
+
+        {
+          id: 7,
+          title: "Mi cuenta",
+          path: "/account",
+          icon: <AccountIcon />
+        }
+
       ]
     }
   ]
