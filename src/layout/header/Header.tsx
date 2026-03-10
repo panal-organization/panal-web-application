@@ -1,6 +1,6 @@
-import { Box, IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { Menu as MenuIcon } from '@mui/icons-material'
-import HeaderStyle from './HeaderStyle'
+import "./Header.css"
 
 interface HeaderProps {
     open: boolean
@@ -8,11 +8,41 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
+
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+
+    const logout = () => {
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+        window.location.href = "/login"
+    }
+
     return (
-        <Box sx={HeaderStyle.header}>
+
+        <div className="header">
+
             <IconButton onClick={() => setOpen(!open)}>
                 <MenuIcon />
             </IconButton>
-        </Box>
+
+            <div className="header-user">
+
+                <img
+                    src={user.foto}
+                    className="header-avatar"
+                />
+
+                <span>{user.nombre}</span>
+
+                <button
+                    className="header-logout"
+                    onClick={logout}
+                >
+                    Cerrar sesión
+                </button>
+
+            </div>
+
+        </div>
     )
 }

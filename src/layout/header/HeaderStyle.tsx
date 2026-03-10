@@ -1,12 +1,14 @@
 const HeaderStyle = {
+
     header: {
-        display: 'flex',
-        flexDirection: 'row',
-        maxHeight: '40px',
-        backgroundColor: '#FFFFFF',
-        padding: '10px',
-        flex: 1,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 20px",
+        borderBottom: "1px solid #eee",
+        background: "#fff"
     }
+
 }
 
 export default HeaderStyle
