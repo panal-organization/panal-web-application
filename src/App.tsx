@@ -1,54 +1,159 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from "react-router-dom"
+
+import { useAuth } from "./context/AuthContext"
+
+import { ProtectedRoute } from "./components/ProtectedRoute"
+import { PublicRoute } from "./components/PublicRoute"
+import ScrollToTop from "./components/ScrollToTop"
+
+/* ===============================
+PÁGINAS PRIVADAS (APP)
+Solo usuarios autenticados
+================================= */
+
 import HomePage from "./pages/app/HomePage"
-//import { Box } from '@mui/material'
-//import img from './assets/images/QubeFlex.png'
-import LandingPage from "./pages/public/LandingPage/LandingPage";
-import AboutPage from "././pages/public/AboutPage/AboutPage"
+import ProfilePage from "./pages/app/ProfilePage"
+import TicketsPage from "./pages/app/TicketsPage"
+import NotificationsPage from "./pages/app/NotificationsPage"
+
+/* ===============================
+PÁGINAS PÚBLICAS (LANDING)
+Accesibles sin sesión
+================================= */
+
+import LandingPage from "./pages/public/LandingPage/LandingPage"
+import AboutPage from "./pages/public/AboutPage/AboutPage"
 import FeaturesPage from "./pages/public/FeaturesPage/FeaturesPage"
 import PricingPage from "./pages/public/PricingPage/PricingPage"
 import ContactPage from "./pages/public/ContactPage/ContactPage"
-import ScrollToTop from "./components/ScrollToTop"
 
 import LoginPage from "./pages/public/LoginPage/LoginPage"
 import RegisterPage from "./pages/public/RegisterPage/RegisterPage"
 
-import { ProtectedRoute } from "./components/ProtectedRoute"
 
 const App: React.FC = () => {
-    return (
-        <>
-            <ScrollToTop />
-            <Routes>
-              
 
+  const { loading, token } = useAuth()
 
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/landing" element={<LandingPage />} />
+  /* ===============================
+  Esperar a que AuthContext revise
+  si hay sesión en localStorage
+  Evita parpadeos de rutas
+  ================================= */
 
-                <Route
-                    path="/home"
-                    element={
-                        <ProtectedRoute>
-                            <HomePage />
-                        </ProtectedRoute>
-                    }
-                />
+  if (loading) {
+    return null
+  }
 
-                <Route path="/about" element={<AboutPage />} />
+  return (
 
-                <Route path="/features" element={<FeaturesPage />} />
-                <Route path="/pricing" element={<PricingPage />} />
-                <Route path="/contact" element={<ContactPage />} />
+    <>
+      <ScrollToTop />
 
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-            </Routes>
+      <Routes>
 
-            {/* <Box component="img" src={img} alt="QubeFlex" sx={style.img} /> */}
-        </>
-    )
+        {/* ===============================
+        RUTA RAÍZ INTELIGENTE
+        Si hay sesión → dashboard
+        Si no hay sesión → landing
+        ================================= */}
+
+        <Route
+          path="/"
+          element={
+            token
+              ? <Navigate to="/dashboard" replace />
+              : <LandingPage />
+          }
+        />
+
+        {/* ===============================
+        RUTAS PRIVADAS
+        Requieren autenticación
+        ================================= */}
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tickets"
+          element={
+            <ProtectedRoute>
+              <TicketsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===============================
+        RUTAS PÚBLICAS
+        Solo accesibles si NO hay sesión
+        ================================= */}
+
+        <Route
+          path="/landing"
+          element={
+            <PublicRoute>
+              <LandingPage />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <RegisterPage />
+            </PublicRoute>
+          }
+        />
+
+        {/* ===============================
+        PÁGINAS PÚBLICAS DE INFORMACIÓN
+        Siempre accesibles
+        ================================= */}
+
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
+      </Routes>
+
+    </>
+  )
 }
-
-
 
 export default App

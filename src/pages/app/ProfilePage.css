@@ -1,0 +1,24 @@
+.profile-page{
+  padding:30px;
+}
+
+.profile-card{
+  background:white;
+
+  padding:30px;
+
+  border-radius:12px;
+
+  max-width:400px;
+
+  box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+.profile-avatar{
+  width:80px;
+  height:80px;
+
+  border-radius:50%;
+
+  margin-bottom:15px;
+}

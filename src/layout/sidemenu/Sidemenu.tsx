@@ -1,6 +1,7 @@
 import { Box, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { NavLink } from "react-router-dom"
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber"
 
 import {
   Home as HomeIcon,
@@ -27,8 +28,9 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
       id: 0,
       title: "Principal",
       menu: [
-        { id: 1, title: "Inicio", path: "/home", icon: <HomeIcon /> },
-        { id: 2, title: "Perfil", path: "/profile", icon: <AccountIcon /> }
+        { id: 1, title: "Inicio", path: "/dashboard", icon: <HomeIcon /> },
+        { id: 2, title: "Perfil", path: "/account", icon: <AccountIcon /> },
+        { id: 3, title: "Tickets", path: "/tickets", icon: <ConfirmationNumberIcon /> }
       ]
     }
   ]

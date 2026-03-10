@@ -56,7 +56,7 @@ const [mostrarPassword, setMostrarPassword] = useState(false)
         login(data.token.token, data.user)
 
         // redirigir
-        navigate("/home")
+        navigate("/dashboard")
 
       }else{
 
