@@ -164,7 +164,7 @@
 } 
 
 .login-illustration img{
-  width:140%;
+  width:140%; 
   max-width:600px;
   opacity:0.95;
 
@@ -182,4 +182,39 @@
   display:none;
 }
 
+}
+
+/* INPUT CON ICONOS */
+
+.input-container{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+.input-container input{
+  width:100%;
+  padding:14px 40px;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+  font-size:14px;
+}
+
+/* ICONO IZQUIERDO */
+
+.input-icon{
+  position:absolute;
+  left:12px;
+  color:#777;
+  font-size:18px;
+}
+
+/* ICONO OJO */
+
+.password-toggle{
+  position:absolute;
+  right:12px;
+  cursor:pointer;
+  color:#777;
+  font-size:18px;
 }

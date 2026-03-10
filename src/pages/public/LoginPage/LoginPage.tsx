@@ -7,6 +7,7 @@ import robot from "../../../assets/images/Robot2.png"
 import { useEffect } from "react"
 
 import { useAuth } from "../../../context/AuthContext"
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi"
 
 const LoginPage = () => {
 
@@ -19,6 +20,8 @@ const LoginPage = () => {
 
   const navigate = useNavigate()
 
+
+const [mostrarPassword, setMostrarPassword] = useState(false)
   const [correo, setCorreo] = useState("")
   const [contrasena, setContrasena] = useState("")
   const [loading, setLoading] = useState(false)
@@ -49,7 +52,7 @@ const LoginPage = () => {
       const data = await response.json()
 
       if(response.ok){
-
+ 
         login(data.token.token, data.user)
 
         // redirigir
@@ -94,28 +97,46 @@ const LoginPage = () => {
 
             <form className="login-form" onSubmit={handleLogin}>
 
-              <div className="login-field">
-                <label>Correo electrónico</label>
-                <input
-                  type="email"
-                  placeholder="ejemplo@dominio.com"
-                  value={correo}
-                  onChange={(e)=>setCorreo(e.target.value)}
-                  required
-                />
-              </div>
 
-              <div className="login-field">
-                <label>Contraseña</label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  value={contrasena}
-                  onChange={(e)=>setContrasena(e.target.value)}
-                  required
-                />
-              </div>
+<div className="login-field">
+  <label>Correo electrónico</label>
 
+  <div className="input-container">
+    <FiMail className="input-icon" />
+
+    <input
+      type="email"
+      placeholder="ejemplo@dominio.com"
+      value={correo}
+      onChange={(e)=>setCorreo(e.target.value)}
+      required
+    />
+  </div>
+</div>
+
+<div className="login-field">
+  <label>Contraseña</label>
+
+  <div className="input-container">
+    <FiLock className="input-icon" />
+
+    <input
+      type={mostrarPassword ? "text" : "password"}
+      placeholder="••••••••"
+      value={contrasena}
+      onChange={(e)=>setContrasena(e.target.value)}
+      required
+    />
+
+    <span
+      className="password-toggle"
+      onClick={()=>setMostrarPassword(!mostrarPassword)}
+    >
+      {mostrarPassword ? <FiEyeOff /> : <FiEye />}
+    </span>
+
+  </div>
+</div>
               <button className="login-button" disabled={loading}>
                 {loading ? "Iniciando..." : "Iniciar sesión"}
               </button>

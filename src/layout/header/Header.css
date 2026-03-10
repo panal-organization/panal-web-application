@@ -9,12 +9,20 @@ HEADER
 
   padding:12px 22px;
 
-  background:#1b2f6b;
+  background:#14224a;
   color:white;
 
   border-bottom:3px solid #f4b400;
 
   box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* ===============================
+MENU BUTTON
+================================= */
+
+.menu-button{
+  color:white !important;
 }
 
 /* ===============================
@@ -24,47 +32,48 @@ USER AREA
 .header-user{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:20px;
 }
 
-/* avatar */
+/* nombre usuario */
 
-.header-avatar{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,0.3);
-}
-
-/* nombre */
-
-.header-user span{
+.header-username{
   font-weight:500;
+  font-size:15px;
 }
 
 /* ===============================
-LOGOUT BUTTON
+ICON BUTTONS
 ================================= */
 
-.header-logout{
-  padding:8px 14px;
-
+.header-icon{
+  background:transparent;
   border:none;
 
-  background:#f4b400;
-  color:#1b1b1b;
-
-  border-radius:6px;
-
-  font-size:13px;
-  font-weight:600;
+  color:white;
+  font-size:20px;
 
   cursor:pointer;
 
-  transition:0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:36px;
+  height:36px;
+
+  border-radius:8px;
+
+  transition:all 0.2s ease;
 }
 
-.header-logout:hover{
-  background:#e6a200;
+.header-icon:hover{
+  background:rgba(255,255,255,0.1);
+  color:#f4b400;
+}
 
+
+.header-name{
+  color:#f4b400;
+  margin-left:6px;
 }

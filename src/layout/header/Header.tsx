@@ -1,48 +1,53 @@
-import { IconButton } from '@mui/material'
-import { Menu as MenuIcon } from '@mui/icons-material'
+import { IconButton } from "@mui/material"
+import { Menu as MenuIcon } from "@mui/icons-material"
+import { FiSettings, FiLogOut } from "react-icons/fi"
 import "./Header.css"
 
 interface HeaderProps {
-    open: boolean
-    setOpen: (open: boolean) => void
+  open: boolean
+  setOpen: (open: boolean) => void
 }
 
 export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
 
-    const user = JSON.parse(localStorage.getItem("user") || "{}")
+  const user = JSON.parse(localStorage.getItem("user") || "{}")
 
-    const logout = () => {
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        window.location.href = "/login"
-    }
+  const logout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    window.location.href = "/login"
+  }
 
-    return (
+  return (
 
-        <div className="header">
+    <div className="header">
 
-            <IconButton onClick={() => setOpen(!open)}>
-                <MenuIcon />
-            </IconButton>
+      {/* botón abrir sidebar */}
+      <IconButton onClick={() => setOpen(!open)} className="menu-button">
+        <MenuIcon />
+      </IconButton>
 
-            <div className="header-user">
+      {/* área usuario */}
+      <div className="header-user">
 
-                <img
-                    src={user.foto}
-                    className="header-avatar"
-                />
+        <span className="header-username">
+  Bienvenid@ de vuelta: 
+  <strong className="header-name">{user.nombre}</strong>
+</span>
+        <button className="header-icon">
+          <FiSettings />
+        </button>
 
-                <span>{user.nombre}</span>
+        <button
+          className="header-icon"
+          onClick={logout}
+        >
+          <FiLogOut />
+        </button>
 
-                <button
-                    className="header-logout"
-                    onClick={logout}
-                >
-                    Cerrar sesión
-                </button>
+      </div>
 
-            </div>
+    </div>
 
-        </div>
-    )
+  )
 }
