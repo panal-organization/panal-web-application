@@ -1,0 +1,242 @@
+/* ===============================
+SIDEMENU
+================================= */
+
+.sidebar{
+  display:flex;
+  flex-direction:column;
+
+  width:220px;
+
+  background:#14224a;
+
+  border-right:1px solid rgba(255,255,255,0.08);
+
+  color:#FFFFFF;
+
+  padding:20px;
+
+  transition:width 0.3s ease, padding 0.3s ease;
+
+  overflow:hidden;
+  white-space:nowrap;
+
+  flex-shrink:0;
+
+  gap:20px;
+}
+
+/* ===============================
+SIDEBAR CLOSED
+================================= */
+
+.sidebar-closed{
+  width:0;
+  padding:0;
+  border:none;
+}
+
+/* ===============================
+HEADER (logo)
+================================= */
+
+.sidebar-header{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  max-height:60px;
+
+  flex:1;
+}
+
+/* ===============================
+LOGO
+================================= */
+
+.sidebar-logo{
+  max-width:100%;
+  max-height:100%;
+}
+
+/* ===============================
+BODY
+================================= */
+
+.sidebar-body{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+/* ===============================
+SECTION
+================================= */
+
+.sidebar-section{
+  display:flex;
+  flex-direction:column;
+
+  margin-bottom:20px;
+}
+
+/* ===============================
+SECTION TITLE
+================================= */
+
+.sidebar-section-title{
+  font-size:12px;
+
+  font-weight:bold;
+
+  letter-spacing:1.3px;
+
+  margin-bottom:10px;
+
+  opacity:0.5;
+
+  color:#A3AED1;
+}
+
+/* ===============================
+MENU
+================================= */
+
+.sidebar-menu{
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===============================
+MENU ITEM
+================================= */
+
+.sidebar-menu-item{
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===============================
+MENU LINK
+================================= */
+
+.sidebar-link{
+  display:flex;
+  align-items:center;
+
+  padding:12px 14px;
+
+  color:#FFFFFF;
+
+  text-decoration:none;
+
+  border-radius:6px;
+
+  position:relative;
+
+  transition:all 0.2s ease;
+}
+/* hover */
+
+.sidebar-link:hover{
+  background:rgba(255,255,255,0.05);
+}
+/* active */
+
+.sidebar-link.active{
+  color:#f4b400;
+}
+.sidebar-link.active::before{
+  content:"";
+
+  position:absolute;
+
+  left:0;
+
+  top:4px;
+
+  height:calc(100% - 8px);
+
+  width:3px;
+
+  background:#f4b400;
+
+  border-radius:4px;
+}
+.sidebar-link.active svg{
+  color:#f4b400;
+}
+
+/* ===============================
+ICON
+================================= */
+.sidebar-icon{
+  margin-right:12px;
+  display:flex;
+  align-items:center;
+}
+
+.sidebar-link.active svg{
+  color:#f4b400;
+}
+
+/* ===============================
+TEXT
+================================= */
+
+.sidebar-text{
+  font-size:14px;
+}
+
+
+/* ===============================
+SIDEBAR TOGGLE
+================================= */
+.sidebar{
+  position:relative;
+}
+
+/* BOTÓN */
+
+.sidebar-toggle{
+  position:fixed;
+
+  top:70px;
+
+  width:18px;
+  height:18px;
+
+  background:rgb(255, 255, 255);
+  color:#14224a;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+
+  font-size:16px;
+  font-weight:600;
+
+  transition:all 0.25s ease;
+
+  z-index:2000;
+}
+
+/* CUANDO SIDEBAR ESTÁ ABIERTO */
+
+.sidebar-toggle.open{
+  left:230px;
+}
+
+/* CUANDO SIDEBAR ESTÁ CERRADO */
+
+.sidebar-toggle.closed{
+  left:-5px;
+}
+
+.sidebar-toggle:hover{
+  background:#f4b400;
+}

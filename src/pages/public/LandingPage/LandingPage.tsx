@@ -29,7 +29,7 @@ const LandingPage = () => {
   useEffect(() => {
 
     if (!loading && token) {
-      navigate("/home")
+      navigate("/dashboard")
     }
 
   }, [token, loading, navigate])

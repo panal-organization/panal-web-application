@@ -1,32 +1,106 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from "react-router-dom"
+
+import { useAuth } from "./context/AuthContext"
+
+import { ProtectedRoute } from "./components/ProtectedRoute"
+import { PublicRoute } from "./components/PublicRoute"
+import ScrollToTop from "./components/ScrollToTop"
+
+/* ===============================
+PÁGINAS PRIVADAS (APP)
+Solo usuarios autenticados
+================================= */
+
 import HomePage from "./pages/app/HomePage"
-//import { Box } from '@mui/material'
-//import img from './assets/images/QubeFlex.png'
-import LandingPage from "./pages/public/LandingPage/LandingPage";
-import AboutPage from "././pages/public/AboutPage/AboutPage"
+import ProfilePage from "./pages/app/ProfilePage"
+import TicketsPage from "./pages/app/TicketsPage"
+import NotificationsPage from "./pages/app/NotificationsPage"
+import OrdersPage from "./pages/app/OrdersPage"
+import InventoryPage from "./pages/app/InventoryPage"
+import WorkspacesPage from "./pages/app/WorkspacesPage"
+import SubscriptionPage from "./pages/app/SubscriptionPage"
+
+/* ===============================
+PÁGINAS PÚBLICAS (LANDING)
+Accesibles sin sesión
+================================= */
+
+import LandingPage from "./pages/public/LandingPage/LandingPage"
+import AboutPage from "./pages/public/AboutPage/AboutPage"
 import FeaturesPage from "./pages/public/FeaturesPage/FeaturesPage"
 import PricingPage from "./pages/public/PricingPage/PricingPage"
 import ContactPage from "./pages/public/ContactPage/ContactPage"
-import ScrollToTop from "./components/ScrollToTop"
 
 import LoginPage from "./pages/public/LoginPage/LoginPage"
 import RegisterPage from "./pages/public/RegisterPage/RegisterPage"
 
-import { ProtectedRoute } from "./components/ProtectedRoute"
 
 const App: React.FC = () => {
+
+    const { loading, token } = useAuth()
+
+    /* ===============================
+    Esperar a que AuthContext revise
+    si hay sesión en localStorage
+    Evita parpadeos de rutas
+    ================================= */
+
+    if (loading) {
+        return null
+    }
+
     return (
+
         <>
             <ScrollToTop />
+
             <Routes>
-              
 
-
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/landing" element={<LandingPage />} />
+                {/* ===============================
+        RUTA RAÍZ
+        ================================= */}
 
                 <Route
-                    path="/home"
+                    path="/"
+                    element={
+                        <PublicRoute>
+                            <LandingPage />
+                        </PublicRoute>
+                    }
+                />
+
+                {/* ===============================
+        RUTAS PRIVADAS
+        ================================= */}
+
+                <Route
+                    path="/inventory"
+                    element={
+                        <ProtectedRoute>
+                            <InventoryPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/workspaces"
+                    element={
+                        <ProtectedRoute>
+                            <WorkspacesPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/subscription"
+                    element={
+                        <ProtectedRoute>
+                            <SubscriptionPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/dashboard"
                     element={
                         <ProtectedRoute>
                             <HomePage />
@@ -34,21 +108,129 @@ const App: React.FC = () => {
                     }
                 />
 
-                <Route path="/about" element={<AboutPage />} />
+                <Route
+                    path="/account"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    }
+                />
 
-                <Route path="/features" element={<FeaturesPage />} />
-                <Route path="/pricing" element={<PricingPage />} />
-                <Route path="/contact" element={<ContactPage />} />
+                <Route
+                    path="/tickets"
+                    element={
+                        <ProtectedRoute>
+                            <TicketsPage />
+                        </ProtectedRoute>
+                    }
+                />
 
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+                <Route
+                    path="/orders"
+                    element={
+                        <ProtectedRoute>
+                            <OrdersPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/notifications"
+                    element={
+                        <ProtectedRoute>
+                            <NotificationsPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* ===============================
+        RUTAS PÚBLICAS (LOGIN / REGISTER)
+        ================================= */}
+
+                <Route
+                    path="/login"
+                    element={
+                        <PublicRoute>
+                            <LoginPage />
+                        </PublicRoute>
+                    }
+                />
+
+                <Route
+                    path="/register"
+                    element={
+                        <PublicRoute>
+                            <RegisterPage />
+                        </PublicRoute>
+                    }
+                />
+
+                {/* ===============================
+        PÁGINAS MARKETING
+        ================================= */}
+
+                <Route
+                    path="/landing"
+                    element={
+                        <PublicRoute>
+                            <LandingPage />
+                        </PublicRoute>
+                    }
+                />
+
+                <Route
+                    path="/about"
+                    element={
+                        <PublicRoute>
+                            <AboutPage />
+                        </PublicRoute>
+                    }
+                />
+
+                <Route
+                    path="/features"
+                    element={
+                        <PublicRoute>
+                            <FeaturesPage />
+                        </PublicRoute>
+                    }
+                />
+
+                <Route
+                    path="/pricing"
+                    element={
+                        <PublicRoute>
+                            <PricingPage />
+                        </PublicRoute>
+                    }
+                />
+
+                <Route
+                    path="/contact"
+                    element={
+                        <PublicRoute>
+                            <ContactPage />
+                        </PublicRoute>
+                    }
+                />
+
+                {/* ===============================
+        RUTA 404
+        ================================= */}
+
+                <Route
+                    path="*"
+                    element={
+                        token
+                            ? <Navigate to="/dashboard" replace />
+                            : <Navigate to="/" replace />
+                    }
+                />
+
             </Routes>
 
-            {/* <Box component="img" src={img} alt="QubeFlex" sx={style.img} /> */}
         </>
     )
 }
-
-
 
 export default App
