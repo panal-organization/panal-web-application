@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import HeaderLanding from "../../../components/landing/HeaderLanding"
 import FooterLanding from "../../../components/landing/FooterLanding"
 import "./LoginPage.css"
@@ -36,7 +36,7 @@ const LoginPage = () => {
       setLoading(true)
 
       const response = await fetch(
-        "http://3.19.63.85:3000/api/auth/sign-in",
+        "https://waggish-unsecludedly-jong.ngrok-free.dev/api/auth/sign-in",
         {
           method: "POST",
           headers: {
@@ -145,7 +145,7 @@ const LoginPage = () => {
 
             <p className="login-register">
               ¿No tienes una cuenta?
-              <a href="/register">Crear cuenta</a>
+              <Link to="/register">Crear cuenta</Link>
             </p>
 
           </div>

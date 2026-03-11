@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 import HeaderLanding from "../../../components/landing/HeaderLanding"
 import FooterLanding from "../../../components/landing/FooterLanding"
@@ -15,9 +15,9 @@ const RegisterPage = () => {
 
 
 
-     useEffect(() => {
-        document.title = "Registrarse"
-      }, [])
+  useEffect(() => {
+    document.title = "Registrarse"
+  }, [])
 
   const navigate = useNavigate()
 
@@ -28,29 +28,29 @@ const RegisterPage = () => {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const handleRegister = async (e:any) => {
+  const handleRegister = async (e: any) => {
 
     e.preventDefault()
 
     setError("")
 
-    if(contrasena !== confirmarContrasena){
+    if (contrasena !== confirmarContrasena) {
       setError("Las contraseñas no coinciden")
       return
     }
 
-    try{
+    try {
 
       setLoading(true)
 
       const response = await fetch(
-        "http://3.19.63.85:3000/api/auth/sign-up",
+        "https://waggish-unsecludedly-jong.ngrok-free.dev/api/auth/sign-up",
         {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
           },
-          body:JSON.stringify({
+          body: JSON.stringify({
             nombre,
             correo,
             contrasena
@@ -60,21 +60,21 @@ const RegisterPage = () => {
 
       const data = await response.json()
 
-      if(response.ok){
+      if (response.ok) {
 
         alert("Cuenta creada correctamente")
         navigate("/login")
 
-      }else{
+      } else {
         setError(data.message || "Error al registrar usuario")
       }
 
-    }catch(error){
+    } catch (error) {
 
       console.error(error)
       setError("Error al conectar con el servidor")
 
-    }finally{
+    } finally {
       setLoading(false)
     }
   }
@@ -106,8 +106,8 @@ const RegisterPage = () => {
               </div>
 
               <p>
-  "<i>Tu sistema de soporte inteligente</i>"
-</p>
+                "<i>Tu sistema de soporte inteligente</i>"
+              </p>
 
             </div>
 
@@ -131,7 +131,7 @@ const RegisterPage = () => {
                   type="text"
                   placeholder="Tu nombre"
                   value={nombre}
-                  onChange={(e)=>setNombre(e.target.value)}
+                  onChange={(e) => setNombre(e.target.value)}
                   required
                 />
               </div>
@@ -142,7 +142,7 @@ const RegisterPage = () => {
                   type="email"
                   placeholder="ejemplo@dominio.com"
                   value={correo}
-                  onChange={(e)=>setCorreo(e.target.value)}
+                  onChange={(e) => setCorreo(e.target.value)}
                   required
                 />
               </div>
@@ -153,7 +153,7 @@ const RegisterPage = () => {
                   type="password"
                   placeholder="••••••••"
                   value={contrasena}
-                  onChange={(e)=>setContrasena(e.target.value)}
+                  onChange={(e) => setContrasena(e.target.value)}
                   required
                 />
               </div>
@@ -164,7 +164,7 @@ const RegisterPage = () => {
                   type="password"
                   placeholder="••••••••"
                   value={confirmarContrasena}
-                  onChange={(e)=>setConfirmarContrasena(e.target.value)}
+                  onChange={(e) => setConfirmarContrasena(e.target.value)}
                   required
                 />
               </div>
@@ -181,7 +181,7 @@ const RegisterPage = () => {
 
             <p className="login-register">
               ¿Ya tienes cuenta?
-              <a href="/login">Iniciar sesión</a>
+              <Link to="/login">Iniciar sesión</Link>
             </p>
 
           </div>

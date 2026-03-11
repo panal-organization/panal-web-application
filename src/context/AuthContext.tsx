@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 interface User {
   id: string
   correo: string
+  nombre: string
 }
 
 interface AuthContextType {
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const savedToken = localStorage.getItem("token")
     const savedUser = localStorage.getItem("user")
 
-    if(savedToken && savedUser){
+    if (savedToken && savedUser) {
 
       setToken(savedToken)
       setUser(JSON.parse(savedUser))
@@ -73,7 +74,7 @@ export const useAuth = () => {
 
   const context = useContext(AuthContext)
 
-  if(!context){
+  if (!context) {
 
     throw new Error("useAuth must be used inside AuthProvider")
 

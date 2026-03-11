@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"
 import "./Header.css"
 import { useState, useEffect } from "react"
 
+import { useAuth } from "../../context/AuthContext"
+
 interface HeaderProps {
     open: boolean
     setOpen: (open: boolean) => void
@@ -13,7 +15,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
 
     const [notifications, setNotifications] = useState(0)
-    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    const { user, logout: authLogout } = useAuth()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -40,9 +42,8 @@ export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
     }, [])
 
     const logout = () => {
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        window.location.href = "/login"
+        authLogout()
+        navigate("/login")
     }
 
     return (
@@ -59,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
 
                 <span className="header-username">
                     Bienvenid@ de vuelta:
-                    <strong className="header-name">{user.nombre}</strong>
+                    <strong className="header-name">{user?.nombre}</strong>
                 </span>
 
                 {/* NOTIFICATIONS */}
