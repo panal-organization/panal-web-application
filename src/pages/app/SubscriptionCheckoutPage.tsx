@@ -137,9 +137,9 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
                 <div className="price-block">
                   <span className="price">
-                    {plan.precio === 0 ? "$0" : `$${plan.precio}`}
+                    {plan.precio === 0 ? "$0" : `$${plan.precio}`} 
                   </span>
-                  <span className="period">/{plan.tipoSuscripcion}</span>
+                  <span className="period"> USD / {plan.tipoSuscripcion}</span>
                 </div>
 
                 <div className="plan-limit">
@@ -174,8 +174,8 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
             {/* PRECIO */}
             <div className="premium-price-block">
-              <span className="premium-price">$299</span>
-              <span className="premium-period">MXN / mes</span>
+              <span className="premium-price">$29.99</span>
+              <span className="premium-period">USD / mes</span>
             </div>
 
             <hr className="premium-divider"/>
