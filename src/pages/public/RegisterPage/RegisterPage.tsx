@@ -189,7 +189,7 @@ const RegisterPage = () => {
 
                   <input
                     type={mostrarPassword ? "text" : "password"}
-                    placeholder="••••••••"
+                    placeholder="••••••"
                     value={contrasena}
                     onChange={(e)=>setContrasena(e.target.value)}
                     required
@@ -213,7 +213,7 @@ const RegisterPage = () => {
 
                   <input
                     type={mostrarConfirmPassword ? "text" : "password"}
-                    placeholder="••••••••"
+                    placeholder="••••••"
                     value={confirmarContrasena}
                     onChange={(e)=>setConfirmarContrasena(e.target.value)}
                     required
