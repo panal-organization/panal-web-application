@@ -4,6 +4,9 @@ import { Page } from "../../templates"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
 
+import { FiBox } from "react-icons/fi"
+import { FaRocket } from "react-icons/fa"
+
 import {
   FiArrowLeft,
   FiCreditCard,
@@ -75,100 +78,132 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
   return (
     <Page>
-          <div className="checkout-no-hover">
-      {/* HEADER */}
-      <div className="orders-header">
-        <h2 className="orders-title">
-          <FiCreditCard className="orders-title-icon"/>
-          Checkout de suscripción
-        </h2>
 
-        <button className="orders-create-btn" onClick={() => navigate("/subscription")}>
-          <FiArrowLeft />
-          Volver
-        </button>
-      </div>
+      <div className="checkout-wrapper">
 
-      {/* PLAN ACTUAL */}
-      <div className={`current-plan-card ${isPremium ? "plan-premium" : "plan-free"}`}>
+        {/* HEADER */}
+        <div className="orders-header">
+          <h2 className="orders-title">
+            <FiCreditCard className="orders-title-icon"/>
+            Checkout de suscripción
+          </h2>
 
-        <span className="current-plan-label">PLAN ACTUAL</span>
+          <button 
+            className="orders-create-btn"
+            onClick={() => navigate("/subscription")}
+          >
+            <FiArrowLeft />
+            Volver
+          </button>
+        </div>
 
-        {loading ? (
-          <p>Cargando...</p>
-        ) : plan && (
+        {/* PLAN ACTUAL */}
+        <div className={`current-plan-card ${isPremium ? "plan-premium" : "plan-free"}`}>
 
-          <div className="current-plan-content">
+          <span className="current-plan-label">PLAN ACTUAL</span>
 
-            <div className="plan-left">
+          {loading ? (
+            <p>Cargando...</p>
+          ) : plan && (
 
-              <div className="plan-title-row">
-                <h3>{plan.nombre}</h3>
-                <span className="plan-badge">
-                  {isPremium ? "PREMIUM" : "FREE"}
-                </span>
+            <div className="current-plan-content">
+
+              {/* LEFT */}
+              <div className="plan-left">
+
+                <div className="plan-title-row">
+                  <h3>{plan.nombre}</h3>
+                  <span className="plan-badge">
+                    {isPremium ? "PREMIUM" : "FREE"}
+                  </span>
+                </div>
+
+                <p className="plan-description">{plan.descripcion}</p>
+
+                <div className="plan-meta">
+                  <div className="meta-item"><FiUser /> Usuario: {userData?.nombre}</div>
+                  <div className="meta-item"><FiMail /> Correo: {userData?.correo}</div>
+                  <div className="meta-item"><FiCalendar /> Activo desde {formatDate(userData?.createdAt)}</div>
+                </div>
+
               </div>
 
-              <p className="plan-description">{plan.descripcion}</p>
+              {/* RIGHT */}
+              <div className="plan-right">
 
-              <div className="plan-meta">
-                <div className="meta-item"><FiUser /> Usuario: {userData?.nombre}</div>
-                <div className="meta-item"><FiMail /> Correo: {userData?.correo}</div>
-                <div className="meta-item"><FiCalendar /> Activo desde {formatDate(userData?.createdAt)}</div>
+                <div className="plan-icon free-icon">
+                  <FiBox />
+                </div>
+
+                <div className="price-block">
+                  <span className="price">
+                    {plan.precio === 0 ? "$0" : `$${plan.precio}`}
+                  </span>
+                  <span className="period">/{plan.tipoSuscripcion}</span>
+                </div>
+
+                <div className="plan-limit">
+                  <FiUsers />
+                  {plan.limiteUsuarios} usuarios
+                </div>
+
               </div>
 
             </div>
+          )}
 
-            <div className="plan-right">
+        </div>
 
-              <div className="price-block">
-                <span className="price">
-                  {plan.precio === 0 ? "$0" : `$${plan.precio}`}
-                </span>
-                <span className="period">/{plan.tipoSuscripcion}</span>
+        {/* CONTENIDO */}
+        <div className="checkout-container">
+
+          {/* PREMIUM */}
+          <div className="checkout-card premium-box">
+
+            {/* ICONO + TITULO */}
+            <div className="premium-header">
+              
+              <h3>Nuevo plan</h3><div className="plan-icon premium-icon">
+                <FaRocket />
               </div>
+            </div>
 
-Limite del plan
-              <div className="plan-limit">
-                
-                
-                <FiUsers />
-                {plan.limiteUsuarios} usuarios
-              </div>
+            <p className="change-text">
+              Vas a cambiar a <strong>Premium</strong>
+            </p>
 
+            {/* PRECIO */}
+            <div className="premium-price-block">
+              <span className="premium-price">$299</span>
+              <span className="premium-period">MXN / mes</span>
+            </div>
+
+            <hr className="premium-divider"/>
+
+            <p className="premium-subtitle">
+              Para equipos y organizaciones
+            </p>
+
+            <div className="premium-features">
+              <span><FiCheck className="check-icon"/> Espacios de trabajo ilimitados</span>
+              <span><FiCheck className="check-icon"/> Gestión avanzada de tickets</span>
+              <span><FiCheck className="check-icon"/> Inventario completo</span>
+              <span><FiCheck className="check-icon"/> Órdenes de servicio avanzadas</span>
+              <span><FiCheck className="check-icon"/> Acceso web, móvil y PWA</span>
+              <span><FiCheck className="check-icon"/> Agente de IA integrado</span>
             </div>
 
           </div>
-        )}
 
-      </div>
-
-      {/* CONTENIDO */}
-      <div className="checkout-container">
-
-        <div className="checkout-card premium-box">
-          <h3>Nuevo plan</h3>
-
-          <p className="change-text">
-            Vas a cambiar a <strong>Premium</strong>
-          </p>
-
-          <div className="premium-features">
-            <span><FiCheck /> Múltiples workspaces</span>
-            <span><FiCheck /> Automatización con IA</span>
-            <span><FiCheck /> Métricas avanzadas</span>
+          {/* PAGO */}
+          <div className="checkout-card">
+            <h3>Pago</h3>
+            <p>Aquí irá PayPal</p>
           </div>
 
-          <p className="price-premium">$299 MXN / mes</p>
-        </div>
-
-        <div className="checkout-card">
-          <h3>Pago</h3>
-          <p>Aquí irá PayPal</p>
         </div>
 
       </div>
-</div>
 
     </Page>
   )
