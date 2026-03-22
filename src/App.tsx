@@ -73,32 +73,32 @@ const App: React.FC = () => {
         RUTAS PRIVADAS
         ================================= */}
 
-<Route
-  path="/inventory"
-  element={
-    <ProtectedRoute>
-      <InventoryPage />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/inventory"
+          element={
+            <ProtectedRoute>
+              <InventoryPage />
+            </ProtectedRoute>
+          }
+        />
 
-<Route
-  path="/workspaces"
-  element={
-    <ProtectedRoute>
-      <WorkspacesPage />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/workspaces"
+          element={
+            <ProtectedRoute>
+              <WorkspacesPage />
+            </ProtectedRoute>
+          }
+        />
 
-<Route
-  path="/subscription"
-  element={
-    <ProtectedRoute>
-      <SubscriptionPage />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/subscription"
+          element={
+            <ProtectedRoute>
+              <SubscriptionPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
@@ -126,14 +126,14 @@ const App: React.FC = () => {
           }
         />
 
-<Route
-  path="/orders"
-  element={
-    <ProtectedRoute>
-      <OrdersPage />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/notifications"
           element={

@@ -9,6 +9,8 @@ import { useEffect } from "react"
 import { useAuth } from "../../../context/AuthContext"
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi"
 
+const BASE_URL = "https://waggish-unsecludedly-jong.ngrok-free.dev/api";
+
 const LoginPage = () => {
 
 
@@ -35,8 +37,7 @@ const [mostrarPassword, setMostrarPassword] = useState(false)
 
       setLoading(true)
 
-      const response = await fetch(
-        "http://3.19.63.85:3000/api/auth/sign-in",
+      const response = await fetch(`${BASE_URL}/auth/sign-in`,
         {
           method: "POST",
           headers: {

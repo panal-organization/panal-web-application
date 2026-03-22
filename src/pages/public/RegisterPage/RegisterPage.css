@@ -1,4 +1,13 @@
-/* CONTENEDOR REGISTER */
+.login-section{
+  min-height:80vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:60px 20px;
+  background:#f6f8fc;
+}
+
+/* CONTENEDOR */
 
 .register-wrapper{
   display:grid;
@@ -13,7 +22,7 @@
   box-shadow:0 25px 60px rgba(0,0,0,0.08);
 }
 
-/* FORM REGISTER */
+/* FORM CARD */
 
 .register-card{
   padding:60px 50px;
@@ -22,7 +31,106 @@
   justify-content:center;
 }
 
-/* PANEL ROBOT */
+/* TITULOS */
+
+.login-title{
+  text-align:center;
+  font-size:30px;
+  color:#14224a;
+  margin-bottom:10px;
+}
+
+.login-subtitle{
+  text-align:center;
+  color:#777;
+  margin-bottom:40px;
+}
+
+/* FORM */
+
+.login-form{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.login-field{
+  display:flex;
+  flex-direction:column;
+}
+
+.login-field label{
+  font-size:14px;
+  margin-bottom:8px;
+  color:#333;
+}
+
+/* INPUT NORMAL (fallback) */
+
+.login-field input{
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+  font-size:14px;
+  transition:all .2s ease;
+}
+
+.login-field input:focus{
+  border-color:#1976d2;
+  box-shadow:0 0 0 3px rgba(25,118,210,0.1);
+}
+
+/* BOTON */
+
+.login-button{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+
+  background:#f4b400;
+  border:none;
+  border-radius:8px;
+
+  font-weight:600;
+  font-size:15px;
+
+  cursor:pointer;
+  transition:background 0.25s ease;
+}
+
+.login-button:hover{
+  background:#e0a800;
+}
+
+/* ERROR */
+
+.form-error{
+  color:#e53935;
+  font-size:14px;
+  text-align:center;
+}
+
+/* LINKS */
+
+.login-register{
+  text-align:center;
+  margin-top:30px;
+  font-size:14px;
+}
+
+.login-register a{
+  color:#1976d2;
+  font-weight:600;
+  margin-left:5px;
+  text-decoration:none;
+}
+
+.login-register a:hover{
+  color:#1565c0;
+  text-decoration:underline;
+}
+
+/* PANEL IZQUIERDO */
 
 .register-image{
   background:linear-gradient(135deg,#14224a, #03051e);
@@ -50,14 +158,16 @@
   margin-bottom:30px;
 }
 
+/* IMAGEN */
+
 .register-illustration{
   display:flex;
   justify-content:center;
 }
 
 .register-illustration img{
-
-  max-width:500px;
+  width:140%;
+  max-width:600px;
   opacity:0.95;
 
   filter:drop-shadow(0 0 15px rgba(255,255,255,0.25));
@@ -67,12 +177,55 @@
 
 @media(max-width:850px){
 
-.register-wrapper{
-  grid-template-columns:1fr;
+  .register-wrapper{
+    grid-template-columns:1fr;
+  }
+
+  .register-image{
+    display:none;
+  }
+
 }
 
-.register-image{
-  display:none;
+/* ========================= */
+/* INPUTS CON ICONOS */
+/* ========================= */
+
+.input-container{
+  position:relative;
+  display:flex;
+  align-items:center;
 }
 
+.input-container input{
+  width:100%;
+  padding:14px 40px; /* espacio para iconos */
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+  font-size:14px;
+  transition:all .2s ease;
+}
+
+.input-container input:focus{
+  border-color:#1976d2;
+  box-shadow:0 0 0 3px rgba(25,118,210,0.1);
+}
+
+/* ICONO IZQUIERDO */
+
+.input-icon{
+  position:absolute;
+  left:12px;
+  color:#777;
+  font-size:18px;
+}
+
+/* ICONO DERECHO (OJO) */
+
+.password-toggle{
+  position:absolute;
+  right:12px;
+  cursor:pointer;
+  color:#777;
+  font-size:18px;
 }
