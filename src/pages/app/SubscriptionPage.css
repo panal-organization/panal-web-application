@@ -1,0 +1,175 @@
+.pricing-section{
+  padding:90px 20px;
+  display:flex;
+  justify-content:center;
+  margin-top: -90px;
+  margin-left: 10px;
+}
+ 
+.pricing-container{
+  background:#14224a;
+  border-radius:24px;
+  padding:20px 50px;
+  max-width:1100px;
+  width:100%;
+  margin-bottom:20px;
+  margin-top: 20px;
+  text-align:center;
+}
+
+.pricing-title{
+  color:white;
+  font-size:34px;
+  margin-bottom:30px;
+}
+
+.pricing-description{
+  max-width:800px;
+  margin:0 auto 60px auto;
+  color:#cbd5e1;
+  line-height:1.6;
+}
+
+.pricing-grid{
+  display:flex;
+  justify-content:center;
+  gap:50px;
+  flex-wrap:wrap;
+}
+
+.pricing-card{
+  background:white;
+  border-radius:18px;
+  padding:45px 40px;
+  width:380px;
+  box-shadow:0 25px 45px rgba(0,0,0,0.15);
+  text-align:left;
+  position:relative;
+  transition:transform .25s ease;
+  margin-bottom: 40px;
+}
+
+.pricing-card:hover{
+  transform:translateY(-6px);
+}
+
+.premium{
+  border:2px solid #f4b400;
+}
+
+.popular-tag{
+  position:absolute;
+  top:-14px;
+  right:20px;
+  background:#f4b400;
+  color:#14224a;
+  font-weight:700;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+.pricing-icon{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  margin-bottom:20px;
+}
+
+.free-icon{
+  background:#e5e7eb;
+  color:#14224a;
+}
+
+.premium-icon{
+  background:#f4b400;
+  color:#14224a;
+}
+
+.plan-price{
+  font-size:40px;
+  font-weight:700;
+  color:#14224a;
+  margin-bottom:10px;
+  border-bottom:1px solid #00000061;
+  padding-bottom:15px;
+  margin-bottom:20px;
+}
+
+.plan-price span{
+  font-size:14px;
+  font-weight:500;
+  color:#6b7280;
+  margin-left:6px;
+}
+
+.pro-price{
+  color:#f4b400;
+}
+
+.plan-subtitle{
+  color:#6b7280;
+  margin-bottom:25px;
+}
+
+.plan-features{
+  list-style:none;
+  padding:0;
+  margin-bottom:35px;
+}
+
+.plan-features li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+  font-size:14px;
+}
+
+.check{
+  color:#22c55e;
+  font-size:18px;
+}
+
+.x{
+  color:#ef4444;
+  font-size:18px;
+}
+
+.disabled{
+  color:#9ca3af;
+  text-decoration:line-through;
+  text-decoration-color:#ef4444;
+}
+
+.plan-button{
+  display:block;
+  text-align:center;
+  padding:14px 24px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:600;
+  margin-top:15px;
+}
+
+.free{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.free:hover{
+  background:#c8c8c8;
+}
+
+.premium-btn{
+  background:#f4b400;
+  color:#1b1b1b;
+}
+
+.premium-btn:hover{
+  background:#e6a200;
+}

@@ -7,12 +7,12 @@ const PageStyle = {
         transition: 'max-width 0.3s ease-in-out',
         backgroundColor: '#FFFFFF',
     },
-    body: {
-        display: 'flex',
-        flexDirection: 'column',
-        transition: 'max-width 0.3s ease-in-out',
-        flex: 1,
-    }
+  body: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    height: '100vh',     // 🔥 necesario
+}
 }
 
 export default PageStyle

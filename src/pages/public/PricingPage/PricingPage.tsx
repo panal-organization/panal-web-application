@@ -115,7 +115,7 @@ const PricingPage = () => {
 
             </div>
 
-
+ 
 
             {/* PLAN PREMIUM */}
 
