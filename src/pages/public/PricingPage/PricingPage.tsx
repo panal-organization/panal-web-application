@@ -106,9 +106,12 @@ const PricingPage = () => {
 
               </ul>
 
-              <NavLink to="/register" className="plan-button free">
-                Comenzar gratis
-              </NavLink>
+              <NavLink 
+              to="/register?plan=free"
+              className="plan-button free"
+            >
+              Comenzar gratis
+            </NavLink>
 
             </div>
 
@@ -181,9 +184,12 @@ const PricingPage = () => {
 
               </ul>
 
-              <NavLink to="/register" className="plan-button premium-btn">
-                Obtener plan
-              </NavLink>
+              <NavLink 
+                    to="/register?intent=subscribe&plan=premium"
+                    className="plan-button premium-btn"
+                  >
+                    Obtener plan 
+                  </NavLink>
 
             </div>
 

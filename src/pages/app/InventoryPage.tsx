@@ -1,7 +1,16 @@
 import { Box, Typography } from "@mui/material"
 import { Page } from "../../templates"
+import { useEffect } from "react"
 
 const InventoryPage: React.FC = () => {
+
+
+
+  useEffect(() => {
+    document.title = "Inventario"
+  }, [])
+
+
 
   return (
 

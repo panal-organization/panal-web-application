@@ -1,7 +1,12 @@
 import { Box, Typography } from "@mui/material"
 import { Page } from "../../templates"
+import { useEffect } from "react"
 
 const SubscriptionPage: React.FC = () => {
+    useEffect(() => {
+    document.title = "Suscripciones"
+  }, [])
+
 
   return (
 

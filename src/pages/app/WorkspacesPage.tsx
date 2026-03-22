@@ -1,7 +1,11 @@
 import { Box, Typography } from "@mui/material"
 import { Page } from "../../templates"
+import { useEffect } from "react"
 
 const WorkspacesPage: React.FC = () => {
+  useEffect(() => {
+    document.title = "Workspaces"
+  }, [])
 
   return (
 

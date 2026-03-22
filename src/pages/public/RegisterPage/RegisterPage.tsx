@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 import HeaderLanding from "../../../components/landing/HeaderLanding"
 import FooterLanding from "../../../components/landing/FooterLanding"
@@ -8,6 +8,7 @@ import "./RegisterPage.css"
 import robot from "../../../assets/images/Robot3.png"
 
 import { FiMail, FiLock, FiEye, FiEyeOff, FiUser } from "react-icons/fi"
+import { useAuth } from "../../../context/AuthContext" // 🔥 IMPORTANTE
 
 const BASE_URL = "https://waggish-unsecludedly-jong.ngrok-free.dev/api";
 
@@ -18,6 +19,8 @@ const RegisterPage = () => {
   }, [])
 
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth() // 🔥 usamos el contexto
 
   const [nombre, setNombre] = useState("")
   const [correo, setCorreo] = useState("")
@@ -41,6 +44,7 @@ const RegisterPage = () => {
     try{
       setLoading(true)
 
+      // 🔹 1. REGISTRO
       const response = await fetch(`${BASE_URL}/auth/sign-up`, {
         method:"POST",
         headers:{
@@ -58,13 +62,47 @@ const RegisterPage = () => {
 
       const data = await response.json()
 
-      if(response.ok){
-        alert("Cuenta creada correctamente")
-        navigate("/login")
-      }else{
+      if(!response.ok){
         setError(data.message || "Error al registrar usuario")
+        return
       }
 
+      // 🔥 2. AUTOLOGIN REAL (MISMO QUE LOGINPAGE)
+      const loginResponse = await fetch(`${BASE_URL}/auth/sign-in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          correo,
+          contrasena
+        })
+      })
+
+      const loginData = await loginResponse.json()
+
+      if(!loginResponse.ok){
+        setError("No se pudo iniciar sesión automáticamente")
+        return
+      }
+
+      // 🔥 CLAVE: usar el contexto (NO localStorage manual)
+      login(loginData.token.token, loginData.user)
+
+      // 🔹 3. LEER INTENT
+      const params = new URLSearchParams(location.search)
+      const intent = params.get("intent")
+
+      // 🔥 4. REDIRECCIÓN FINAL
+    if (intent === "subscribe") {
+  setTimeout(() => {
+    navigate("/subscription")
+  }, 100)
+} else {
+  setTimeout(() => {
+    navigate("/dashboard")
+  }, 100)
+}
     }catch(error){
       console.error(error)
       setError("Error al conectar con el servidor")
