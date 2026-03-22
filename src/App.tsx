@@ -19,6 +19,7 @@ import OrdersPage from "./pages/app/OrdersPage"
 import InventoryPage from "./pages/app/InventoryPage"
 import WorkspacesPage from "./pages/app/WorkspacesPage"
 import SubscriptionPage from "./pages/app/SubscriptionPage"
+import SubscriptionCheckoutPage from "./pages/app/SubscriptionCheckoutPage"
 
 /* ===============================
 PÁGINAS PÚBLICAS (LANDING)
@@ -143,6 +144,7 @@ const App: React.FC = () => {
           }
         />
 
+        <Route path="/subscription/checkout" element={<SubscriptionCheckoutPage />} />
         {/* ===============================
         RUTAS PÚBLICAS (LOGIN / REGISTER)
         ================================= */}

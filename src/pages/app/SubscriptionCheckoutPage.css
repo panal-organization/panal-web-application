@@ -1,0 +1,207 @@
+/* =========================
+CONTENEDOR
+========================= */
+
+.checkout-container{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-left:10px;
+}
+
+/* =========================
+CARDS
+========================= */
+
+.checkout-card{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:20px;
+  flex:1;
+  min-width:280px;
+}
+
+/* 🔥 SIN CAMBIO DE COLOR EN HOVER */
+.checkout-card:hover{
+  background: unset !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* PREMIUM BOX */
+.premium-box{
+  border-left:4px solid #f59e0b;
+}
+
+/* =========================
+PLAN ACTUAL
+========================= */
+
+.current-plan-card{
+  border-radius:14px;
+  padding:28px;
+  margin:10px 0 20px 10px;
+}
+
+/* FREE */
+.current-plan-card.plan-free{
+  border-left:6px solid #9ca3af;
+  background:#ffffff;
+}
+
+/* PREMIUM */
+.current-plan-card.plan-premium{
+  border-left:6px solid #f59e0b;
+  background:linear-gradient(135deg,#fff7ed,#ffffff);
+}
+
+/* 🔥 SIN CAMBIO DE COLOR EN HOVER */
+/* FREE */
+.current-plan-card.plan-free:hover{
+  background:#ffffff !important;
+}
+
+/* PREMIUM */
+.current-plan-card.plan-premium:hover{
+  background:linear-gradient(135deg,#fff7ed,#ffffff) !important;
+}
+
+/* CARDS */
+.checkout-card:hover{
+  background:white !important;
+}
+
+/* =========================
+TEXTOS
+========================= */
+
+.current-plan-label{
+  font-size:12px;
+  font-weight:600;
+  color:#f59e0b;
+}
+
+.plan-description{
+  color:#6b7280;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.current-plan-content{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+
+.plan-left{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.plan-right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:10px;
+}
+
+/* =========================
+META
+========================= */
+
+.meta-item{
+  display:flex;
+  gap:6px;
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* =========================
+BADGE
+========================= */
+
+.plan-badge{
+  background:#e5e7eb;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+}
+
+.current-plan-card.plan-premium .plan-badge{
+  background:#f59e0b;
+  color:white;
+}
+
+/* =========================
+PRECIO
+========================= */
+
+.price{
+  font-size:42px;
+  font-weight:800;
+}
+
+.period{
+  font-size:14px;
+  color:#6b7280;
+}
+
+/* =========================
+LIMITE
+========================= */
+
+.plan-limit{
+  background:#f3f4f6;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+
+/* =========================
+PREMIUM FEATURES
+========================= */
+
+.premium-features{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin:10px 0;
+  font-size:14px;
+}
+
+.premium-features span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* =========================
+EXTRAS
+========================= */
+
+.price-premium{
+  font-weight:700;
+  margin-top:10px;
+}
+
+.change-text{
+  margin-top:5px;
+}
+
+.orders-title-icon{
+  margin-right:8px;
+}
+
+/* =========================
+MUI (PADRE) FIX
+========================= */
+
+/* 🔥 evita que el contenedor padre cambie color */
+.checkout-no-hover:hover,
+.checkout-no-hover .MuiBox-root:hover {
+  background: unset !important;
+}

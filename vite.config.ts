@@ -34,8 +34,19 @@ export default defineConfig({
           }
         ]
       }
-
     })
 
-  ]
+  ],
+
+  // 🔥 AQUÍ VA LO NUEVO
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://waggish-unsecludedly-jong.ngrok-free.dev',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
+
 })

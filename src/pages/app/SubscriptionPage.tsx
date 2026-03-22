@@ -1,6 +1,7 @@
 import { Page } from "../../templates"
 import { useEffect } from "react"
 
+import { Link } from "react-router-dom"
 import { FiCheck, FiX } from "react-icons/fi"
 import { FaCube, FaRocket } from "react-icons/fa"
 
@@ -114,13 +115,12 @@ const SubscriptionPage: React.FC = () => {
 
                 </ul>
 
-                <a 
-                  href="/subscription/checkout"
-                  className="plan-button premium-btn"
-                >
-                  Obtener plan
-                </a>
-
+                <Link 
+  to="/subscription/checkout"
+  className="plan-button premium-btn"
+>
+  Obtener plan
+</Link>
               </div>
 
             </div>
