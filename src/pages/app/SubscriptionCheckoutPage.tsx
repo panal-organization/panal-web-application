@@ -16,7 +16,8 @@ import {
   FiUsers,
   FiCheck
 } from "react-icons/fi"
-import { FiLock } from "react-icons/fi";
+
+import { FiLock } from "react-icons/fi"
 
 import "./SubscriptionCheckoutPage.css"
 
@@ -34,6 +35,19 @@ const SubscriptionCheckoutPage: React.FC = () => {
   const formatDate = (dateString: string) => {
     if (!dateString) return "-"
     const date = new Date(dateString)
+    return date.toLocaleDateString("es-MX", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    })
+  }
+
+  // 🔥 NUEVO: calcular vencimiento
+  const getExpirationDate = (dateString: string) => {
+    if (!dateString) return "-"
+    const date = new Date(dateString)
+    date.setMonth(date.getMonth() + 1)
+
     return date.toLocaleDateString("es-MX", {
       year: "numeric",
       month: "long",
@@ -81,7 +95,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
   // 🔥 PAYPAL
   useEffect(() => {
 
-    if (loading) return
+    if (loading || isPremium) return // 🔥 IMPORTANTE
 
     const addPaypalScript = () => {
       return new Promise<void>((resolve) => {
@@ -101,7 +115,6 @@ const SubscriptionCheckoutPage: React.FC = () => {
     addPaypalScript().then(() => {
 
       const paypal = (window as any).paypal
-
       if (!paypal) return
 
       paypal.Buttons({
@@ -115,64 +128,42 @@ const SubscriptionCheckoutPage: React.FC = () => {
         createOrder: (_data: any, actions: any) => {
           return actions.order.create({
             purchase_units: [{
-              amount: {
-                value: "29.99"
-              }
+              amount: { value: "29.99" }
             }]
           })
         },
 
-        
         onApprove: (_data: any, actions: any) => {
-  return actions.order.capture().then(async (details: any) => {
+          return actions.order.capture().then(async (details: any) => {
 
-    alert("Pago completado por " + details.payer.name.given_name)
-    console.log("DETALLES DEL PAGO:", details)
+            alert("Pago completado por " + details.payer.name.given_name)
 
-    try {
+            await fetch(
+              `https://waggish-unsecludedly-jong.ngrok-free.dev/api/usuarios/${user._id}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "ngrok-skip-browser-warning": "true"
+                },
+                body: JSON.stringify({
+                  nombre: userData.nombre,
+                  correo: userData.correo,
+                  status: true,
+                  plan_id: "69a3df3381a5be4cb1bd8bc3"
+                })
+              }
+            )
 
-      await fetch(
-        `https://waggish-unsecludedly-jong.ngrok-free.dev/api/usuarios/${user._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "true"
-          },
-          body: JSON.stringify({
-            nombre: userData.nombre,
-            correo: userData.correo,
-            status: true,
-            plan_id: "69a3df3381a5be4cb1bd8bc3" // 🔥 PLAN PREMIUM
+            window.location.reload()
           })
-        }
-      )
-
-      console.log("✅ Usuario actualizado a PREMIUM")
-
-      // 🔥 OPCIONAL: refrescar datos
-      window.location.reload()
-
-    } catch (error) {
-      console.error("❌ Error actualizando plan:", error)
-    }
-
-  })
-},
-
-        onCancel: () => {
-          alert("Pago cancelado")
-        },
-
-        onError: (err: any) => {
-          console.error("Error en PayPal:", err)
         }
 
       }).render("#paypal-button-container")
 
     })
 
-  }, [loading])
+  }, [loading, isPremium])
 
   return (
     <Page>
@@ -221,6 +212,14 @@ const SubscriptionCheckoutPage: React.FC = () => {
                   <div className="meta-item"><FiUser /> Usuario: {userData?.nombre}</div>
                   <div className="meta-item"><FiMail /> Correo: {userData?.correo}</div>
                   <div className="meta-item"><FiCalendar /> Activo desde {formatDate(userData?.createdAt)}</div>
+
+                  {/* 🔥 NUEVO */}
+                  {isPremium && (
+                    <div className="meta-item">
+                      <FiCalendar />
+                      Vence el {getExpirationDate(userData?.createdAt)}
+                    </div>
+                  )}
                 </div>
 
               </div>
@@ -238,10 +237,10 @@ const SubscriptionCheckoutPage: React.FC = () => {
                   <span className="period"> USD / {plan.tipoSuscripcion}</span>
                 </div>
 
-               <div className={`plan-limit ${isPremium ? "limit-premium" : "limit-free"}`}>
-  <FiUsers className="limit-icon" />
-  {plan.limiteUsuarios} usuarios
-</div>
+                <div className={`plan-limit ${isPremium ? "limit-premium" : "limit-free"}`}>
+                  <FiUsers className="limit-icon" />
+                  {plan.limiteUsuarios} usuarios
+                </div>
 
               </div>
 
@@ -250,83 +249,81 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
         </div>
 
-        {/* CONTENIDO */}
-        <div className="checkout-container">
+        {/* 🔥 SOLO SI NO ES PREMIUM */}
+        {!isPremium && (
+          <div className="checkout-container">
 
-          {/* NUEVO PLAN */}
-          <div className="checkout-card premium-box">
+            {/* NUEVO PLAN */}
+            <div className="checkout-card premium-box">
 
-            <div className="premium-header">
-              <h3>Nuevo plan</h3>
-              <div className="plan-icon premium-icon2">
-                <FaRocket />
+              <div className="premium-header">
+                <h3>Nuevo plan</h3>
+                <div className="plan-icon premium-icon2">
+                  <FaRocket />
+                </div>
               </div>
+
+              <p className="change-text">
+                Vas a cambiar a <strong>Premium</strong>
+              </p>
+
+              <div className="premium-price-block">
+                <span className="premium-price">$29.99</span>
+                <span className="premium-period">USD / mes</span>
+              </div>
+
+              <p className="premium-note">
+                Cancela en cualquier momento
+              </p>
+
+              <hr className="premium-divider"/>
+
+              <p className="premium-subtitle">
+                Para equipos y organizaciones
+              </p>
+
+              <div className="premium-features">
+                <span><FiCheck className="check-icon"/> Espacios de trabajo ilimitados</span>
+                <span><FiCheck className="check-icon"/> Gestión avanzada de tickets</span>
+                <span><FiCheck className="check-icon"/> Inventario completo</span>
+                <span><FiCheck className="check-icon"/> Órdenes de servicio avanzadas</span>
+                <span><FiCheck className="check-icon"/> Acceso web, móvil y PWA</span>
+                <span><FiCheck className="check-icon"/> Agente de IA integrado</span>
+              </div>
+
             </div>
 
-            <p className="change-text">
-              Vas a cambiar a <strong>Premium</strong>
-            </p>
+            {/* 💳 PAGO */}
+            <div className="checkout-card payment-card">
 
-            <div className="premium-price-block">
-              <span className="premium-price">$29.99</span>
-              <span className="premium-period">USD / mes</span>
-            </div>
+              <div className="payment-header">
+                <h3>Pago</h3>
 
-            <p className="premium-note">
-              Cancela en cualquier momento
-            </p>
+                <div className="plan-icon payment-icon">
+                  <FiCreditCard />
+                </div>
+              </div>
 
-            <hr className="premium-divider"/>
+              <div className="payment-content">
 
-            <p className="premium-subtitle">
-              Para equipos y organizaciones
-            </p>
+                <div className="payment-branding">
+                  <img src="/src/assets/images/paypal.png" alt="Panal" />
+                  <p>"Tu sistema de soporte inteligente"</p>
+                </div>
 
-            <div className="premium-features">
-              <span><FiCheck className="check-icon"/> Espacios de trabajo ilimitados</span>
-              <span><FiCheck className="check-icon"/> Gestión avanzada de tickets</span>
-              <span><FiCheck className="check-icon"/> Inventario completo</span>
-              <span><FiCheck className="check-icon"/> Órdenes de servicio avanzadas</span>
-              <span><FiCheck className="check-icon"/> Acceso web, móvil y PWA</span>
-              <span><FiCheck className="check-icon"/> Agente de IA integrado</span>
+                <div id="paypal-button-container"></div>
+
+                <span className="payment-secure">
+                  <FiLock className="lock-icon" />
+                  Pago seguro
+                </span>
+
+              </div>
+
             </div>
 
           </div>
-
-          {/* 💳 PAGO */}
-         <div className="checkout-card payment-card">
-
-  <div className="payment-header">
-    <h3>Pago</h3>
-
-    <div className="plan-icon payment-icon">
-      <FiCreditCard />
-    </div>
-  </div>
-
-
-
-<div className="payment-content">
-
-  <div className="payment-branding">
-    <img src="/src/assets/images/paypal.png" alt="Panal" />
-    <p>"Tu sistema de soporte inteligente</p>
-  </div>
-
-  <div id="paypal-button-container"></div>
-
-  <span className="payment-secure">
-    <FiLock className="lock-icon" />
-    Pago seguro
-  </span>
-
-</div>
-
-
-
-          </div>
-
-        </div>
+        )}
 
       </div>
 
