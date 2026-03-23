@@ -16,6 +16,7 @@ import {
   FiUsers,
   FiCheck
 } from "react-icons/fi"
+import { FiLock } from "react-icons/fi";
 
 import "./SubscriptionCheckoutPage.css"
 
@@ -106,7 +107,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
       paypal.Buttons({
 
         style: {
-          color: "blue",
+          color: "gold",
           shape: "pill",
           label: "pay"
         },
@@ -121,6 +122,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
           })
         },
 
+        
         onApprove: (_data: any, actions: any) => {
   return actions.order.capture().then(async (details: any) => {
 
@@ -236,10 +238,10 @@ const SubscriptionCheckoutPage: React.FC = () => {
                   <span className="period"> USD / {plan.tipoSuscripcion}</span>
                 </div>
 
-                <div className="plan-limit">
-                  <FiUsers />
-                  {plan.limiteUsuarios} usuarios
-                </div>
+               <div className={`plan-limit ${isPremium ? "limit-premium" : "limit-free"}`}>
+  <FiUsers className="limit-icon" />
+  {plan.limiteUsuarios} usuarios
+</div>
 
               </div>
 
@@ -292,10 +294,35 @@ const SubscriptionCheckoutPage: React.FC = () => {
           </div>
 
           {/* 💳 PAGO */}
-          <div className="checkout-card">
-            <h3>Pago</h3>
+         <div className="checkout-card payment-card">
 
-            <div id="paypal-button-container"></div>
+  <div className="payment-header">
+    <h3>Pago</h3>
+
+    <div className="plan-icon payment-icon">
+      <FiCreditCard />
+    </div>
+  </div>
+
+
+
+<div className="payment-content">
+
+  <div className="payment-branding">
+    <img src="/src/assets/images/paypal.png" alt="Panal" />
+    <p>"Tu sistema de soporte inteligente</p>
+  </div>
+
+  <div id="paypal-button-container"></div>
+
+  <span className="payment-secure">
+    <FiLock className="lock-icon" />
+    Pago seguro
+  </span>
+
+</div>
+
+
 
           </div>
 
