@@ -40,6 +40,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
     })
   }
 
+  // 🔹 FETCH DATA
   useEffect(() => {
     document.title = "Checkout"
 
@@ -76,6 +77,101 @@ const SubscriptionCheckoutPage: React.FC = () => {
     fetchData()
   }, [user])
 
+  // 🔥 PAYPAL
+  useEffect(() => {
+
+    if (loading) return
+
+    const addPaypalScript = () => {
+      return new Promise<void>((resolve) => {
+        if ((window as any).paypal) {
+          resolve()
+          return
+        }
+
+        const script = document.createElement("script")
+        script.src = "https://www.paypal.com/sdk/js?client-id=AT003xCdTML8ADA1jDOEdXLxa3ldgCFkf_n3kL_GN7608wbgkxIluDzscc663sYp4KlKUxYJWylMk6Nj&currency=USD"
+        script.onload = () => resolve()
+
+        document.body.appendChild(script)
+      })
+    }
+
+    addPaypalScript().then(() => {
+
+      const paypal = (window as any).paypal
+
+      if (!paypal) return
+
+      paypal.Buttons({
+
+        style: {
+          color: "blue",
+          shape: "pill",
+          label: "pay"
+        },
+
+        createOrder: (_data: any, actions: any) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: "29.99"
+              }
+            }]
+          })
+        },
+
+        onApprove: (_data: any, actions: any) => {
+  return actions.order.capture().then(async (details: any) => {
+
+    alert("Pago completado por " + details.payer.name.given_name)
+    console.log("DETALLES DEL PAGO:", details)
+
+    try {
+
+      await fetch(
+        `https://waggish-unsecludedly-jong.ngrok-free.dev/api/usuarios/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true"
+          },
+          body: JSON.stringify({
+            nombre: userData.nombre,
+            correo: userData.correo,
+            status: true,
+            plan_id: "69a3df3381a5be4cb1bd8bc3" // 🔥 PLAN PREMIUM
+          })
+        }
+      )
+
+      console.log("✅ Usuario actualizado a PREMIUM")
+
+      // 🔥 OPCIONAL: refrescar datos
+      window.location.reload()
+
+    } catch (error) {
+      console.error("❌ Error actualizando plan:", error)
+    }
+
+  })
+},
+
+        onCancel: () => {
+          alert("Pago cancelado")
+        },
+
+        onError: (err: any) => {
+          console.error("Error en PayPal:", err)
+        }
+
+      }).render("#paypal-button-container")
+
+    })
+
+  }, [loading])
+
   return (
     <Page>
 
@@ -108,7 +204,6 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
             <div className="current-plan-content">
 
-              {/* LEFT */}
               <div className="plan-left">
 
                 <div className="plan-title-row">
@@ -128,7 +223,6 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
               </div>
 
-              {/* RIGHT */}
               <div className="plan-right">
 
                 <div className="plan-icon free-icon">
@@ -157,13 +251,12 @@ const SubscriptionCheckoutPage: React.FC = () => {
         {/* CONTENIDO */}
         <div className="checkout-container">
 
-          {/* PREMIUM */}
+          {/* NUEVO PLAN */}
           <div className="checkout-card premium-box">
 
-            {/* ICONO + TITULO */}
             <div className="premium-header">
-              
-              <h3>Nuevo plan</h3><div className="plan-icon premium-icon">
+              <h3>Nuevo plan</h3>
+              <div className="plan-icon premium-icon2">
                 <FaRocket />
               </div>
             </div>
@@ -172,11 +265,14 @@ const SubscriptionCheckoutPage: React.FC = () => {
               Vas a cambiar a <strong>Premium</strong>
             </p>
 
-            {/* PRECIO */}
             <div className="premium-price-block">
               <span className="premium-price">$29.99</span>
               <span className="premium-period">USD / mes</span>
             </div>
+
+            <p className="premium-note">
+              Cancela en cualquier momento
+            </p>
 
             <hr className="premium-divider"/>
 
@@ -195,10 +291,12 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
           </div>
 
-          {/* PAGO */}
+          {/* 💳 PAGO */}
           <div className="checkout-card">
             <h3>Pago</h3>
-            <p>Aquí irá PayPal</p>
+
+            <div id="paypal-button-container"></div>
+
           </div>
 
         </div>

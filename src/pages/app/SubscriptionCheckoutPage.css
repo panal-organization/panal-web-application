@@ -1,6 +1,6 @@
 /* CONTENEDOR */
 .checkout-wrapper{
-  background:#f9fafb;
+ 
   padding-bottom:30px;
 }
 
@@ -14,7 +14,7 @@
 
 /* CARDS */
 .checkout-card{
-  background:white;
+ background:#ffffff !important;
   border:1px solid #e5e7eb;
   border-radius:12px;
   padding:20px;
@@ -40,7 +40,8 @@
 /* FREE */
 .plan-free{
   border-left:6px solid #9ca3af;
-  background:#ffffff;
+  background:#ffffff !important;
+  
 }
 
 /* PREMIUM */
@@ -132,6 +133,7 @@
   align-items:center;
   justify-content:center;
   font-size:26px;
+  
 }
 
 .free-icon{
@@ -140,6 +142,13 @@
 }
 
 .premium-icon{
+  background:#f59e0b;
+  color:white;
+  margin-left: 320px;
+  
+}
+
+.premium-icon2{
   background:#f59e0b;
   color:white;
   margin-left: 370px;
@@ -157,6 +166,8 @@
 /* PREMIUM PRO */
 .premium-box{
   border-left:4px solid #f59e0b;
+  background:#ffffff !important;
+  
 }
 
 .premium-price-block{
@@ -167,9 +178,13 @@
 }
 
 .premium-price{
-  font-size:42px;
-  font-weight:800;
+  font-size:48px;
+  font-weight:900;
   color:#f59e0b;
+}
+.premium-note{
+  font-size:12px;
+  color:#9ca3af;
 }
 
 .premium-period{
