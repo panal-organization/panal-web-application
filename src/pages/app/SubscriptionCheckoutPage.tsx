@@ -174,7 +174,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
         <div className="orders-header">
           <h2 className="orders-title">
             <FiCreditCard className="orders-title-icon"/>
-            Checkout de suscripción
+            Mi suscripción
           </h2>
 
           <button 
@@ -192,7 +192,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
           <span className="current-plan-label">PLAN ACTUAL</span>
 
           {loading ? (
-            <p>Cargando...</p>
+            <p>Cargando información...</p>
           ) : plan && (
 
             <div className="current-plan-content">
@@ -250,8 +250,8 @@ const SubscriptionCheckoutPage: React.FC = () => {
         </div>
 
         {/* 🔥 SOLO SI NO ES PREMIUM */}
-        {!isPremium && (
-          <div className="checkout-container">
+    {!loading && !isPremium && (
+  <div className="checkout-container">
 
             {/* NUEVO PLAN */}
             <div className="checkout-card premium-box">

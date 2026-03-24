@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 
-import HeaderLanding from "../../../components/landing/HeaderLanding"
+import HeaderLanding from "../../../components/landing/HeaderLanding" 
 import FooterLanding from "../../../components/landing/FooterLanding"
 
 import "./RegisterPage.css"
@@ -96,7 +96,7 @@ const RegisterPage = () => {
       // 🔥 4. REDIRECCIÓN FINAL
     if (intent === "subscribe") {
   setTimeout(() => {
-    navigate("/subscription")
+    navigate("/subscription/checkout")
   }, 100)
 } else {
   setTimeout(() => {

@@ -12,17 +12,23 @@ import "./SubscriptionPage.css"
 const SubscriptionPage: React.FC = () => {
 
   const navigate = useNavigate()
-  const { user } = useAuth() as any
+  const { user, loading: authLoading } = useAuth() as any
 
-  const [loading, setLoading] = useState(true)
+  const [checking, setChecking] = useState(true)
+  const [isPremium, setIsPremium] = useState<boolean | null>(null)
 
-  // 🔥 IMPORTANTE: cambia esto por tu ID real de plan FREE
   const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
 
   useEffect(() => {
+
     document.title = "Suscripciones"
 
-    if (!user?._id) return
+    if (authLoading) return
+
+    if (!user?._id) {
+      setChecking(false)
+      return
+    }
 
     const checkUserPlan = async () => {
       try {
@@ -33,26 +39,41 @@ const SubscriptionPage: React.FC = () => {
 
         const data = await res.json()
 
-        const isPremium = data.plan_id !== FREE_PLAN_ID
+        const premium = data.plan_id !== FREE_PLAN_ID
+        setIsPremium(premium)
 
-        // 🔥 REDIRECCIÓN
-        if (isPremium) {
-          navigate("/subscription/checkout")
+        // 🔥 REDIRECCIÓN INMEDIATA
+        if (premium) {
+          navigate("/subscription/checkout", { replace: true })
+          return
         }
 
       } catch (error) {
         console.error(error)
       } finally {
-        setLoading(false)
+        setChecking(false)
       }
     }
 
     checkUserPlan()
 
-  }, [user])
+  }, [user, authLoading])
 
-  // 🔥 evita que se vea la página antes de redirigir
-  if (loading) return null
+  // 🔥 BLOQUE TOTAL (evita flash)
+  if (checking || authLoading || isPremium === null) {
+    return (
+      <Page>
+        <div style={{
+          height: "300px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+          <p></p>
+        </div>
+      </Page>
+    )
+  }
 
   return (
 
@@ -99,15 +120,15 @@ const SubscriptionPage: React.FC = () => {
                 <li><FiCheck className="check"/> Acceso web y PWA</li>
 
                 <li className="disabled">
-                  <FiX className="x"/> Agente de Inteligencia Artificial
+                  <FiX className="x"/> IA no disponible
                 </li>
 
                 <li className="disabled">
-                  <FiX className="x"/> Automatización de procesos
+                  <FiX className="x"/> Automatización
                 </li>
 
                 <li className="disabled">
-                  <FiX className="x"/> Métricas operativas
+                  <FiX className="x"/> Métricas
                 </li>
 
               </ul>
@@ -142,14 +163,14 @@ const SubscriptionPage: React.FC = () => {
 
               <ul className="plan-features">
 
-                <li><FiCheck className="check"/> Espacios de trabajo ilimitados</li>
-                <li><FiCheck className="check"/> Gestión avanzada de tickets</li>
+                <li><FiCheck className="check"/> Espacios ilimitados</li>
+                <li><FiCheck className="check"/> Tickets avanzados</li>
                 <li><FiCheck className="check"/> Inventario completo</li>
-                <li><FiCheck className="check"/> Órdenes de servicio avanzadas</li>
-                <li><FiCheck className="check"/> Acceso web, móvil y PWA</li>
-                <li><FiCheck className="check"/> Agente de Inteligencia Artificial</li>
-                <li><FiCheck className="check"/> Automatización de procesos</li>
-                <li><FiCheck className="check"/> Métricas y monitoreo</li>
+                <li><FiCheck className="check"/> Órdenes avanzadas</li>
+                <li><FiCheck className="check"/> Web + PWA</li>
+                <li><FiCheck className="check"/> IA integrada</li>
+                <li><FiCheck className="check"/> Automatización</li>
+                <li><FiCheck className="check"/> Métricas</li>
 
               </ul>
 

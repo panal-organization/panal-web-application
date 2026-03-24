@@ -144,7 +144,14 @@ const App: React.FC = () => {
           }
         />
 
-        <Route path="/subscription/checkout" element={<SubscriptionCheckoutPage />} />
+      <Route
+  path="/subscription/checkout"
+  element={
+    <ProtectedRoute>
+      <SubscriptionCheckoutPage />
+    </ProtectedRoute>
+  }
+/>
         {/* ===============================
         RUTAS PÚBLICAS (LOGIN / REGISTER)
         ================================= */}
