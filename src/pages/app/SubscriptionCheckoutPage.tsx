@@ -179,7 +179,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
           <button 
             className="orders-create-btn"
-            onClick={() => navigate("/subscription")}
+            onClick={() => navigate("/dashboard")}
           >
             <FiArrowLeft />
             Volver
