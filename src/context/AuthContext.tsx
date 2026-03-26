@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 interface User {
   _id: string
   correo: string
+  plan_id?: string
 }
 
 interface AuthContextType {
@@ -21,21 +22,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // 🔥 CARGAR DESDE LOCALSTORAGE
   useEffect(() => {
 
     const savedToken = localStorage.getItem("token")
     const savedUser = localStorage.getItem("user")
 
-    if(savedToken && savedUser){
-
+    if (savedToken && savedUser) {
       setToken(savedToken)
       setUser(JSON.parse(savedUser))
-
     }
 
     setLoading(false)
 
   }, [])
+
+  // 🔥 TRAER USER COMPLETO (CON plan_id)
+  useEffect(() => {
+
+    const fetchUserWithPlan = async () => {
+
+      if (!user?._id) return
+
+      // ⚠️ si ya tiene plan_id, no vuelvas a pedirlo
+      if (user.plan_id) return
+
+      try {
+        const res = await fetch(`/api/usuarios/${user._id}`, {
+          headers: { "ngrok-skip-browser-warning": "true" }
+        })
+
+        const fullUser = await res.json()
+
+        // 🔥 actualiza user con plan
+        setUser(fullUser)
+
+        // 🔥 guarda actualizado
+        localStorage.setItem("user", JSON.stringify(fullUser))
+
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    fetchUserWithPlan()
+
+  }, [user?._id])
 
   const login = (token: string, user: User) => {
 
@@ -44,7 +76,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setToken(token)
     setUser(user)
-
   }
 
   const logout = () => {
@@ -54,31 +85,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setToken(null)
     setUser(null)
-
   }
 
   return (
-
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>
-
       {children}
-
     </AuthContext.Provider>
-
   )
-
 }
 
 export const useAuth = () => {
 
   const context = useContext(AuthContext)
 
-  if(!context){
-
+  if (!context) {
     throw new Error("useAuth must be used inside AuthProvider")
-
   }
 
   return context
-
 }

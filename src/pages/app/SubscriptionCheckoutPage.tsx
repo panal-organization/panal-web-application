@@ -14,10 +14,8 @@ import {
   FiMail,
   FiCalendar,
   FiUsers,
-  FiCheck
+  FiLock
 } from "react-icons/fi"
-
-import { FiLock } from "react-icons/fi"
 
 import "./SubscriptionCheckoutPage.css"
 
@@ -35,19 +33,6 @@ const SubscriptionCheckoutPage: React.FC = () => {
   const formatDate = (dateString: string) => {
     if (!dateString) return "-"
     const date = new Date(dateString)
-    return date.toLocaleDateString("es-MX", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    })
-  }
-
-  // 🔥 NUEVO: calcular vencimiento
-  const getExpirationDate = (dateString: string) => {
-    if (!dateString) return "-"
-    const date = new Date(dateString)
-    date.setMonth(date.getMonth() + 1)
-
     return date.toLocaleDateString("es-MX", {
       year: "numeric",
       month: "long",
@@ -95,7 +80,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
   // 🔥 PAYPAL
   useEffect(() => {
 
-    if (loading || isPremium) return // 🔥 IMPORTANTE
+    if (loading || isPremium) return
 
     const addPaypalScript = () => {
       return new Promise<void>((resolve) => {
@@ -138,23 +123,34 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
             alert("Pago completado por " + details.payer.name.given_name)
 
-            await fetch(
-              `https://waggish-unsecludedly-jong.ngrok-free.dev/api/usuarios/${user._id}`,
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                  "ngrok-skip-browser-warning": "true"
-                },
-                body: JSON.stringify({
-                  nombre: userData.nombre,
-                  correo: userData.correo,
-                  status: true,
-                  plan_id: "69a3df3381a5be4cb1bd8bc3"
-                })
-              }
-            )
+            const ahora = new Date()
+            const vence = new Date()
+            vence.setMonth(vence.getMonth() + 1)
 
+            // 🔥 ACTUALIZA EN BACKEND
+            await fetch(`/api/usuarios/${user._id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true"
+              },
+              body: JSON.stringify({
+                nombre: userData.nombre,
+                correo: userData.correo,
+                status: true,
+                plan_id: "69a3df3381a5be4cb1bd8bc3",
+                plan_inicio: ahora,
+                plan_vence: vence
+              })
+            })
+
+            // 🔥 ACTUALIZA FRONTEND (CLAVE)
+            localStorage.setItem("user", JSON.stringify({
+              ...user,
+              plan_id: "69a3df3381a5be4cb1bd8bc3"
+            }))
+
+            // 🔥 RECARGA PARA REFRESCAR UI
             window.location.reload()
           })
         }
@@ -170,7 +166,6 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
       <div className="checkout-wrapper">
 
-        {/* HEADER */}
         <div className="orders-header">
           <h2 className="orders-title">
             <FiCreditCard className="orders-title-icon"/>
@@ -186,7 +181,6 @@ const SubscriptionCheckoutPage: React.FC = () => {
           </button>
         </div>
 
-        {/* PLAN ACTUAL */}
         <div className={`current-plan-card ${isPremium ? "plan-premium" : "plan-free"}`}>
 
           <span className="current-plan-label">PLAN ACTUAL</span>
@@ -211,13 +205,23 @@ const SubscriptionCheckoutPage: React.FC = () => {
                 <div className="plan-meta">
                   <div className="meta-item"><FiUser /> Usuario: {userData?.nombre}</div>
                   <div className="meta-item"><FiMail /> Correo: {userData?.correo}</div>
-                  <div className="meta-item"><FiCalendar /> Activo desde {formatDate(userData?.createdAt)}</div>
 
-                  {/* 🔥 NUEVO */}
-                  {isPremium && (
+                  {isPremium ? (
+                    <>
+                      <div className="meta-item">
+                        <FiCalendar />
+                        Inicio: {formatDate(userData?.plan_inicio)}
+                      </div>
+
+                      <div className="meta-item">
+                        <FiCalendar />
+                        Vence: {formatDate(userData?.plan_vence)}
+                      </div>
+                    </>
+                  ) : (
                     <div className="meta-item">
                       <FiCalendar />
-                      Vence el {getExpirationDate(userData?.createdAt)}
+                      Activo desde {formatDate(userData?.createdAt)}
                     </div>
                   )}
                 </div>
@@ -249,11 +253,9 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
         </div>
 
-        {/* 🔥 SOLO SI NO ES PREMIUM */}
-    {!loading && !isPremium && (
-  <div className="checkout-container">
+        {!loading && !isPremium && (
+          <div className="checkout-container">
 
-            {/* NUEVO PLAN */}
             <div className="checkout-card premium-box">
 
               <div className="premium-header">
@@ -276,29 +278,12 @@ const SubscriptionCheckoutPage: React.FC = () => {
                 Cancela en cualquier momento
               </p>
 
-              <hr className="premium-divider"/>
-
-              <p className="premium-subtitle">
-                Para equipos y organizaciones
-              </p>
-
-              <div className="premium-features">
-                <span><FiCheck className="check-icon"/> Espacios de trabajo ilimitados</span>
-                <span><FiCheck className="check-icon"/> Gestión avanzada de tickets</span>
-                <span><FiCheck className="check-icon"/> Inventario completo</span>
-                <span><FiCheck className="check-icon"/> Órdenes de servicio avanzadas</span>
-                <span><FiCheck className="check-icon"/> Acceso web, móvil y PWA</span>
-                <span><FiCheck className="check-icon"/> Agente de IA integrado</span>
-              </div>
-
             </div>
 
-            {/* 💳 PAGO */}
             <div className="checkout-card payment-card">
 
               <div className="payment-header">
                 <h3>Pago</h3>
-
                 <div className="plan-icon payment-icon">
                   <FiCreditCard />
                 </div>

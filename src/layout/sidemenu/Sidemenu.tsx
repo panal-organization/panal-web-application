@@ -2,6 +2,9 @@ import { Box, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { NavLink } from "react-router-dom"
 
+import logoGold from "../../assets/images/2gold.png"
+import logo from "../../assets/images/logo.png"
+
 import {
   SpaceDashboard as DashboardIcon,
   Assignment as TicketsIcon,
@@ -12,10 +15,8 @@ import {
   Archive as InventoryIcon
 } from "@mui/icons-material"
 
-import logo from "../../assets/images/logo.png"
 import { Overlay } from "../../components/shared"
-
-import { useAuth } from "../../context/AuthContext" // 🔥 IMPORTANTE
+import { useAuth } from "../../context/AuthContext"
 
 import "./Sidemenu.css"
 
@@ -29,11 +30,14 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
   const theme = useTheme()
   const isSmall = useMediaQuery(theme.breakpoints.down("md"))
 
-  const { user } = useAuth() as any // 🔥 usamos user
+  const { user } = useAuth() as any
 
+  // 🔥 CLAVE: sin fetch, directo del AuthContext
   const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
 
-  // 🔥 FUNCIÓN INTELIGENTE
+ const isPremium = user?.plan_id && user.plan_id !== FREE_PLAN_ID
+
+  // 🔥 CLICK INTELIGENTE (esto lo dejamos igual)
   const handleSubscriptionClick = async (e: any) => {
 
     e.preventDefault()
@@ -41,16 +45,15 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
     if (!user?._id) return
 
     try {
-
       const res = await fetch(`/api/usuarios/${user._id}`, {
         headers: { "ngrok-skip-browser-warning": "true" }
       })
 
       const data = await res.json()
 
-      const isPremium = data.plan_id !== FREE_PLAN_ID
+      const isPremiumNow = data.plan_id !== FREE_PLAN_ID
 
-      if (isPremium) {
+      if (isPremiumNow) {
         window.location.href = "/subscription/checkout"
       } else {
         window.location.href = "/subscription"
@@ -59,7 +62,6 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
     } catch (err) {
       console.error(err)
     }
-
   }
 
   const menu = [
@@ -121,7 +123,7 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
       )}
 
       <Box
-        className={`sidebar ${!open ? "sidebar-closed" : ""}`}
+        className={`sidebar ${!open ? "sidebar-closed" : ""} ${isPremium ? "sidebar-premium" : ""}`}
         sx={
           isSmall
             ? {
@@ -142,10 +144,20 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
           {open ? "‹" : "›"}
         </button>
 
-        {/* LOGO */}
-        <div className="sidebar-header">
-          <img src={logo} alt="Logo" className="sidebar-logo" />
-        </div>
+        {/* HEADER */}
+        <NavLink to="/dashboard" className="sidebar-header">
+          <img
+            src={isPremium ? logoGold : logo}
+            alt="Panal"
+            className="sidebar-logo"
+          />
+
+          {open && (
+            <div className="sidebar-brand">
+              Panal<span className="tm">™</span>
+            </div>
+          )}
+        </NavLink>
 
         {/* BODY */}
         <div className="sidebar-body">
