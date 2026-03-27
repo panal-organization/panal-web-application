@@ -1,64 +1,113 @@
 /* ===============================
-SIDEMENU
+SIDEMENU BASE
 ================================= */
 
-.sidebar{
-  display:flex;
-  flex-direction:column;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
 
-  width:220px;
+  background: #14224a;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
 
-  background:#14224a;
+  padding: 20px;
+  gap: 20px;
 
-  border-right:1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
 
-  color:#FFFFFF;
+  transition: width 0.3s ease, padding 0.3s ease;
 
-  padding:20px;
-
-  transition:width 0.3s ease, padding 0.3s ease;
-
-  overflow:hidden;
-  white-space:nowrap;
-
-  flex-shrink:0;
-
-  gap:20px;
+  position: relative;
 }
 
 /* ===============================
-SIDEBAR CLOSED
+SIDEBAR COMPACT (CLOSED)
 ================================= */
 
-.sidebar-closed{
-  width:0;
-  padding:0;
-  border:none;
+.sidebar-closed {
+  width: 70px;
+  padding: 10px 8px;
+}
+
+/* ocultar texto */
+.sidebar-closed .sidebar-text,
+.sidebar-closed .sidebar-section-title,
+.sidebar-closed .sidebar-brand {
+  display: none;
+}
+
+/* centrar iconos */
+.sidebar-closed .sidebar-link {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.sidebar-closed .sidebar-icon {
+  margin-right: 0;
+}
+
+/* logo compacto */
+.sidebar-closed .sidebar-logo {
+  width: 32px;
+  height: 32px;
+}
+
+/* header compacto */
+.sidebar-closed .sidebar-header {
+  justify-content: center;
+  padding: 10px;
 }
 
 /* ===============================
-HEADER (logo)
+HEADER (LOGO)
 ================================= */
-
 
 .sidebar-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: -20px;
-  margin-right: 20px;
-  margin-left: -27px;
-
-  padding: 12px 0px 10px 75px; /* 👈 antes 20px */
-
-
-  background: #0f172a; /* 🔥 negro azulado elegante */
+  margin: -20px 20px 0 -27px;
+  padding: 12px 0 10px 75px;
+  background: #0f172a;
   border-radius: 10px;
-
-  width: 240px; /* 👈 controla el ancho */
-  height: 54px; /* 👈 más alto */
-
+  width: 240px;
+  height: 54px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ===============================
+HEADER FIX (COMPACT MODE)
+================================= */
+
+.sidebar-closed .sidebar-header {
+  margin: -10px;
+  padding: 10px 0;
+  width: 100px;
+  justify-content: center;
+  background: #0f172a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.sidebar-closed {
+  overflow: visible;
+}
+
+.sidebar-closed .sidebar-logo {
+  width: 50px;
+  height: 50px;
+  margin-top: 3px;
+  margin-left: -10px;
+}
+
+/* quitar focus feo */
+.sidebar-header:focus,
+.sidebar-header:active {
+  outline: none;
 }
 
 /* ===============================
@@ -71,16 +120,16 @@ LOGO
   margin-top: 3px;
 }
 
-/* TEXTO */
+/* ===============================
+BRAND
+================================= */
+
 .sidebar-brand {
   font-size: 22px;
   font-weight: 700;
-  color: white;
   display: flex;
-  align-items: flex-start;
 }
 
-/* ™ chiquito pro */
 .tm {
   font-size: 10px;
   margin-left: 2px;
@@ -91,199 +140,315 @@ LOGO
 BODY
 ================================= */
 
-.sidebar-body{
-  display:flex;
-  flex-direction:column;
-  flex:1;
+.sidebar-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 /* ===============================
 SECTION
 ================================= */
 
-.sidebar-section{
-  display:flex;
-  flex-direction:column;
-
-  margin-bottom:20px;
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
 }
 
-/* ===============================
-SECTION TITLE
-================================= */
+.sidebar-section-title {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1.3px;
+  margin-bottom: 10px;
 
-.sidebar-section-title{
-  font-size:12px;
-
-  font-weight:bold;
-
-  letter-spacing:1.3px;
-
-  margin-bottom:10px;
-
-  opacity:0.5;
-
-  color:#A3AED1;
+  opacity: 0.5;
+  color: #A3AED1;
 }
 
 /* ===============================
 MENU
 ================================= */
 
-.sidebar-menu{
-  display:flex;
-  flex-direction:column;
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
 }
+
+.sidebar-menu-item {
+  display: flex;
+  flex-direction: column;
+}
+
+
 
 /* ===============================
-MENU ITEM
+LINK
 ================================= */
 
-.sidebar-menu-item{
-  display:flex;
-  flex-direction:column;
+.sidebar-link {
+  display: flex;
+  align-items: center;
+
+  padding: 12px 14px;
+  border-radius: 6px;
+
+  color: #fff;
+  text-decoration: none;
+
+  position: relative;
+
+  transition: all 0.2s ease;
 }
 
-/* ===============================
-MENU LINK
-================================= */
-
-.sidebar-link{
-  display:flex;
-  align-items:center;
-
-  padding:12px 14px;
-
-  color:#FFFFFF;
-
-  text-decoration:none;
-
-  border-radius:6px;
-
-  position:relative;
-
-  transition:all 0.2s ease;
-}
 /* hover */
-
-.sidebar-link:hover{
-  background:rgba(255,255,255,0.05);
+.sidebar-link:hover {
+  background: rgba(255,255,255,0.05);
 }
+
 /* active */
-
-.sidebar-link.active{
-  color:#f4b400;
+.sidebar-link.active {
+  color: #f4b400;
 }
-.sidebar-link.active::before{
-  content:"";
 
-  position:absolute;
+.sidebar-link.active::before {
+  content: "";
+  position: absolute;
 
-  left:0;
+  left: 0;
+  top: 4px;
 
-  top:4px;
+  width: 3px;
+  height: calc(100% - 8px);
 
-  height:calc(100% - 8px);
-
-  width:3px;
-
-  background:#f4b400;
-
-  border-radius:4px;
+  background: #f4b400;
+  border-radius: 4px;
 }
-.sidebar-link.active svg{
-  color:#f4b400;
+
+.sidebar-link.active svg {
+  color: #f4b400;
 }
 
 /* ===============================
 ICON
 ================================= */
-.sidebar-icon{
-  margin-right:12px;
-  display:flex;
-  align-items:center;
-}
 
-.sidebar-link.active svg{
-  color:#f4b400;
+.sidebar-icon {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
 }
 
 /* ===============================
 TEXT
 ================================= */
 
-.sidebar-text{
-  font-size:14px;
+.sidebar-text {
+  font-size: 14px;
+}
+
+/* ===============================
+TOGGLE BUTTON
+================================= */
+
+.sidebar-toggle {
+  position: fixed;
+  top: 70px;
+
+  width: 22px;
+  height: 22px;
+
+  background: #fff;
+  color: #14224a;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+
+  z-index: 2000;
+}
+
+.sidebar-toggle.open {
+  left: 230px;
+}
+
+.sidebar-toggle.closed {
+  left: -5px;
+}
+
+.sidebar-toggle:hover {
+  background: #f4b400;
+  transform: scale(1.1);
+}
+
+/* ===============================
+PREMIUM STYLE
+================================= */
+
+.sidebar.sidebar-premium .sidebar-logo {
+  filter: drop-shadow(0 0 8px rgba(244,180,0,0.55));
+}
+
+
+
+/* wrapper necesario */
+.sidebar-item-wrapper {
+  position: relative;
+}
+
+/* popover */
+.sidebar-popover {
+  position: absolute;
+  left: 75px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: #1e293b;
+  color: white;
+
+  padding: 10px 14px;
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  white-space: nowrap;
+  z-index: 999;
+
+  animation: fadeIn 0.2s ease;
+}
+
+/* animación pro */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
 }
 
 
 /* ===============================
-SIDEBAR TOGGLE
+SIDEBAR CONTROL (BOTTOM)
 ================================= */
-.sidebar{
-  position:relative;
+
+.sidebar-control {
+  margin-top: auto;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 10px;
+  padding: 10px;
+
+  font-size: 13px;
 }
 
-/* BOTÓN */
-
-.sidebar-toggle{
-  position:fixed;
-
-  top:70px;
-
-  width:18px;
-  height:18px;
-
-  background:rgb(255, 255, 255);
-  color:#14224a;
-
-  border-radius:50%;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  cursor:pointer;
-
-  font-size:16px;
-  font-weight:600;
-
-  transition:all 0.25s ease;
-
-  z-index:2000;
+/* título */
+.sidebar-control-title {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 8px;
 }
 
-/* CUANDO SIDEBAR ESTÁ ABIERTO */
-
-.sidebar-toggle.open{
-  left:230px;
+/* opciones */
+.sidebar-control-option {
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* CUANDO SIDEBAR ESTÁ CERRADO */
-
-.sidebar-toggle.closed{
-  left:-5px;
+/* hover */
+.sidebar-control-option:hover {
+  background: rgba(255,255,255,0.08);
 }
 
-.sidebar-toggle:hover{
-  background:#f4b400;
+/* activo */
+.sidebar-control-option.active {
+  background: rgba(255,255,255,0.12);
 }
 
+/* botón pequeño */
+.sidebar-control-button {
+  margin-top: auto;
 
+  width: 32px;
+  height: 32px;
 
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
 
-.sidebar.sidebar-premium .sidebar-logo {
-  filter: drop-shadow(0 0 8px rgba(244,180,0,0.));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.sidebar-header:focus {
-  outline: none;
+.sidebar-control-button:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-.sidebar-header:active {
-  outline: none;
+/* panel flotante */
+.sidebar-control-panel {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 10px;
+  padding: 12px;
+
+  width: 180px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  z-index: 999;
 }
 
-.sidebar-header {
-  text-decoration: none !important;
+/* título */
+.sidebar-control-title {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+
+/* opciones */
+.sidebar-control-option {
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar-control-option {
+  font-size: 11px; /* 👈 CAMBIA ESTO */
+  
+}
+
+.sidebar-control-option:hover {
+    background: #1f2e5a;
+   color: #ffffff;
+}
+.sidebar-control-option.active {
+ 
+  background:#0d6efd;
+  color: #ffffff;
+  
 }

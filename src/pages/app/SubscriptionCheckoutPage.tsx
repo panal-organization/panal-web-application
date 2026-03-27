@@ -230,9 +230,9 @@ const SubscriptionCheckoutPage: React.FC = () => {
 
               <div className="plan-right">
 
-                <div className="plan-icon free-icon">
-                  <FiBox />
-                </div>
+                <div className={`plan-icon ${isPremium ? "premium-icon" : "free-icon"}`}>
+  {isPremium ? <FaRocket /> : <FiBox />}
+</div>
 
                 <div className="price-block">
                   <span className="price">

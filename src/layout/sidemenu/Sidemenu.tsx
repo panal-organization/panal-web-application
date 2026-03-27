@@ -1,6 +1,7 @@
-import { Box, useMediaQuery } from "@mui/material"
+import { Box, useMediaQuery, Tooltip } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
 
 import logoGold from "../../assets/images/2gold.png"
 import logo from "../../assets/images/logo.png"
@@ -20,26 +21,39 @@ import { useAuth } from "../../context/AuthContext"
 
 import "./Sidemenu.css"
 
-interface SidemenuProps {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
+export const Sidemenu = () => {
 
   const theme = useTheme()
   const isSmall = useMediaQuery(theme.breakpoints.down("md"))
 
+  const navigate = useNavigate()
   const { user } = useAuth() as any
 
-  // 🔥 CLAVE: sin fetch, directo del AuthContext
   const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
+  const isPremium = user?.plan_id && user.plan_id !== FREE_PLAN_ID
 
- const isPremium = user?.plan_id && user.plan_id !== FREE_PLAN_ID
+  // 🔥 estado sidebar (persistente)
+  const [open, setOpen] = useState(() => {
+    const saved = localStorage.getItem("sidebar-open")
+    return saved ? JSON.parse(saved) : true
+  })
 
-  // 🔥 CLICK INTELIGENTE (esto lo dejamos igual)
+  useEffect(() => {
+    localStorage.setItem("sidebar-open", JSON.stringify(open))
+  }, [open])
+
+  // 🔥 estado panel control
+  const [controlOpen, setControlOpen] = useState(false)
+
+  // 🔥 cerrar panel al hacer click fuera
+  useEffect(() => {
+    const handleClick = () => setControlOpen(false)
+    window.addEventListener("click", handleClick)
+    return () => window.removeEventListener("click", handleClick)
+  }, [])
+
+  // 🔥 lógica subscription
   const handleSubscriptionClick = async (e: any) => {
-
     e.preventDefault()
 
     if (!user?._id) return
@@ -51,12 +65,12 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
 
       const data = await res.json()
 
-      const isPremiumNow = data.plan_id !== FREE_PLAN_ID
+      const isPremiumUser = data.plan_id !== FREE_PLAN_ID
 
-      if (isPremiumNow) {
-        window.location.href = "/subscription/checkout"
+      if (isPremiumUser) {
+        navigate("/subscription/checkout")
       } else {
-        window.location.href = "/subscription"
+        navigate("/subscription")
       }
 
     } catch (err) {
@@ -65,93 +79,30 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
   }
 
   const menu = [
-    {
-      id: 0,
-      title: "",
-      menu: [
-        {
-          id: 1,
-          title: "Dashboard",
-          path: "/dashboard",
-          icon: <DashboardIcon />
-        },
-        {
-          id: 2,
-          title: "Tickets",
-          path: "/tickets",
-          icon: <TicketsIcon />
-        },
-        {
-          id: 3,
-          title: "Órdenes de servicio",
-          path: "/orders",
-          icon: <OrdersIcon />
-        },
-        {
-          id: 4,
-          title: "Inventario",
-          path: "/inventory",
-          icon: <InventoryIcon />
-        },
-        {
-          id: 5,
-          title: "Espacios de trabajo",
-          path: "/workspaces",
-          icon: <WorkspacesIcon />
-        },
-        {
-          id: 6,
-          title: "Suscripción",
-          path: "/subscription",
-          icon: <SubscriptionIcon />
-        },
-        {
-          id: 7,
-          title: "Mi cuenta",
-          path: "/account",
-          icon: <AccountIcon />
-        }
-      ]
-    }
+    { id: 1, title: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
+    { id: 2, title: "Tickets", path: "/tickets", icon: <TicketsIcon /> },
+    { id: 3, title: "Órdenes", path: "/orders", icon: <OrdersIcon /> },
+    { id: 4, title: "Inventario", path: "/inventory", icon: <InventoryIcon /> },
+    { id: 5, title: "Workspaces", path: "/workspaces", icon: <WorkspacesIcon /> },
+    { id: 6, title: "Suscripción", path: "/subscription", icon: <SubscriptionIcon /> },
+    { id: 7, title: "Cuenta", path: "/account", icon: <AccountIcon /> }
   ]
 
   return (
     <>
-
-      {isSmall && open && (
-        <Overlay onClick={() => setOpen(false)} />
-      )}
+      {/* overlay mobile */}
+      {isSmall && open && <Overlay onClick={() => setOpen(false)} />}
 
       <Box
         className={`sidebar ${!open ? "sidebar-closed" : ""} ${isPremium ? "sidebar-premium" : ""}`}
-        sx={
-          isSmall
-            ? {
-                position: "fixed",
-                zIndex: 1300,
-                height: "100vh",
-                overflowY: "auto"
-              }
-            : {}
-        }
       >
-
-        {/* BOTÓN */}
-        <button
-          className={`sidebar-toggle ${open ? "open" : "closed"}`}
-          onClick={() => setOpen(!open)}
-        >
-          {open ? "‹" : "›"}
-        </button>
 
         {/* HEADER */}
         <NavLink to="/dashboard" className="sidebar-header">
           <img
             src={isPremium ? logoGold : logo}
-            alt="Panal"
             className="sidebar-logo"
           />
-
           {open && (
             <div className="sidebar-brand">
               Panal<span className="tm">™</span>
@@ -159,56 +110,89 @@ export const Sidemenu: React.FC<SidemenuProps> = ({ open, setOpen }) => {
           )}
         </NavLink>
 
-        {/* BODY */}
+        {/* MENU */}
         <div className="sidebar-body">
 
-          {menu.map((section) => (
-            <div key={section.id} className="sidebar-section">
+          {menu.map((item) => (
 
-              <div className="sidebar-section-title">
-                {section.title}
-              </div>
+            <Tooltip
+              key={item.id}
+              title={!open ? item.title : ""}
+              placement="right"
+              arrow
+            >
+              <NavLink
+                to={item.path}
+                className="sidebar-link"
+                onClick={(e) => {
 
-              <div className="sidebar-menu">
+                  e.stopPropagation()
 
-                {section.menu.map((item) => (
+                  if (item.path === "/subscription") {
+                    handleSubscriptionClick(e)
+                  }
 
-                  <NavLink
-                    key={item.id}
-                    to={item.path}
-                    onClick={(e) => {
+                }}
+              >
+                <div className="sidebar-icon">{item.icon}</div>
 
-                      if (item.path === "/subscription") {
-                        handleSubscriptionClick(e)
-                      } else {
-                        isSmall && setOpen(false)
-                      }
+                {open && (
+                  <div className="sidebar-text">
+                    {item.title}
+                  </div>
+                )}
+              </NavLink>
+            </Tooltip>
 
-                    }}
-                    className="sidebar-link"
-                  >
-
-                    <div className="sidebar-icon">
-                      {item.icon}
-                    </div>
-
-                    <div className="sidebar-text">
-                      {item.title}
-                    </div>
-
-                  </NavLink>
-
-                ))}
-
-              </div>
-
-            </div>
           ))}
 
         </div>
 
-      </Box>
+        {/* 🔥 BOTÓN SUPABASE */}
+        <div
+          className="sidebar-control-button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setControlOpen(!controlOpen)
+          }}
+        >
+          ☰
+        </div>
 
+        {/* 🔥 PANEL FLOTANTE */}
+        {controlOpen && (
+          <div className="sidebar-control-panel">
+
+            <div className="sidebar-control-title">
+             Control del menú
+            </div>
+
+            <div
+              className={`sidebar-control-option ${open ? "active" : ""}`}
+              onClick={() => {
+                setOpen(true)
+                setControlOpen(false)
+              }}
+            >
+              ● Expandido
+            </div>
+
+            <div
+              className={`sidebar-control-option ${!open ? "active" : ""}`}
+              onClick={() => {
+                setOpen(false)
+                setControlOpen(false)
+              }}
+            >
+              ● Contraido
+            </div>
+
+          
+
+          </div>
+        )}
+
+      </Box>
     </>
   )
 }
