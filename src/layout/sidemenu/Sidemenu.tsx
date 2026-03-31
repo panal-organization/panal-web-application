@@ -1,19 +1,22 @@
-import { Box, useMediaQuery, Tooltip } from "@mui/material"
+import { Box, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import logoGold from "../../assets/images/2gold.png"
 import logo from "../../assets/images/logo.png"
 
+
 import {
-  SpaceDashboard as DashboardIcon,
+  Home as DashboardIcon,
   Assignment as TicketsIcon,
   Construction as OrdersIcon,
-  Workspaces as WorkspacesIcon,
+  ListAlt   as OrdersIcon2,
+  Groups  as WorkspacesIcon,
   CreditCard as SubscriptionIcon,
-  AccountBox as AccountIcon,
-  Archive as InventoryIcon
+  ManageAccounts    as AccountIcon,
+  GridView      as InventoryIcon,
+  Build as MaintenanceIcon
 } from "@mui/icons-material"
 
 import { Overlay } from "../../components/shared"
@@ -25,6 +28,7 @@ export const Sidemenu = () => {
 
   const theme = useTheme()
   const isSmall = useMediaQuery(theme.breakpoints.down("md"))
+  const location = useLocation()
 
   const navigate = useNavigate()
   const { user } = useAuth() as any
@@ -32,7 +36,7 @@ export const Sidemenu = () => {
   const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
   const isPremium = user?.plan_id && user.plan_id !== FREE_PLAN_ID
 
-  // 🔥 estado sidebar (persistente)
+  // 🔥 sidebar abierto/cerrado
   const [open, setOpen] = useState(() => {
     const saved = localStorage.getItem("sidebar-open")
     return saved ? JSON.parse(saved) : true
@@ -42,17 +46,21 @@ export const Sidemenu = () => {
     localStorage.setItem("sidebar-open", JSON.stringify(open))
   }, [open])
 
-  // 🔥 estado panel control
+  // 🔥 dropdown servicios
+  const [openServices, setOpenServices] = useState(
+    location.pathname.includes("orders") ||
+    location.pathname.includes("tickets")
+  )
+
+  // 🔥 panel control
   const [controlOpen, setControlOpen] = useState(false)
 
-  // 🔥 cerrar panel al hacer click fuera
   useEffect(() => {
     const handleClick = () => setControlOpen(false)
     window.addEventListener("click", handleClick)
     return () => window.removeEventListener("click", handleClick)
   }, [])
 
-  // 🔥 lógica subscription
   const handleSubscriptionClick = async (e: any) => {
     e.preventDefault()
 
@@ -64,7 +72,6 @@ export const Sidemenu = () => {
       })
 
       const data = await res.json()
-
       const isPremiumUser = data.plan_id !== FREE_PLAN_ID
 
       if (isPremiumUser) {
@@ -78,77 +85,106 @@ export const Sidemenu = () => {
     }
   }
 
-  const menu = [
-    { id: 1, title: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
-    { id: 2, title: "Tickets", path: "/tickets", icon: <TicketsIcon /> },
-    { id: 3, title: "Órdenes", path: "/orders", icon: <OrdersIcon /> },
-    { id: 4, title: "Inventario", path: "/inventory", icon: <InventoryIcon /> },
-    { id: 5, title: "Workspaces", path: "/workspaces", icon: <WorkspacesIcon /> },
-    { id: 6, title: "Suscripción", path: "/subscription", icon: <SubscriptionIcon /> },
-    { id: 7, title: "Cuenta", path: "/account", icon: <AccountIcon /> }
-  ]
-
   return (
     <>
-      {/* overlay mobile */}
       {isSmall && open && <Overlay onClick={() => setOpen(false)} />}
 
-      <Box
-        className={`sidebar ${!open ? "sidebar-closed" : ""} ${isPremium ? "sidebar-premium" : ""}`}
-      >
+      <Box className={`sidebar ${!open ? "sidebar-closed" : ""} ${isPremium ? "sidebar-premium" : ""}`}>
 
         {/* HEADER */}
         <NavLink to="/dashboard" className="sidebar-header">
-          <img
-            src={isPremium ? logoGold : logo}
-            className="sidebar-logo"
-          />
-          {open && (
-            <div className="sidebar-brand">
-              Panal<span className="tm">™</span>
-            </div>
-          )}
+          <img src={isPremium ? logoGold : logo} className="sidebar-logo" />
+          {open && <div className="sidebar-brand">Panal<span className="tm">™</span></div>}
         </NavLink>
 
         {/* MENU */}
         <div className="sidebar-body">
 
-          {menu.map((item) => (
+          {/* Inicio */}
+          <NavLink to="/dashboard" className="sidebar-link">
+            <div className="sidebar-icon"><DashboardIcon /></div>
+            {open && <div className="sidebar-text">Inicio</div>}
+          </NavLink>
 
-            <Tooltip
-              key={item.id}
-              title={!open ? item.title : ""}
-              placement="right"
-              arrow
+          {/* 🔥 SERVICIOS */}
+          <div className="sidebar-item-wrapper">
+
+            <div
+              className={`sidebar-link ${location.pathname.includes("orders") || location.pathname.includes("tickets") ? "active" : ""}`}
+            onClick={(e) => {
+  e.stopPropagation()
+
+  if (!open) {
+    setOpen(true) // 👈 abre sidebar
+    return
+  }
+
+  setOpenServices(!openServices)
+}}
             >
-              <NavLink
-                to={item.path}
-                className="sidebar-link"
-                onClick={(e) => {
+              <div className="sidebar-icon"><OrdersIcon /></div>
+              {open && <div className="sidebar-text">Servicios</div>}
+            </div>
 
-                  e.stopPropagation()
+            {openServices && open && (
+              <div className="sidebar-submenu">
 
-                  if (item.path === "/subscription") {
-                    handleSubscriptionClick(e)
-                  }
+                <NavLink to="/orders" className="sidebar-subitem">
+  <span className="sidebar-subicon">
+    <OrdersIcon2 fontSize="small" />
+  </span>
+  Órdenes
+</NavLink>
 
-                }}
-              >
-                <div className="sidebar-icon">{item.icon}</div>
+                <NavLink to="/tickets" className="sidebar-subitem">
+  <span className="sidebar-subicon">
+    <TicketsIcon fontSize="small" />
+  </span>
+  Tickets
+</NavLink>
 
-                {open && (
-                  <div className="sidebar-text">
-                    {item.title}
-                  </div>
-                )}
-              </NavLink>
-            </Tooltip>
+              </div>
+            )}
 
-          ))}
+          </div>
+
+          {/* Almacén */}
+          <NavLink to="/inventory" className="sidebar-link">
+            <div className="sidebar-icon"><InventoryIcon /></div>
+            {open && <div className="sidebar-text">Almacén</div>}
+          </NavLink>
+
+          {/* Mantenimiento */}
+          <NavLink to="/maintenance" className="sidebar-link">
+            <div className="sidebar-icon"><MaintenanceIcon /></div>
+            {open && <div className="sidebar-text">Mantenimiento</div>}
+          </NavLink>
+
+          {/* Workspaces */}
+          <NavLink to="/workspaces" className="sidebar-link">
+            <div className="sidebar-icon"><WorkspacesIcon /></div>
+            {open && <div className="sidebar-text">Espacios de trabajo</div>}
+          </NavLink>
+
+          {/* Suscripción */}
+          <NavLink
+            to="/subscription"
+            className="sidebar-link"
+            onClick={(e) => handleSubscriptionClick(e)}
+          >
+            <div className="sidebar-icon"><SubscriptionIcon /></div>
+            {open && <div className="sidebar-text">Suscripción</div>}
+          </NavLink>
+
+          {/* Configuración */}
+          <NavLink to="/account" className="sidebar-link">
+            <div className="sidebar-icon"><AccountIcon /></div>
+            {open && <div className="sidebar-text">Configuración</div>}
+          </NavLink>
 
         </div>
 
-        {/* 🔥 BOTÓN SUPABASE */}
+        {/* BOTÓN CONTROL */}
         <div
           className="sidebar-control-button"
           onClick={(e) => {
@@ -159,12 +195,11 @@ export const Sidemenu = () => {
           ☰
         </div>
 
-        {/* 🔥 PANEL FLOTANTE */}
         {controlOpen && (
           <div className="sidebar-control-panel">
 
             <div className="sidebar-control-title">
-             Control del menú
+              Control del menú
             </div>
 
             <div
@@ -174,7 +209,7 @@ export const Sidemenu = () => {
                 setControlOpen(false)
               }}
             >
-              ● Expandido
+              ● Expandir
             </div>
 
             <div
@@ -184,10 +219,8 @@ export const Sidemenu = () => {
                 setControlOpen(false)
               }}
             >
-              ● Contraido
+              ● Contraer
             </div>
-
-          
 
           </div>
         )}

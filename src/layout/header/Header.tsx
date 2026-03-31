@@ -15,7 +15,8 @@ export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
     const [notifications, setNotifications] = useState(0)
   const user = JSON.parse(localStorage.getItem("user") || "{}")
   const navigate = useNavigate()
-
+const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
+const isPremium = user?.plan_id && user.plan_id !== FREE_PLAN_ID
   useEffect(() => {
 
   const fetchNotifications = async () => {
@@ -56,11 +57,14 @@ export const Header: React.FC<HeaderProps> = ({ open, setOpen }) => {
 
       {/* área usuario */} 
       <div className="header-user">
+<span className="header-username">
+  Bienvenid@ de vuelta:
+  <strong className="header-name">{user.nombre}</strong>
 
-        <span className="header-username">
-          Bienvenid@ de vuelta:
-          <strong className="header-name">{user.nombre}</strong>
-        </span>
+  {isPremium && (
+    <span className="premium-badge">PREMIUM</span>
+  )}
+</span>
 
         {/* NOTIFICATIONS */}
     <button

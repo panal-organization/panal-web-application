@@ -153,8 +153,8 @@ const SubscriptionPage: React.FC = () => {
               <h3>Plan Profesional</h3>
 
               <div className="plan-price pro-price">
-                $299
-                <span>MXN / mes</span>
+                $29.99
+                <span>USD / mes</span>
               </div>
 
               <p className="plan-subtitle">

@@ -20,7 +20,7 @@ import InventoryPage from "./pages/app/InventoryPage"
 import WorkspacesPage from "./pages/app/WorkspacesPage"
 import SubscriptionPage from "./pages/app/SubscriptionPage"
 import SubscriptionCheckoutPage from "./pages/app/SubscriptionCheckoutPage"
-
+import MaintenancePage from "./pages/app/MaintenancePage"
 /* ===============================
 PÁGINAS PÚBLICAS (LANDING)
 Accesibles sin sesión
@@ -91,6 +91,15 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+  path="/maintenance"
+  element={
+    <ProtectedRoute>
+      <MaintenancePage />
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/subscription"

@@ -385,7 +385,7 @@ SIDEBAR CONTROL (BOTTOM)
 /* botón pequeño */
 .sidebar-control-button {
   margin-top: auto;
-
+  margin-left:5.5px ;
   width: 32px;
   height: 32px;
 
@@ -452,3 +452,72 @@ SIDEBAR CONTROL (BOTTOM)
   color: #ffffff;
   
 }
+
+.premium-badge {
+  margin-left: 10px;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #1e293b;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+
+
+}
+
+/* SUBMENU SERVICIOS */
+.sidebar-submenu {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.sidebar-subitem {
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #cbd5e1;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.sidebar-subitem:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.sidebar-subitem.active {
+  color: #f4b400;
+}
+
+/* 🔥 ACTIVO SUBMENU (barrita naranja) */
+.sidebar-subitem.active {
+  color: #f4b400;
+  position: relative;
+}
+
+.sidebar-subitem.active::before {
+  content: "";
+  position: absolute;
+
+  left: -10px; /* ajusta según se vea */
+  top: 4px;
+
+  width: 3px;
+  height: calc(100% - 8px);
+
+  background: #f4b400;
+  border-radius: 4px;
+}
+
+.sidebar-subitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-subicon {
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+}   
