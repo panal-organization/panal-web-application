@@ -1,93 +1,383 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Page } from "../../templates"
+import OrderDetailModal from "../../components/orders/OrderDetailModal"
 
 import AddIcon from "@mui/icons-material/Add"
 import SearchIcon from "@mui/icons-material/Search"
 import Inventory2Icon from "@mui/icons-material/Inventory2"
+import EditIcon from "@mui/icons-material/Edit"
+import DeleteIcon from "@mui/icons-material/Delete"
+
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom"
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
+
+import { useWorkspace } from "../../context/WorkspaceContext"
 
 import "./OrdersPage.css"
 
+interface Order {
+  _id: string
+  descripcion: string
+  estado: string
+  tipo_id: string
+  articulo_id: string
+  created_at: string
+}
+
+interface Tipo {
+  _id: string
+  nombre: string
+}
+
+interface Articulo {
+  _id: string
+  nombre: string
+}
+
 const OrdersPage: React.FC = () => {
+
+  const { workspace } = useWorkspace()
+
+  const [usuarios, setUsuarios] = useState<any[]>([])
+  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const [orders, setOrders] = useState<Order[]>([])
+  const [tipos, setTipos] = useState<Tipo[]>([])
+  const [articulos, setArticulos] = useState<Articulo[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const [search, setSearch] = useState("")
+  const [estadoFiltro, setEstadoFiltro] = useState("ALL")
+  const [tipoFiltro, setTipoFiltro] = useState("ALL")
+  const [orden, setOrden] = useState("ASC")
+
+  const [page, setPage] = useState(1)
+  const itemsPerPage = 10
 
   useEffect(() => {
     document.title = "Órdenes de servicio"
   }, [])
 
+  useEffect(() => {
+
+    if (!workspace?._id) return
+
+    const fetchData = async () => {
+
+      try {
+
+       const [ordersRes, tiposRes, articulosRes, usuariosRes] = await Promise.all([
+  fetch(`/api/ordenes-servicio`, {
+    headers: { "ngrok-skip-browser-warning": "true" }
+  }),
+  fetch(`/api/tipo-ordenes`, {
+    headers: { "ngrok-skip-browser-warning": "true" }
+  }),
+  fetch(`/api/articulos`, {
+    headers: { "ngrok-skip-browser-warning": "true" }
+  }),
+  fetch(`/api/usuarios`, {
+    headers: { "ngrok-skip-browser-warning": "true" }
+  })
+])
+const usuariosData = await usuariosRes.json()
+setUsuarios(usuariosData)
+        const ordersData = await ordersRes.json()
+        const tiposData = await tiposRes.json()
+        const articulosData = await articulosRes.json()
+
+        const filtered = ordersData.filter((o: any) =>
+          o.workspace_id === workspace._id
+        )
+
+        setOrders(filtered)
+        setTipos(tiposData)
+        setArticulos(articulosData)
+
+      } catch (err) {
+        console.error("❌ Error:", err)
+      } finally {
+        setLoading(false)
+      }
+
+    }
+
+    fetchData()
+
+  }, [workspace])
+
+const openModal = (order: any) => {
+  if (!usuarios.length) {
+    console.log("usuarios aún no cargan")
+    return
+  }
+
+  setSelectedOrder({
+    ...order,
+    usuario_nombre: getUsuarioNombre(order.created_by)
+  })
+
+  setIsModalOpen(true)
+}
+
+  const getTipoNombre = (id: string) =>
+    tipos.find(t => t._id === id)?.nombre || "-"
+
+  const getArticuloNombre = (id: string) =>
+    articulos.find(a => a._id === id)?.nombre || "-"
+
+const getUsuarioNombre = (id: string) =>
+  usuarios.find(u => String(u._id) === String(id))?.nombre || "Usuario"
+
+  const getEstadoClass = (estado: string) =>
+    estado.toLowerCase()
+
+  const getEstadoIcon = (estado: string) => {
+    switch (estado) {
+      case "RESUELTO":
+        return <CheckCircleIcon fontSize="small" />
+      case "EN_PROGRESO":
+        return <HourglassBottomIcon fontSize="small" />
+      case "PENDIENTE":
+        return <RadioButtonUncheckedIcon fontSize="small" />
+      default:
+        return null
+    }
+  }
+
+  let filteredOrders = orders.filter((order) => {
+
+    const matchesSearch =
+      order.descripcion.toLowerCase().includes(search.toLowerCase()) ||
+      getTipoNombre(order.tipo_id).toLowerCase().includes(search.toLowerCase()) ||
+      getArticuloNombre(order.articulo_id).toLowerCase().includes(search.toLowerCase())
+
+    const matchesEstado =
+      estadoFiltro === "ALL" || order.estado === estadoFiltro
+
+    const matchesTipo =
+      tipoFiltro === "ALL" || order.tipo_id === tipoFiltro
+
+    return matchesSearch && matchesEstado && matchesTipo
+  })
+
+  filteredOrders = filteredOrders.sort((a, b) => {
+    const valA = a.descripcion.toLowerCase()
+    const valB = b.descripcion.toLowerCase()
+
+    if (orden === "ASC") return valA.localeCompare(valB)
+    return valB.localeCompare(valA)
+  })
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage)
+
+  const paginatedOrders = filteredOrders.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  )
+
   return (
 
     <Page>
 
-      {/* HEADER */}
+      <div className="orders-header">
+        <h2 className="orders-title">
+          <Inventory2Icon className="orders-title-icon"/>
+          Gestión de Órdenes
+        </h2>
+      </div>
 
-     {/* HEADER */}
+      <div className="orders-toolbar">
 
-<div className="orders-header">
+        <div className="orders-filters">
 
-  <h2 className="orders-title">
-    <Inventory2Icon className="orders-title-icon"/>
-    Gestión de Órdenes
-  </h2>
+          <div className="orders-search-container">
+            <SearchIcon className="orders-search-icon"/>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              className="orders-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-</div>
+          <select
+            className="orders-select"
+            value={estadoFiltro}
+            onChange={(e) => setEstadoFiltro(e.target.value)}
+          >
+            <option value="ALL">Todos</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROGRESO">En progreso</option>
+            <option value="RESUELTO">Resuelto</option>
+          </select>
 
-{/* FILTROS */}
+          <select
+            className="orders-select"
+            value={tipoFiltro}
+            onChange={(e) => setTipoFiltro(e.target.value)}
+          >
+            <option value="ALL">Todos los tipos</option>
+            {tipos.map(t => (
+              <option key={t._id} value={t._id}>
+                {t.nombre}
+              </option>
+            ))}
+          </select>
 
-<div className="orders-toolbar">
+          <span className="orders-order-label">Ordenar:</span>
 
-  <div className="orders-filters">
+          <select
+            className="orders-select"
+            value={orden}
+            onChange={(e) => setOrden(e.target.value)}
+          >
+            <option value="ASC">A → Z</option>
+            <option value="DESC">Z → A</option>
+          </select>
 
-    <div className="orders-search-container">
-      <SearchIcon className="orders-search-icon"/>
-      <input
-        type="text"
-        placeholder="Buscar por cliente o ticket"
-        className="orders-search"
-      />
-    </div>
+        </div>
 
-    <select className="orders-select">
-      <option>Todos los estados</option>
-      <option>Pendiente</option>
-      <option>En proceso</option>
-      <option>Completado</option>
-    </select>
+        <button className="orders-create-btn">
+          <AddIcon />
+          Crear orden
+        </button>
 
-    <span className="orders-order-label">Ordenar por:</span>
-
-    <select className="orders-select">
-      <option>A → Z</option>
-      <option>Z → A</option>
-    </select>
-
-  </div>
-
-  <button className="orders-create-btn">
-    <AddIcon />
-    Crear orden
-  </button>
-
-</div>      {/* TABLA */}
+      </div>
 
       <div className="orders-table">
 
         <div className="orders-table-header">
-
-          <div>ID</div>
-          <div>Ticket</div>
-          <div>Técnico</div>
+          <div>Tipo</div>
+          <div>Descripción</div>
           <div>Estado</div>
-          <div>Fecha</div>
+          <div>Artículo</div>
           <div>Acciones</div>
-
         </div>
 
-        <div className="orders-table-row loading">
+        {loading ? (
 
-          Cargando órdenes...
+          <div className="orders-table-row loading">
+            Cargando órdenes...
+          </div>
 
-        </div>
+        ) : paginatedOrders.length === 0 ? (
+
+          <div className="orders-table-row loading">
+            No hay órdenes
+          </div>
+
+        ) : (
+
+          paginatedOrders.map((order) => (
+
+            <div key={order._id} className="orders-table-row">
+
+              <div className="tipo">{getTipoNombre(order.tipo_id)}</div>
+
+              <div className="descripcion">{order.descripcion}</div>
+
+              <div>
+                <span className={`badge ${getEstadoClass(order.estado)}`}>
+                  {getEstadoIcon(order.estado)}
+                  {order.estado}
+                </span>
+              </div>
+
+              <div>{getArticuloNombre(order.articulo_id)}</div>
+
+              <div className="actions">
+
+                <button 
+                  className="btn view"
+                  onClick={() => openModal(order)}
+                >
+                  👁 Ver
+                </button>
+
+                <button 
+                  className="btn edit"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <EditIcon fontSize="small" />
+                  Editar
+                </button>
+
+                <button 
+                  className="btn delete"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <DeleteIcon fontSize="small" />
+                  Eliminar
+                </button>
+
+              </div>
+
+            </div>
+
+          ))
+
+        )}
 
       </div>
+
+      <div className="pagination-container">
+
+        <button
+          className="page-btn"
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+        >
+          {"<"}
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter(p =>
+            p === 1 ||
+            p === totalPages ||
+            Math.abs(p - page) <= 1
+          )
+          .map((p, i, arr) => {
+
+            const prev = arr[i - 1]
+
+            return (
+              <span key={p} className="page-group">
+
+                {prev && p - prev > 1 && <span className="dots">...</span>}
+
+                <button
+                  className={`page-btn ${page === p ? "active" : ""}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+
+              </span>
+            )
+          })}
+
+        <button
+          className="page-btn"
+          disabled={page === totalPages}
+          onClick={() => setPage(page + 1)}
+        >
+          {">"}
+        </button>
+
+      </div>
+
+      {/* MODAL */}
+      <OrderDetailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        order={selectedOrder}
+        getTipoNombre={getTipoNombre}
+        getArticuloNombre={getArticuloNombre}
+      />
 
     </Page>
 

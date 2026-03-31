@@ -91,14 +91,6 @@ TABLA
   background:white;
 }
 
-.orders-table-header{
-  display:grid;
-  grid-template-columns: 80px 160px 160px 140px 160px 120px;
-  background:#f59e0b;
-  color:white;
-  font-weight:600;
-  padding:12px 16px;
-}
 
 .orders-table-row{
   display:grid;
@@ -133,4 +125,208 @@ TABLA
   justify-content:space-between;
   align-items:center;
   margin-bottom:18px;
+}
+
+
+
+
+/*BADGES*/
+.tipo {
+  font-weight: 600;
+}
+
+.descripcion {
+  color: #444;
+}
+
+/* BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px; /* 🔥 espacio entre icono y texto */
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+.badge.pendiente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+
+.badge.resuelto {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* PAGINACIÓN */
+.pagination-container {
+  display: flex;
+  justify-content: flex-end; /* 🔥 derecha */
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.page-btn {
+  background:  #14224a;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 36px;
+}
+
+.page-btn:hover {
+  background: #2c3a63;
+}
+
+.badge.en_progreso {
+  background: #dbeafe; /* azul suave */
+  color: #1d4ed8;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-btn.active {
+  background:  #f59e0b;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.dots {
+  padding: 0 6px;
+  color:  #f59e0b;
+}
+
+
+
+/* BOTONES */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn.edit {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn.delete {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* TABLA GRID MEJORADA */
+.orders-table-header,
+.orders-table-row {
+  display: grid;
+  grid-template-columns: 
+  180px   /* Tipo */
+  1fr     /* Descripción */
+  300px   /* Estado */
+  220px   /* Artículo */
+  260px;  /* Acciones */
+  
+  align-items: center;
+  padding: 12px 16px;
+}
+.orders-table-header{
+
+  background:#f59e0b;
+  color:white;
+  font-weight:600;
+
+}
+
+/* separación visual */
+.orders-table-row {
+  border-bottom: 1px solid #eee;
+}
+
+/* HEADER */
+.orders-table-header {
+  font-weight: bold;
+}
+
+/* descripción más aire */
+.orders-table-row div:nth-child(2) {
+  padding-right: 20px;
+}
+
+
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  white-space: nowrap;
+}
+
+/* VER → neutro (outline azul) */
+.btn.view {
+  color: #2563eb;
+  border-color: #2563eb;
+  background-color: transparent;
+}
+
+/* EDITAR → secundario (gris elegante) */
+.btn.edit {
+  color: #374151;
+  border-color: #898c90;
+  background-color: #f9fafb;
+}
+
+/* ELIMINAR → peligro (fuerte) */
+.btn.delete {
+  color: #dc2626;
+  border-color: #dc2626;
+  background-color: transparent;
+}
+
+.btn {
+  transition: all 0.2s ease;
+}
+
+/* VER */
+.btn.view:hover {
+  background-color: #5489cf; /* azul suave */
+   color: #fff;
+  border-color: #1d4ed8;
+}
+
+/* EDITAR */
+.btn.edit:hover {
+  background-color: #c5c5c6; /* gris suave */
+  border-color: #000000;
+
+}
+
+/* DELETE */
+.btn.delete:hover {
+  background-color: #bd4545;
+  color: #fff;
+  border-color: #dc2626;
 }
