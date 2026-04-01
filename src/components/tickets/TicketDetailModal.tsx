@@ -9,6 +9,21 @@ import {
   User
 } from "lucide-react"
 
+
+const formatText = (text: string = "") => {
+  const map: any = {
+    SOPORTE: "Soporte",
+    BUG: "Bug",
+    MEJORA: "Mejora",
+    MANTENIMIENTO: "Mantenimiento",
+    BAJA: "Baja",
+    MEDIA: "Media",
+    ALTA: "Alta",
+    CRITICA: "Crítica"
+  }
+
+  return map[text] || text
+}
 const TicketDetailModal = ({ isOpen, onClose, ticket }: any) => {
   if (!isOpen || !ticket) return null
 
@@ -65,7 +80,7 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }: any) => {
               <AlertTriangle size={16} />
               <span>Prioridad</span>
             </div>
-            <p>{ticket.prioridad}</p>
+            <p>{formatText(ticket.prioridad)}</p>
           </div>
 
           {/* 🏷️ CATEGORÍA */}
@@ -74,7 +89,7 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }: any) => {
               <Tag size={16} />
               <span>Categoría</span>
             </div>
-            <p>{ticket.categoria || "SOPORTE"}</p>
+            <p>{formatText(ticket.categoria || "SOPORTE")}</p>
           </div>
 
           {/* 📅 CREADO */}

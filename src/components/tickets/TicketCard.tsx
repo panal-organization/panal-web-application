@@ -9,15 +9,6 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported"
 
-interface Ticket {
-  _id: string
-  titulo: string
-  descripcion: string
-  estado: string
-  prioridad: string
-  categoria?: string
-  foto?: string
-}
 
 /* =========================
 HELPERS

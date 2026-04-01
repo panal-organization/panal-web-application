@@ -6,6 +6,8 @@
   margin-top: 25px;
 }
 
+
+
 .tickets-section-title {
   font-size: 16px;
   font-weight: 600;
@@ -131,4 +133,68 @@ CATEGORIA (AZULITOS PRO)
   gap: 6px;
   margin-top: 6px;
   flex-wrap: wrap;
+}
+
+
+.modal-input {
+  width: 100%;
+  margin-top: 6px;
+  border: 1px solid #e5e7eb; /* MISMO COLOR */
+
+}
+.modal-card input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px; /* 👈 IGUAL QUE SELECT */
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+}
+.modal-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.modal-card input:focus,
+.modal-card textarea:focus,
+.modal-card select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+
+
+.estado-disabled {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  background: #f9fafb;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #92400e;
+  cursor: not-allowed;
+}
+
+.estado-disabled .arrow {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.tickets-total {
+  margin: 10px 0 15px 10px;
+  font-size: 16px;
+  color: #374151;
+  margin-top: 10px;
+  margin-left: 12px;
+}
+
+.tickets-total strong {
+  color: #111827;
+  font-weight: 600;
 }

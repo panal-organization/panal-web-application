@@ -1,9 +1,11 @@
 import { Box } from "@mui/material"
 import { Page } from "../../templates"
 import { useEffect, useState } from "react"
-import Modal from "../../components/ui/Modal"
+
+
 import TicketCard from "../../components/tickets/TicketCard"
 import TicketDetailModal from "../../components/tickets/TicketDetailModal"
+import CreateTicketModal from "../../components/tickets/CreateTicketModal"
 
 import AssignmentIcon from "@mui/icons-material/Assignment"
 import AddIcon from "@mui/icons-material/Add"
@@ -212,6 +214,9 @@ return (
         </div>
 
         {/* CONTENIDO */}
+        <div className="tickets-total">
+  Total de tickets: <strong>{ticketsFiltrados.length}</strong>
+</div>
         <Box className="tickets-container">
 
           {loading && (
@@ -287,15 +292,6 @@ return (
           </div>
         )}
 
-        {/* MODAL CREAR */}
-        <Modal
-          isOpen={isCreateOpen}
-          onClose={() => setIsCreateOpen(false)}
-        >
-          <Box p={3}>
-            Crear Ticket (siguiente paso 💥)
-          </Box>
-        </Modal>
 
         {/* MODAL DETALLE */}
         <TicketDetailModal
@@ -303,6 +299,14 @@ return (
           onClose={() => setIsDetailOpen(false)}
           ticket={selectedTicket}
         />
+
+        <CreateTicketModal
+  isOpen={isCreateOpen}
+  onClose={() => setIsCreateOpen(false)}
+  onSuccess={(newTicket: any) => {
+    setTickets(prev => [newTicket, ...prev])
+  }}
+/>
 
       </Box>
     </Page>
