@@ -1,0 +1,134 @@
+.tickets-container {
+  padding-left: 10px;
+}
+
+.tickets-section {
+  margin-top: 25px;
+}
+
+.tickets-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.tickets-empty,
+.tickets-loading {
+  padding: 20px;
+  color: #6b7280;
+}
+
+/* =========================
+PRIORIDAD (UX PRO)
+========================= */
+
+.badge.prioridad.baja {
+  background: #dcfce7;   /* verde suave */
+  color: #166534;
+}
+
+.badge.prioridad.media {
+  background: #fef9c3;   /* amarillo */
+  color: #854d0e;
+}
+
+.badge.prioridad.alta {
+  background: #fed7aa;   /* naranja */
+  color: #9a3412;
+}
+
+.badge.prioridad.critica {
+  background: #fee2e2;   /* rojo */
+  color: #991b1b;
+}
+
+
+
+/* =========================
+CATEGORIA (AZULITOS PRO)
+========================= */
+
+.badge.categoria.soporte {
+  background: #dbeafe;   /* azul claro */
+  color: #1d4ed8;
+}
+
+.badge.categoria.mejora {
+  background: #dbeafe;   /* azul claro */
+  color: #1d4ed8;
+}
+
+.badge.categoria.mantenimiento {
+   background: #dbeafe;   /* azul claro */
+  color: #1d4ed8;
+}
+
+.badge.categoria.bug {
+   background: #dbeafe;   /* azul claro */
+  color: #1d4ed8;       /* azul más fuerte */
+}
+
+.ticket-card {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* IZQUIERDA */
+.ticket-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.ticket-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* SIN IMAGEN */
+.no-image-avatar {
+  width: 100%;
+  height: 100%;
+  background: #e0f2fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  color: #000000;
+}
+
+/* CONTENIDO */
+.ticket-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* HEADER */
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-id {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* BADGES */
+.ticket-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}

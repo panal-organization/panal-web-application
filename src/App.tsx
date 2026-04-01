@@ -34,7 +34,7 @@ import ContactPage from "./pages/public/ContactPage/ContactPage"
 
 import LoginPage from "./pages/public/LoginPage/LoginPage"
 import RegisterPage from "./pages/public/RegisterPage/RegisterPage"
-
+import "./styles/ui.css"
 
 const App: React.FC = () => {
 

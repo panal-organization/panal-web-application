@@ -241,7 +241,7 @@ TABLA
   grid-template-columns: 
   180px   /* Tipo */
   1fr     /* Descripción */
-  280px   /* Estado */
+  260px   /* Estado */
   200px   /* Artículo */
   260px;  /* Acciones */
   

@@ -4,7 +4,9 @@ import OrderDetailModal from "../../components/orders/OrderDetailModal"
 
 import AddIcon from "@mui/icons-material/Add"
 import SearchIcon from "@mui/icons-material/Search"
-import Inventory2Icon from "@mui/icons-material/Inventory2"
+
+import ListAlt from "@mui/icons-material/ListAlt"
+
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 
@@ -101,10 +103,11 @@ setUsuarios(usuariosData)
 
         const filtered = ordersData.filter((o: any) => {
 
-  // ❌ ignorar órdenes sin workspace
   if (!o.workspace_id) return false
 
-  // 🔥 comparar correctamente
+  // 🔥 FILTRO CLAVE
+  if (o.is_deleted) return false
+
   return String(o.workspace_id) === String(workspace._id)
 })
 
@@ -246,7 +249,7 @@ const getUsuarioNombre = (id: string) =>
 
       <div className="orders-header">
         <h2 className="orders-title">
-          <Inventory2Icon className="orders-title-icon"/>
+          <ListAlt className="orders-title-icon"/>
           Gestión de órdenes
         </h2>
       </div>
