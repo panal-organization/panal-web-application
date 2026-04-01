@@ -86,10 +86,11 @@ TABLA
 
 .orders-table{
   border-radius:10px;
-  overflow:hidden;
+  
   border:1px solid #e5e7eb;
   background:white;
 }
+
 
 
 .orders-table-row{
@@ -240,8 +241,8 @@ TABLA
   grid-template-columns: 
   180px   /* Tipo */
   1fr     /* Descripción */
-  300px   /* Estado */
-  220px   /* Artículo */
+  280px   /* Estado */
+  200px   /* Artículo */
   260px;  /* Acciones */
   
   align-items: center;

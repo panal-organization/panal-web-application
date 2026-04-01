@@ -11,7 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
-
+import CreateOrderModal from "../../components/orders/CreateOrderModal"
 import { useWorkspace } from "../../context/WorkspaceContext"
 
 import "./OrdersPage.css"
@@ -42,7 +42,7 @@ const OrdersPage: React.FC = () => {
   const [usuarios, setUsuarios] = useState<any[]>([])
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [orders, setOrders] = useState<Order[]>([])
   const [tipos, setTipos] = useState<Tipo[]>([])
   const [articulos, setArticulos] = useState<Articulo[]>([])
@@ -54,7 +54,7 @@ const OrdersPage: React.FC = () => {
   const [orden, setOrden] = useState("ASC")
 
   const [page, setPage] = useState(1)
-  const itemsPerPage = 10
+  const itemsPerPage = 8
 
   useEffect(() => {
     document.title = "Órdenes de servicio"
@@ -88,9 +88,17 @@ setUsuarios(usuariosData)
         const tiposData = await tiposRes.json()
         const articulosData = await articulosRes.json()
 
-        const filtered = ordersData.filter((o: any) =>
-          o.workspace_id === workspace._id
-        )
+        const filtered = ordersData.filter((o: any) => {
+
+  // ❌ ignorar órdenes sin workspace
+  if (!o.workspace_id) return false
+
+  // 🔥 comparar correctamente
+  return String(o.workspace_id) === String(workspace._id)
+})
+
+console.log("Workspace actual:", workspace._id)
+console.log("Órdenes filtradas:", filtered.length)
 
         setOrders(filtered)
         setTipos(tiposData)
@@ -163,14 +171,13 @@ const getUsuarioNombre = (id: string) =>
     return matchesSearch && matchesEstado && matchesTipo
   })
 
-  filteredOrders = filteredOrders.sort((a, b) => {
-    const valA = a.descripcion.toLowerCase()
-    const valB = b.descripcion.toLowerCase()
+  filteredOrders = [...filteredOrders].sort((a, b) => {
+  const valA = a.descripcion.toLowerCase()
+  const valB = b.descripcion.toLowerCase()
 
-    if (orden === "ASC") return valA.localeCompare(valB)
-    return valB.localeCompare(valA)
-  })
-
+  if (orden === "ASC") return valA.localeCompare(valB)
+  return valB.localeCompare(valA)
+})
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage)
 
   const paginatedOrders = filteredOrders.slice(
@@ -185,7 +192,7 @@ const getUsuarioNombre = (id: string) =>
       <div className="orders-header">
         <h2 className="orders-title">
           <Inventory2Icon className="orders-title-icon"/>
-          Gestión de Órdenes
+          Gestión de órdenes
         </h2>
       </div>
 
@@ -228,23 +235,17 @@ const getUsuarioNombre = (id: string) =>
             ))}
           </select>
 
-          <span className="orders-order-label">Ordenar:</span>
-
-          <select
-            className="orders-select"
-            value={orden}
-            onChange={(e) => setOrden(e.target.value)}
-          >
-            <option value="ASC">A → Z</option>
-            <option value="DESC">Z → A</option>
-          </select>
+        
 
         </div>
 
-        <button className="orders-create-btn">
-          <AddIcon />
-          Crear orden
-        </button>
+        <button 
+  className="orders-create-btn"
+  onClick={() => setIsCreateOpen(true)}
+>
+  <AddIcon />
+  Crear orden
+</button>
 
       </div>
 
@@ -379,6 +380,17 @@ const getUsuarioNombre = (id: string) =>
         getArticuloNombre={getArticuloNombre}
       />
 
+<CreateOrderModal
+  isOpen={isCreateOpen}
+  onClose={() => setIsCreateOpen(false)}
+  tipos={tipos}
+  articulos={articulos}
+  onSuccess={(newOrder: any) => {   // 🔥 CAMBIA ESTO
+    setOrders(prev => [newOrder, ...prev])
+  }}
+
+  
+/>
     </Page>
 
   )

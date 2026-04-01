@@ -87,10 +87,6 @@
   transition: all 0.2s ease;
 }
 
-.modal-card:hover {
-  background: #eef2ff;
-  transform: translateY(-1px);
-}
 .modal-card-header{
   display:flex;
   align-items:center;
@@ -106,7 +102,7 @@
 }
 .modal-card p{
   margin:0;
-  font-weight:600; /* más fuerte */
+  
   color:#111827; /* negro suave */
 }
 /* DESCRIPCIÓN */
@@ -123,7 +119,7 @@
 .modal-description p{
   margin-top:6px;
   line-height:1.4;
-  font-weight:600;  
+
 }
 
 /* ANIMACIÓN */
