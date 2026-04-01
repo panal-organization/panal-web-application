@@ -3,6 +3,7 @@ import { Page } from "../../templates"
 import { useEffect, useState } from "react"
 import Modal from "../../components/ui/Modal"
 import TicketCard from "../../components/tickets/TicketCard"
+import TicketDetailModal from "../../components/tickets/TicketDetailModal"
 
 import AssignmentIcon from "@mui/icons-material/Assignment"
 import AddIcon from "@mui/icons-material/Add"
@@ -10,17 +11,19 @@ import SearchIcon from "@mui/icons-material/Search"
 
 import { useWorkspace } from "../../context/WorkspaceContext"
 
-// 🔥 reutilizamos estilos de Orders
 import "./OrdersPage.css"
-
-// 🔥 estilos propios (opcional)
 import "./TicketsPage.css"
 
 const TicketsPage: React.FC = () => {
 
   const { workspace } = useWorkspace()
 
+  const [usuarios, setUsuarios] = useState<any[]>([]) // 🔥 IMPORTANTE
+
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+
+  const [selectedTicket, setSelectedTicket] = useState<any>(null)
+  const [isDetailOpen, setIsDetailOpen] = useState(false)
 
   const [tickets, setTickets] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -28,10 +31,27 @@ const TicketsPage: React.FC = () => {
   const [search, setSearch] = useState("")
   const [estadoFiltro, setEstadoFiltro] = useState("ALL")
   const [prioridadFiltro, setPrioridadFiltro] = useState("ALL")
+  const [categoriaFiltro, setCategoriaFiltro] = useState("ALL")
 
-  // 🔥 PAGINACIÓN
   const [page, setPage] = useState(1)
-  const itemsPerPage = 5
+  const itemsPerPage = 4
+
+  // 🔥 OBTENER NOMBRE USUARIO (igual que orders)
+  const getUsuarioNombre = (id: string) =>
+    usuarios.find(u => String(u._id) === String(id))?.nombre || "Usuario"
+
+  // 🔥 ABRIR MODAL (AQUÍ ESTÁ LA MAGIA)
+  const openDetail = (ticket: any) => {
+
+    if (!usuarios.length) return
+
+    setSelectedTicket({
+      ...ticket,
+      usuario_nombre: getUsuarioNombre(ticket.created_by)
+    })
+
+    setIsDetailOpen(true)
+  }
 
   useEffect(() => {
     document.title = "Tickets"
@@ -42,19 +62,25 @@ const TicketsPage: React.FC = () => {
 
     if (!workspace?._id) return
 
-    const fetchTickets = async () => {
+    const fetchData = async () => {
 
       try {
 
-        const res = await fetch(`/api/tickets`, {
-          headers: {
-            "ngrok-skip-browser-warning": "true"
-          }
-        })
+        const [ticketsRes, usuariosRes] = await Promise.all([
+          fetch(`/api/tickets`, {
+            headers: { "ngrok-skip-browser-warning": "true" }
+          }),
+          fetch(`/api/usuarios`, {
+            headers: { "ngrok-skip-browser-warning": "true" }
+          })
+        ])
 
-        const data = await res.json()
+        const ticketsData = await ticketsRes.json()
+        const usuariosData = await usuariosRes.json()
 
-        const filtrados = data.filter((t: any) => {
+        setUsuarios(usuariosData)
+
+        const filtrados = ticketsData.filter((t: any) => {
           return (
             t.workspace_id &&
             !t.is_deleted &&
@@ -72,7 +98,7 @@ const TicketsPage: React.FC = () => {
 
     }
 
-    fetchTickets()
+    fetchData()
 
   }, [workspace])
 
@@ -89,15 +115,20 @@ const TicketsPage: React.FC = () => {
     const matchesPrioridad =
       prioridadFiltro === "ALL" || t.prioridad === prioridadFiltro
 
-    return matchesSearch && matchesEstado && matchesPrioridad
+      const matchesCategoria =
+  categoriaFiltro === "ALL" || t.categoria === categoriaFiltro
+return (
+  matchesSearch &&
+  matchesEstado &&
+  matchesPrioridad &&
+  matchesCategoria
+)
   })
 
-  // 🔥 RESET PAGE cuando cambian filtros
   useEffect(() => {
     setPage(1)
-  }, [search, estadoFiltro, prioridadFiltro])
+ }, [search, estadoFiltro, prioridadFiltro, categoriaFiltro])
 
-  // 🔥 PAGINACIÓN
   const totalPages = Math.ceil(ticketsFiltrados.length / itemsPerPage)
 
   const paginatedTickets = ticketsFiltrados.slice(
@@ -122,7 +153,6 @@ const TicketsPage: React.FC = () => {
 
           <div className="orders-filters">
 
-            {/* 🔍 BUSCADOR */}
             <div className="orders-search-container">
               <SearchIcon className="orders-search-icon"/>
               <input
@@ -134,7 +164,6 @@ const TicketsPage: React.FC = () => {
               />
             </div>
 
-            {/* 🔹 ESTADO */}
             <select
               className="orders-select"
               value={estadoFiltro}
@@ -146,7 +175,6 @@ const TicketsPage: React.FC = () => {
               <option value="RESUELTO">Resuelto</option>
             </select>
 
-            {/* 🔹 PRIORIDAD */}
             <select
               className="orders-select"
               value={prioridadFiltro}
@@ -159,9 +187,20 @@ const TicketsPage: React.FC = () => {
               <option value="CRITICA">Crítica</option>
             </select>
 
+            <select
+  className="orders-select"
+  value={categoriaFiltro}
+  onChange={(e) => setCategoriaFiltro(e.target.value)}
+>
+  <option value="ALL">Todas las categorías</option>
+  <option value="SOPORTE">Soporte</option>
+  <option value="BUG">Bug</option>
+  <option value="MEJORA">Mejora</option>
+  <option value="MANTENIMIENTO">Mantenimiento</option>
+</select>
+
           </div>
 
-          {/* ➕ BOTÓN */}
           <button 
             className="orders-create-btn"
             onClick={() => setIsCreateOpen(true)}
@@ -187,20 +226,20 @@ const TicketsPage: React.FC = () => {
             </div>
           )}
 
-          {/* 🔥 LISTA PAGINADA SIEMPRE */}
           {!loading && ticketsFiltrados.length > 0 && (
-
             paginatedTickets.map(t => (
-              <TicketCard key={t._id} ticket={t} />
+              <TicketCard
+                key={t._id}
+                ticket={t}
+                onClick={openDetail}
+              />
             ))
-
           )}
 
         </Box>
 
-        {/* 🔥 PAGINACIÓN SIEMPRE */}
+        {/* PAGINACIÓN */}
         {totalPages > 0 && (
-
           <div className="pagination-container">
 
             <button
@@ -246,10 +285,9 @@ const TicketsPage: React.FC = () => {
             </button>
 
           </div>
-
         )}
 
-        {/* MODAL */}
+        {/* MODAL CREAR */}
         <Modal
           isOpen={isCreateOpen}
           onClose={() => setIsCreateOpen(false)}
@@ -258,6 +296,13 @@ const TicketsPage: React.FC = () => {
             Crear Ticket (siguiente paso 💥)
           </Box>
         </Modal>
+
+        {/* MODAL DETALLE */}
+        <TicketDetailModal
+          isOpen={isDetailOpen}
+          onClose={() => setIsDetailOpen(false)}
+          ticket={selectedTicket}
+        />
 
       </Box>
     </Page>

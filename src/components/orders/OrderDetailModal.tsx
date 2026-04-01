@@ -5,7 +5,8 @@ import {
   Package,
   Calendar,
   Clock,
-  ImageOff
+  ImageOff,
+   FileText
 } from "lucide-react"
 
 const OrderDetailModal = ({
@@ -108,8 +109,9 @@ const OrderDetailModal = ({
         {/* DESCRIPCIÓN */}
         <div className="modal-description">
           <div className="modal-card-header">
-            <span>Descripción</span>
-          </div>
+  <FileText size={16} />
+  <span>Descripción</span>
+</div>
           <p>{order.descripcion}</p>
         </div>
 

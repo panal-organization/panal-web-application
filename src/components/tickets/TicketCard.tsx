@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material"
 // 🔥 reutilizamos estilos de Orders
 import "../../pages/app/OrdersPage.css"
 
-// 🔥 ICONOS (igual que Orders)
+// 🔥 ICONOS
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
@@ -16,7 +16,7 @@ interface Ticket {
   estado: string
   prioridad: string
   categoria?: string
-  foto?: string // 🔥 IMPORTANTE
+  foto?: string
 }
 
 /* =========================
@@ -62,25 +62,28 @@ const getCategoriaClass = (categoria?: string) =>
 COMPONENTE
 ========================= */
 
-const TicketCard = ({ ticket }: { ticket: Ticket }) => {
+const TicketCard = ({ ticket, onClick }: any) => {
 
   const hasImage = ticket.foto && ticket.foto.startsWith("http")
 
   return (
     <Box
+      onClick={() => onClick(ticket)} // 🔥 CLAVE
       sx={{
-        display: "flex",            // 🔥 CLAVE
+        cursor: "pointer",            // 🔥 UX PRO
+        display: "flex",
         gap: 2,
         p: 2,
         borderRadius: "12px",
         border: "1px solid #e5e7eb",
         background: "#fff",
         mb: 2,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+        boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+        transition: "all 0.2s ease"
       }}
     >
 
-      {/* 🖼️ IMAGEN IZQUIERDA */}
+      {/* 🖼️ IMAGEN */}
       <Box
         sx={{
           width: 120,
@@ -114,8 +117,8 @@ const TicketCard = ({ ticket }: { ticket: Ticket }) => {
 
         {/* HEADER */}
         <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography fontWeight="bold">
-            #{ticket._id?.slice(-4)}
+          <Typography fontWeight="bold"mb={1.52}>
+            {ticket.titulo}
           </Typography>
 
           <div className={getEstadoClass(ticket.estado)}>
@@ -125,8 +128,8 @@ const TicketCard = ({ ticket }: { ticket: Ticket }) => {
         </Box>
 
         {/* TITULO */}
-        <Typography fontWeight="600" mb={0.5}>
-          {ticket.titulo}
+        <Typography fontWeight="600" mb={4}>
+          
         </Typography>
 
         {/* DESCRIPCIÓN */}

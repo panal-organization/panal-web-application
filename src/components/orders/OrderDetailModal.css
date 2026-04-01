@@ -43,6 +43,11 @@
   gap:6px;
 }
 
+.modal-description {
+  padding: 15px 20px 20px;
+  margin-left: 10px; /* 🔥 AJUSTA ESTE VALOR */
+}
+
 .no-image svg{
   color:#9ca3af;
 }
