@@ -13,6 +13,7 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import CreateOrderModal from "../../components/orders/CreateOrderModal"
 import { useWorkspace } from "../../context/WorkspaceContext"
+import DeleteOrderModal from "../../components/orders/DeleteOrderModal"
 
 import "./OrdersPage.css"
 
@@ -53,7 +54,8 @@ const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [estadoFiltro, setEstadoFiltro] = useState("ALL")
   const [tipoFiltro, setTipoFiltro] = useState("ALL")
   const [orden] = useState("ASC")
-
+const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+const [orderToDelete, setOrderToDelete] = useState<any>(null)
   const [page, setPage] = useState(1)
   const itemsPerPage = 8
 
@@ -124,6 +126,34 @@ console.log("Órdenes filtradas:", filtered.length)
     fetchData()
 
   }, [workspace])
+
+const handleDeleteOrder = async () => {
+  if (!orderToDelete) return
+
+  try {
+    await fetch(`/api/ordenes-servicio/${orderToDelete._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        is_deleted: true
+      })
+    })
+
+    // 🔥 quitar de la UI
+    setOrders(prev =>
+      prev.filter(o => o._id !== orderToDelete._id)
+    )
+
+    // 🔥 cerrar modal
+    setIsDeleteOpen(false)
+    setOrderToDelete(null)
+
+  } catch (error) {
+    console.error("Error eliminando:", error)
+  }
+}
 
 const openModal = (order: any) => {
   if (!usuarios.length) {
@@ -338,7 +368,11 @@ const getUsuarioNombre = (id: string) =>
 
                 <button 
                   className="btn delete"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+  e.stopPropagation()
+  setOrderToDelete(order)
+  setIsDeleteOpen(true)
+}}
                 >
                   <DeleteIcon fontSize="small" />
                   Eliminar
@@ -434,6 +468,16 @@ const getUsuarioNombre = (id: string) =>
       prev.map(o => o._id === updatedOrder._id ? updatedOrder : o)
     )
   }}
+/>
+
+<DeleteOrderModal
+  isOpen={isDeleteOpen}
+  onClose={() => {
+    setIsDeleteOpen(false)
+    setOrderToDelete(null)
+  }}
+ onConfirm={handleDeleteOrder}
+  order={orderToDelete}
 />
     </Page>
 

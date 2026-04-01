@@ -33,6 +33,19 @@ const CreateOrderModal = ({
     estado: "PENDIENTE"
   })
 
+  const resetForm = () => {
+  setForm({
+    descripcion: "",
+    tipo_id: "",
+    articulo_id: "",
+    almacen_id: "",
+    estado: "PENDIENTE"
+  })
+
+  setPreview(null)
+  setFile(null)
+  setErrors({})
+}
   const [preview, setPreview] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
@@ -204,7 +217,8 @@ const CreateOrderModal = ({
 
       if (onSuccess) onSuccess(result)
 
-      onClose()
+resetForm()   // 🔥 limpia todo
+onClose()
 
     } catch (err) {
       console.error("❌ ERROR:", err)
@@ -214,7 +228,7 @@ const CreateOrderModal = ({
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
 
         {/* IMAGE */}
@@ -341,7 +355,14 @@ const CreateOrderModal = ({
 
           {/* BOTONES */}
           <div className="modal-actions">
-            <button type="button" onClick={onClose} className="btn-secondary">
+            <button
+  type="button"
+  onClick={() => {
+    resetForm()
+    onClose()
+  }}
+  className="btn-secondary"
+>
               Cancelar
             </button>
 

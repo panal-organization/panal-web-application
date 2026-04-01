@@ -1,0 +1,191 @@
+/* =========================
+   OVERLAY
+========================= */
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* =========================
+   MODAL
+========================= */
+.delete-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  animation: scaleIn 0.2s ease;
+}
+
+/* ANIMACIÓN */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   HEADER
+========================= */
+.delete-modal h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* =========================
+   TEXTO
+========================= */
+.delete-modal p {
+  margin: 8px 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* =========================
+   INFO ORDEN
+========================= */
+.delete-order-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 12px 0;
+  font-weight: 500;
+}
+
+/* =========================
+   WARNING (naranja suave)
+========================= */
+.delete-warning {
+  background: #fff7ed;
+  color: #9a3412;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #fed7aa;
+}
+
+/* =========================
+   INPUT
+========================= */
+.delete-input {
+  width: 95%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  margin-top: 6px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.delete-input:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+}
+
+/* =========================
+   BOTONES (usa los tuyos)
+========================= */
+
+/* CONTENEDOR */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 16px;
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+/* BOTÓN DELETE (VARIANTE DEL PRIMARY) */
+/* =========================
+   BOTÓN PRIMARY (DELETE usa el mismo estilo)
+========================= */
+
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  
+
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.delete-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827; /* texto normal */
+}
+
+/* SOLO el icono */
+.delete-icon {
+  color: #f59e0b; /* naranja bonito */
+}
+
+/* BLOQUE ORDEN */
+.delete-order-box {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 14px;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+/* TITULO */
+.order-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* SUBTEXTO */
+.order-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+
+.delete-warning {
+  margin-bottom: 25px;
+}
+.delete-order-box {
+  margin: 16px 0;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
