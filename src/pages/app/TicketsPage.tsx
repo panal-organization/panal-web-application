@@ -2,7 +2,6 @@ import { Box } from "@mui/material"
 import { Page } from "../../templates"
 import { useEffect, useState } from "react"
 
-
 import TicketCard from "../../components/tickets/TicketCard"
 import TicketDetailModal from "../../components/tickets/TicketDetailModal"
 import CreateTicketModal from "../../components/tickets/CreateTicketModal"
@@ -12,18 +11,25 @@ import AddIcon from "@mui/icons-material/Add"
 import SearchIcon from "@mui/icons-material/Search"
 
 import { useWorkspace } from "../../context/WorkspaceContext"
-
+import DeleteTicketModal from "../../components/tickets/DeleteTicketModal"
 import "./OrdersPage.css"
 import "./TicketsPage.css"
 
 const TicketsPage: React.FC = () => {
 
   const { workspace } = useWorkspace()
+const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+const [ticketToDelete, setTicketToDelete] = useState<any>(null)
+  const [usuarios, setUsuarios] = useState<any[]>([])
 
-  const [usuarios, setUsuarios] = useState<any[]>([]) // 🔥 IMPORTANTE
-
+  // 🔥 CREATE
   const [isCreateOpen, setIsCreateOpen] = useState(false)
 
+  // 🔥 EDIT
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [ticketToEdit, setTicketToEdit] = useState<any>(null)
+
+  // 🔥 DETAIL
   const [selectedTicket, setSelectedTicket] = useState<any>(null)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
 
@@ -38,13 +44,38 @@ const TicketsPage: React.FC = () => {
   const [page, setPage] = useState(1)
   const itemsPerPage = 4
 
-  // 🔥 OBTENER NOMBRE USUARIO (igual que orders)
   const getUsuarioNombre = (id: string) =>
     usuarios.find(u => String(u._id) === String(id))?.nombre || "Usuario"
 
-  // 🔥 ABRIR MODAL (AQUÍ ESTÁ LA MAGIA)
-  const openDetail = (ticket: any) => {
 
+  const handleDeleteTicket = async () => {
+  if (!ticketToDelete) return
+
+  try {
+    await fetch(`/api/tickets/${ticketToDelete._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        is_deleted: true
+      })
+    })
+
+    // 🔥 quitar de la UI
+    setTickets(prev =>
+      prev.filter(t => t._id !== ticketToDelete._id)
+    )
+
+    // 🔥 cerrar modal
+    setIsDeleteOpen(false)
+    setTicketToDelete(null)
+
+  } catch (error) {
+    console.error("Error eliminando ticket:", error)
+  }
+}
+  const openDetail = (ticket: any) => {
     if (!usuarios.length) return
 
     setSelectedTicket({
@@ -117,19 +148,20 @@ const TicketsPage: React.FC = () => {
     const matchesPrioridad =
       prioridadFiltro === "ALL" || t.prioridad === prioridadFiltro
 
-      const matchesCategoria =
-  categoriaFiltro === "ALL" || t.categoria === categoriaFiltro
-return (
-  matchesSearch &&
-  matchesEstado &&
-  matchesPrioridad &&
-  matchesCategoria
-)
+    const matchesCategoria =
+      categoriaFiltro === "ALL" || t.categoria === categoriaFiltro
+
+    return (
+      matchesSearch &&
+      matchesEstado &&
+      matchesPrioridad &&
+      matchesCategoria
+    )
   })
 
   useEffect(() => {
     setPage(1)
- }, [search, estadoFiltro, prioridadFiltro, categoriaFiltro])
+  }, [search, estadoFiltro, prioridadFiltro, categoriaFiltro])
 
   const totalPages = Math.ceil(ticketsFiltrados.length / itemsPerPage)
 
@@ -190,16 +222,16 @@ return (
             </select>
 
             <select
-  className="orders-select"
-  value={categoriaFiltro}
-  onChange={(e) => setCategoriaFiltro(e.target.value)}
->
-  <option value="ALL">Todas las categorías</option>
-  <option value="SOPORTE">Soporte</option>
-  <option value="BUG">Bug</option>
-  <option value="MEJORA">Mejora</option>
-  <option value="MANTENIMIENTO">Mantenimiento</option>
-</select>
+              className="orders-select"
+              value={categoriaFiltro}
+              onChange={(e) => setCategoriaFiltro(e.target.value)}
+            >
+              <option value="ALL">Todas las categorías</option>
+              <option value="SOPORTE">Soporte</option>
+              <option value="BUG">Bug</option>
+              <option value="MEJORA">Mejora</option>
+              <option value="MANTENIMIENTO">Mantenimiento</option>
+            </select>
 
           </div>
 
@@ -213,10 +245,12 @@ return (
 
         </div>
 
-        {/* CONTENIDO */}
+        {/* TOTAL */}
         <div className="tickets-total">
-  Total de tickets: <strong>{ticketsFiltrados.length}</strong>
-</div>
+          Total de tickets: <strong>{ticketsFiltrados.length}</strong>
+        </div>
+
+        {/* LISTA */}
         <Box className="tickets-container">
 
           {loading && (
@@ -233,11 +267,19 @@ return (
 
           {!loading && ticketsFiltrados.length > 0 && (
             paginatedTickets.map(t => (
-              <TicketCard
-                key={t._id}
-                ticket={t}
-                onClick={openDetail}
-              />
+             <TicketCard
+  key={t._id}
+  ticket={t}
+  onClick={openDetail}
+  onEdit={(ticket: any) => {
+    setTicketToEdit(ticket)
+    setIsEditOpen(true)
+  }}
+  onDelete={(ticket: any) => {
+    setTicketToDelete(ticket)
+    setIsDeleteOpen(true)
+  }}
+/>
             ))
           )}
 
@@ -292,7 +334,6 @@ return (
           </div>
         )}
 
-
         {/* MODAL DETALLE */}
         <TicketDetailModal
           isOpen={isDetailOpen}
@@ -300,12 +341,40 @@ return (
           ticket={selectedTicket}
         />
 
+        {/* CREATE */}
         <CreateTicketModal
-  isOpen={isCreateOpen}
-  onClose={() => setIsCreateOpen(false)}
-  onSuccess={(newTicket: any) => {
-    setTickets(prev => [newTicket, ...prev])
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+          onSuccess={(newTicket: any) => {
+            setTickets(prev => [newTicket, ...prev])
+          }}
+        />
+
+        {/* EDIT 🔥 */}
+        <CreateTicketModal
+          isOpen={isEditOpen}
+          onClose={() => {
+            setIsEditOpen(false)
+            setTicketToEdit(null)
+          }}
+          ticketToEdit={ticketToEdit}
+          onSuccess={(updatedTicket: any) => {
+            setTickets(prev =>
+              prev.map(t =>
+                t._id === updatedTicket._id ? updatedTicket : t
+              )
+            )
+          }}
+        />
+
+        <DeleteTicketModal
+  isOpen={isDeleteOpen}
+  onClose={() => {
+    setIsDeleteOpen(false)
+    setTicketToDelete(null)
   }}
+  onConfirm={handleDeleteTicket}
+  ticket={ticketToDelete}
 />
 
       </Box>

@@ -1,14 +1,15 @@
 import "../orders/CreateOrderModal.css"
 
 import { Info, FileText, Tag, AlertTriangle, Upload } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../../context/AuthContext"
 import { useWorkspace } from "../../context/WorkspaceContext"
 
 const CreateTicketModal = ({
   isOpen,
   onClose,
-  onSuccess
+  onSuccess,
+  ticketToEdit // 🔥 NUEVO
 }: any) => {
 
   const { user } = useAuth()
@@ -38,6 +39,23 @@ const CreateTicketModal = ({
     setPreview(null)
   }
 
+  // 🔥 PRECARGAR DATOS (EDIT)
+  useEffect(() => {
+    if (ticketToEdit) {
+      setForm({
+        titulo: ticketToEdit.titulo || "",
+        descripcion: ticketToEdit.descripcion || "",
+        prioridad: ticketToEdit.prioridad || "MEDIA",
+        categoria: ticketToEdit.categoria || "SOPORTE",
+        estado: ticketToEdit.estado || "PENDIENTE"
+      })
+
+      if (ticketToEdit.foto) {
+        setPreview(ticketToEdit.foto)
+      }
+    }
+  }, [ticketToEdit])
+
   if (!isOpen) return null
 
   const handleChange = (e: any) => {
@@ -51,8 +69,6 @@ const CreateTicketModal = ({
     const selected = e.target.files[0]
     if (!selected) return
 
-    console.log("📸 FILE SELECTED:", selected)
-
     setFile(selected)
     setPreview(URL.createObjectURL(selected))
   }
@@ -65,12 +81,10 @@ const CreateTicketModal = ({
     try {
       setLoading(true)
 
-      let imageUrl: string | null = null
+      let imageUrl = preview
 
-      // 🔥 SUBIR IMAGEN
+      // 🔥 SUBIR IMAGEN SI HAY NUEVA
       if (file && user?._id) {
-        console.log("🚀 Subiendo imagen...")
-
         const fd = new FormData()
         fd.append("file", file)
         fd.append("usuario_id", user._id)
@@ -82,33 +96,32 @@ const CreateTicketModal = ({
         })
 
         const data = await res.json()
-
-        console.log("📦 RESPUESTA UPLOAD:", data)
-
-        imageUrl = data?.archivo?.url || data?.url || null
+        imageUrl = data?.archivo?.url || data?.url
       }
 
-      console.log("🧠 URL FINAL:", imageUrl)
+      const isEditing = !!ticketToEdit
 
-      // 🔥 CREAR TICKET
-      const res = await fetch("/api/tickets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          ...form,
-          foto: imageUrl, // 🔥 CLAVE
-          workspace_id: workspace._id,
-          created_by: user?._id
-        })
-      })
+      const res = await fetch(
+        isEditing
+          ? `/api/tickets/${ticketToEdit._id}`
+          : "/api/tickets",
+        {
+          method: isEditing ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            ...form,
+            foto: imageUrl,
+            workspace_id: workspace._id,
+            created_by: user?._id
+          })
+        }
+      )
 
       const result = await res.json()
 
-      console.log("✅ TICKET CREADO:", result)
-
-      onSuccess(result)
+      if (onSuccess) onSuccess(result)
 
       resetForm()
       onClose()
@@ -144,9 +157,11 @@ const CreateTicketModal = ({
         {/* HEADER */}
         <div className="modal-header">
           <div>
-            <h2>Crear ticket</h2>
+            <h2>{ticketToEdit ? "Editar ticket" : "Crear ticket"}</h2>
             <p className="modal-subtitle">
-              Completa la información del ticket
+              {ticketToEdit
+                ? "Modifica la información del ticket"
+                : "Completa la información del ticket"}
             </p>
           </div>
         </div>
@@ -211,8 +226,14 @@ const CreateTicketModal = ({
                 <Info size={16} />
                 <span>Estado</span>
               </div>
-              <select disabled>
-                <option>Pendiente</option>
+              <select
+                name="estado"
+                value={form.estado}
+                onChange={handleChange}
+              >
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="EN_PROGRESO">En progreso</option>
+                <option value="RESUELTO">Resuelto</option>
               </select>
             </div>
 
@@ -245,7 +266,9 @@ const CreateTicketModal = ({
             </button>
 
             <button type="submit" className="btn-primary">
-              {loading ? "Creando..." : "Crear ticket"}
+              {loading
+                ? (ticketToEdit ? "Actualizando..." : "Creando...")
+                : (ticketToEdit ? "Actualizar ticket" : "Crear ticket")}
             </button>
           </div>
 

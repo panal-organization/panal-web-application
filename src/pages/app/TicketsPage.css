@@ -131,8 +131,9 @@ CATEGORIA (AZULITOS PRO)
 .ticket-badges {
   display: flex;
   gap: 6px;
-  margin-top: 6px;
+  margin-top: 10px;
   flex-wrap: wrap;
+  
 }
 
 
