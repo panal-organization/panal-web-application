@@ -9,18 +9,19 @@ import {
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useAuth } from "../../context/AuthContext"
-import { useWorkspace } from "../../context/WorkspaceContext" // 🔥 NUEVO
+import { useWorkspace } from "../../context/WorkspaceContext"
 
 const CreateOrderModal = ({
   isOpen,
   onClose,
   tipos,
   articulos,
-  onSuccess
+  onSuccess,
+  orderToEdit // 🔥 NUEVO
 }: any) => {
 
   const { user } = useAuth()
-  const { workspace } = useWorkspace() // 🔥 CLAVE
+  const { workspace } = useWorkspace()
 
   const [almacenesData, setAlmacenesData] = useState<any[]>([])
 
@@ -37,7 +38,10 @@ const CreateOrderModal = ({
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>({})
 
-  // ✅ FETCH ALMACENES
+  //NO BORRRAR ERRORS AUNQUE NO SE USE!!!
+  //NO BORRAR SI NO NO SE ACTUALIZA EN ORDERS!!!!!
+  //PLZ !
+  
   useEffect(() => {
     const fetchAlmacenes = async () => {
       try {
@@ -50,20 +54,80 @@ const CreateOrderModal = ({
 
       } catch (err) {
         console.error("Error cargando almacenes", err)
+        console.log(errors)
       }
     }
 
     if (isOpen) fetchAlmacenes()
   }, [isOpen])
 
+  // 🔥 PRECARGAR DATOS (EDIT)
+  useEffect(() => {
+  if (orderToEdit) {
+
+    const articuloSeleccionado = articulos.find(
+      (a: any) => String(a._id) === String(orderToEdit.articulo_id)
+    )
+
+    let almacenId = ""
+
+    if (articuloSeleccionado) {
+      almacenId =
+        typeof articuloSeleccionado.almacen_id === "object"
+          ? articuloSeleccionado.almacen_id._id
+          : articuloSeleccionado.almacen_id
+    }
+
+    setForm({
+      descripcion: orderToEdit.descripcion || "",
+      tipo_id: orderToEdit.tipo_id || "",
+      articulo_id: orderToEdit.articulo_id || "",
+      almacen_id: almacenId, // 🔥 AHORA VIENE DEL ARTICULO
+      estado: orderToEdit.estado || "PENDIENTE"
+    })
+
+    if (orderToEdit.foto) {
+      setPreview(orderToEdit.foto)
+    }
+  }
+}, [orderToEdit, articulos])
+
   if (!isOpen) return null
 
   const handleChange = (e: any) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    })
+
+  // 🔥 SI CAMBIA ARTICULO → AUTO SET ALMACEN
+  if (e.target.name === "articulo_id") {
+
+    const articuloSeleccionado = articulos.find(
+      (a: any) => String(a._id) === String(e.target.value)
+    )
+
+    if (articuloSeleccionado) {
+
+      const almacenId =
+        typeof articuloSeleccionado.almacen_id === "object"
+          ? articuloSeleccionado.almacen_id._id
+          : articuloSeleccionado.almacen_id
+
+      setForm({
+        ...form,
+        articulo_id: e.target.value,
+        almacen_id: almacenId // 🔥 AUTO
+      })
+
+      return
+    }
   }
+
+  // 🔁 comportamiento normal
+  setForm({
+    ...form,
+    [e.target.name]: e.target.value
+  })
+}
+
+  
 
   const handleImageChange = (e: any) => {
     const selected = e.target.files[0]
@@ -88,7 +152,6 @@ const CreateOrderModal = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    // 🔥 VALIDACIÓN CRÍTICA SaaS
     if (!workspace?._id) {
       console.error("❌ No hay workspace activo")
       return
@@ -99,9 +162,9 @@ const CreateOrderModal = ({
     try {
       setLoading(true)
 
-      let imageUrl = null
+      let imageUrl = preview
 
-      // 📸 SUBIR IMAGEN
+      // subir imagen si hay nueva
       if (file && user?._id) {
         const fd = new FormData()
         fd.append("file", file)
@@ -117,29 +180,34 @@ const CreateOrderModal = ({
         imageUrl = data?.archivo?.url || data?.url
       }
 
-      // 🔥 CREAR ORDEN (YA MULTI-TENANT)
-      const res = await fetch("/api/ordenes-servicio", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          ...form,
-          foto: imageUrl,
-          workspace_id: workspace._id,   // 🔥 CLAVE
-          created_by: user?._id          // 🔥 RECOMENDADO
-        })
-      })
+      const isEditing = !!orderToEdit
 
-      const newOrder = await res.json()
+      const res = await fetch(
+        isEditing
+          ? `/api/ordenes-servicio/${orderToEdit._id}`
+          : "/api/ordenes-servicio",
+        {
+          method: isEditing ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            ...form,
+            foto: imageUrl,
+            workspace_id: workspace._id,
+            created_by: user?._id
+          })
+        }
+      )
 
-      // 🔥 ACTUALIZAR UI INMEDIATAMENTE
-      if (onSuccess) onSuccess(newOrder)
+      const result = await res.json()
+
+      if (onSuccess) onSuccess(result)
 
       onClose()
 
     } catch (err) {
-      console.error("❌ ERROR CREANDO ORDEN:", err)
+      console.error("❌ ERROR:", err)
     } finally {
       setLoading(false)
     }
@@ -165,9 +233,11 @@ const CreateOrderModal = ({
         {/* HEADER */}
         <div className="modal-header">
           <div>
-            <h2>Crear orden</h2>
+            <h2>{orderToEdit ? "Editar orden" : "Crear orden"}</h2>
             <p className="modal-subtitle">
-              Completa la información de la orden
+              {orderToEdit
+                ? "Modifica la información de la orden"
+                : "Completa la información de la orden"}
             </p>
           </div>
         </div>
@@ -176,7 +246,7 @@ const CreateOrderModal = ({
 
           <div className="modal-grid">
 
-            {/* ALMACÉN */}
+            {/* ALMACEN */}
             <div className="modal-card">
               <div className="modal-card-header">
                 <Warehouse size={16} />
@@ -186,7 +256,7 @@ const CreateOrderModal = ({
                 name="almacen_id"
                 value={form.almacen_id}
                 onChange={handleChange}
-                className={errors.almacen_id ? "input-error" : ""}
+                disabled
               >
                 <option value="">Seleccionar almacén</option>
                 {almacenesData.map((a: any) => (
@@ -197,7 +267,7 @@ const CreateOrderModal = ({
               </select>
             </div>
 
-            {/* ARTÍCULO */}
+            {/* ARTICULO */}
             <div className="modal-card">
               <div className="modal-card-header">
                 <Package size={16} />
@@ -207,7 +277,6 @@ const CreateOrderModal = ({
                 name="articulo_id"
                 value={form.articulo_id}
                 onChange={handleChange}
-                className={errors.articulo_id ? "input-error" : ""}
               >
                 <option value="">Seleccionar artículo</option>
                 {articulos.map((a: any) => (
@@ -228,7 +297,6 @@ const CreateOrderModal = ({
                 name="tipo_id"
                 value={form.tipo_id}
                 onChange={handleChange}
-                className={errors.tipo_id ? "input-error" : ""}
               >
                 <option value="">Seleccionar tipo</option>
                 {tipos.map((t: any) => (
@@ -250,9 +318,9 @@ const CreateOrderModal = ({
                 value={form.estado}
                 onChange={handleChange}
               >
-               <option value="PENDIENTE">Pendiente</option>
-<option value="EN_PROGRESO">En progreso</option>
-<option value="RESUELTO">Resuelto</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="EN_PROGRESO">En progreso</option>
+                <option value="RESUELTO">Resuelto</option>
               </select>
             </div>
 
@@ -266,10 +334,8 @@ const CreateOrderModal = ({
             </div>
             <textarea
               name="descripcion"
-              placeholder="Describe los detalles de la orden..."
               value={form.descripcion}
               onChange={handleChange}
-              className={errors.descripcion ? "input-error" : ""}
             />
           </div>
 
@@ -279,8 +345,10 @@ const CreateOrderModal = ({
               Cancelar
             </button>
 
-            <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? "Creando..." : "Crear orden"}
+            <button type="submit" className="btn-primary">
+              {loading
+                ? (orderToEdit ? "Actualizando..." : "Creando...")
+                : (orderToEdit ? "Actualizar orden" : "Crear orden")}
             </button>
           </div>
 
@@ -290,5 +358,6 @@ const CreateOrderModal = ({
     </div>
   )
 }
+
 
 export default CreateOrderModal

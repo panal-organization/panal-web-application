@@ -33,12 +33,13 @@ interface Tipo {
 interface Articulo {
   _id: string
   nombre: string
+  almacen_id: any // 🔥 AGREGA ESTO
 }
-
 const OrdersPage: React.FC = () => {
 
   const { workspace } = useWorkspace()
-
+  const [isEditOpen, setIsEditOpen] = useState(false)
+const [orderToEdit, setOrderToEdit] = useState<any>(null)
   const [usuarios, setUsuarios] = useState<any[]>([])
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -47,11 +48,11 @@ const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [tipos, setTipos] = useState<Tipo[]>([])
   const [articulos, setArticulos] = useState<Articulo[]>([])
   const [loading, setLoading] = useState(true)
-
+  const [almacenes, setAlmacenes] = useState<any[]>([])
   const [search, setSearch] = useState("")
   const [estadoFiltro, setEstadoFiltro] = useState("ALL")
   const [tipoFiltro, setTipoFiltro] = useState("ALL")
-  const [orden, setOrden] = useState("ASC")
+  const [orden] = useState("ASC")
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 8
@@ -68,7 +69,7 @@ const [isCreateOpen, setIsCreateOpen] = useState(false)
 
       try {
 
-       const [ordersRes, tiposRes, articulosRes, usuariosRes] = await Promise.all([
+  const [ordersRes, tiposRes, articulosRes, usuariosRes, almacenesRes] = await Promise.all([
   fetch(`/api/ordenes-servicio`, {
     headers: { "ngrok-skip-browser-warning": "true" }
   }),
@@ -80,8 +81,16 @@ const [isCreateOpen, setIsCreateOpen] = useState(false)
   }),
   fetch(`/api/usuarios`, {
     headers: { "ngrok-skip-browser-warning": "true" }
+  }),
+  fetch(`/api/almacen`, {
+    headers: { "ngrok-skip-browser-warning": "true" }
   })
 ])
+
+
+const almacenesData = await almacenesRes.json()
+setAlmacenes(almacenesData.data || almacenesData)
+
 const usuariosData = await usuariosRes.json()
 setUsuarios(usuariosData)
         const ordersData = await ordersRes.json()
@@ -135,6 +144,22 @@ const openModal = (order: any) => {
 
   const getArticuloNombre = (id: string) =>
     articulos.find(a => a._id === id)?.nombre || "-"
+
+  const getAlmacenFromArticulo = (articulo_id: string) => {
+  const articulo = articulos.find(a => String(a._id) === String(articulo_id))
+  if (!articulo) return "-"
+
+  // 🔥 aquí el fix importante
+  const almacenId = typeof articulo.almacen_id === "object"
+    ? articulo.almacen_id._id
+    : articulo.almacen_id
+
+  const almacen = almacenes.find(a => String(a._id) === String(almacenId))
+
+  return almacen?.nombre || "-"
+}
+
+
 
 const getUsuarioNombre = (id: string) =>
   usuarios.find(u => String(u._id) === String(id))?.nombre || "Usuario"
@@ -301,7 +326,11 @@ const getUsuarioNombre = (id: string) =>
 
                 <button 
                   className="btn edit"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+  e.stopPropagation()
+  setOrderToEdit(order)
+  setIsEditOpen(true)
+}}
                 >
                   <EditIcon fontSize="small" />
                   Editar
@@ -372,13 +401,14 @@ const getUsuarioNombre = (id: string) =>
       </div>
 
       {/* MODAL */}
-      <OrderDetailModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        order={selectedOrder}
-        getTipoNombre={getTipoNombre}
-        getArticuloNombre={getArticuloNombre}
-      />
+     <OrderDetailModal
+  isOpen={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+  order={selectedOrder}
+  getTipoNombre={getTipoNombre}
+  getArticuloNombre={getArticuloNombre}
+  getAlmacenFromArticulo={getAlmacenFromArticulo} // 🔥 ESTE
+/>
 
 <CreateOrderModal
   isOpen={isCreateOpen}
@@ -388,8 +418,22 @@ const getUsuarioNombre = (id: string) =>
   onSuccess={(newOrder: any) => {   // 🔥 CAMBIA ESTO
     setOrders(prev => [newOrder, ...prev])
   }}
+/>
 
-  
+<CreateOrderModal
+  isOpen={isEditOpen}
+  onClose={() => {
+    setIsEditOpen(false)
+    setOrderToEdit(null)
+  }}
+  tipos={tipos}
+  articulos={articulos}
+  orderToEdit={orderToEdit}
+  onSuccess={(updatedOrder: any) => {
+    setOrders(prev =>
+      prev.map(o => o._id === updatedOrder._id ? updatedOrder : o)
+    )
+  }}
 />
     </Page>
 

@@ -13,7 +13,8 @@ const OrderDetailModal = ({
   onClose,
   order,
   getTipoNombre,
-  getArticuloNombre
+  getArticuloNombre,
+  getAlmacenFromArticulo
 }: any) => {
 
   if (!isOpen || !order) return null
@@ -77,6 +78,15 @@ const OrderDetailModal = ({
             <p>{getArticuloNombre(order.articulo_id)}</p>
           </div>
 
+<div className="modal-card">
+            <div className="modal-card-header">
+              <Package size={16} />
+              <span>Almacen</span>
+            </div>
+ <p>{getAlmacenFromArticulo(order.articulo_id)}</p>
+          </div>
+
+
           <div className="modal-card">
             <div className="modal-card-header">
               <Calendar size={16} />
@@ -107,5 +117,7 @@ const OrderDetailModal = ({
     </div>
   )
 }
+
+
 
 export default OrderDetailModal
