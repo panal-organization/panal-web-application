@@ -30,7 +30,7 @@ const DeleteArticuloModal = ({
         </div>
 
         <div className="delete-warning">
-          Este artículo dejará de ser visible.
+          Este artículo se va a eliminar.
           Esta acción no se puede deshacer.
         </div>
 

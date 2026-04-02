@@ -9,12 +9,27 @@ import ArticuloCard from "../../components/inventory/ArticuloCard"
 import CreateArticuloModal from "../../components/inventory/CreateArticuloModal"
 
 // 🔥 ICONOS
-import Inventory2Icon from "@mui/icons-material/Inventory2"
 import AddIcon from "@mui/icons-material/Add"
 import SearchIcon from "@mui/icons-material/Search"
 import WidgetsIcon from "@mui/icons-material/Widgets"
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone"
 import LaptopMacIcon from "@mui/icons-material/LaptopMac"
+import Inventory2Icon from "@mui/icons-material/Inventory2"
+import CategoryIcon from "@mui/icons-material/Category"
+import ViewListIcon from "@mui/icons-material/ViewList"
+import LocalShippingIcon from "@mui/icons-material/LocalShipping"
+
+import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows"
+import RouterIcon from "@mui/icons-material/Router"
+import PrintIcon from "@mui/icons-material/Print"
+
+import MemoryIcon from "@mui/icons-material/Memory"
+import SettingsIcon from "@mui/icons-material/Settings"
+
+import BuildIcon from "@mui/icons-material/Build"
+import FactoryIcon from "@mui/icons-material/Factory"
+import AppsIcon from "@mui/icons-material/Apps"
+import ScienceIcon from "@mui/icons-material/Science"
 
 // 🔥 estilos
 import "./OrdersPage.css"
@@ -25,19 +40,30 @@ import "./TicketsPage.css"
 /* =========================
 ICONO DINÁMICO
 ========================= */
-const getIcon = (icono: string) => {
-  const props = { sx: { fontSize: 20 } }
+const iconMap: any = {
+  widgets: <WidgetsIcon sx={{ fontSize: 20 }} />,
+  inventory: <Inventory2Icon sx={{ fontSize: 20 }} />,
+  category: <CategoryIcon sx={{ fontSize: 20 }} />,
+  list: <ViewListIcon sx={{ fontSize: 20 }} />,
+  truck: <LocalShippingIcon sx={{ fontSize: 20 }} />,
 
-  switch (icono) {
-    case "widgets":
-      return <WidgetsIcon {...props} />
-    case "mobile":
-      return <PhoneIphoneIcon {...props} />
-    case "laptop":
-      return <LaptopMacIcon {...props} />
-    default:
-      return <WidgetsIcon {...props} />
-  }
+  laptop: <LaptopMacIcon sx={{ fontSize: 20 }} />,
+  desktop: <DesktopWindowsIcon sx={{ fontSize: 20 }} />,
+  router: <RouterIcon sx={{ fontSize: 20 }} />,
+  mobile: <PhoneIphoneIcon sx={{ fontSize: 20 }} />,
+  printer: <PrintIcon sx={{ fontSize: 20 }} />,
+
+  chip: <MemoryIcon sx={{ fontSize: 20 }} />,
+  settings: <SettingsIcon sx={{ fontSize: 20 }} />,
+
+  tools: <BuildIcon sx={{ fontSize: 20 }} />,
+  factory: <FactoryIcon sx={{ fontSize: 20 }} />,
+  apps: <AppsIcon sx={{ fontSize: 20 }} />,
+  lab: <ScienceIcon sx={{ fontSize: 20 }} />
+}
+
+const getIcon = (icono: string) => {
+  return iconMap[icono] || <WidgetsIcon sx={{ fontSize: 20 }} />
 }
 
 const InventoryDetailPage: React.FC = () => {
@@ -235,8 +261,14 @@ const [articuloToDelete, setArticuloToDelete] = useState<any>(null)
         </div>
 
         {/* LISTA */}
-        <Box className="tickets-container">
-
+        <Box 
+  className="tickets-container"
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    gap: 2.5 // 🔥 AQUÍ está la magia
+  }}
+>
           {loading && (
             <div className="tickets-loading">Cargando artículos...</div>
           )}
