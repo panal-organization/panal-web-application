@@ -21,6 +21,7 @@ import WorkspacesPage from "./pages/app/WorkspacesPage"
 import SubscriptionPage from "./pages/app/SubscriptionPage"
 import SubscriptionCheckoutPage from "./pages/app/SubscriptionCheckoutPage"
 import MaintenancePage from "./pages/app/MaintenancePage"
+import InventoryDetailPage from "./pages/app/InventoryDetailPage"
 /* ===============================
 PÁGINAS PÚBLICAS (LANDING)
 Accesibles sin sesión
@@ -83,6 +84,15 @@ const App: React.FC = () => {
           }
         />
 
+
+ 
+<Route path="/inventory/:id" 
+          element={
+            <ProtectedRoute>
+              <InventoryDetailPage  />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/workspaces"
           element={

@@ -62,7 +62,7 @@ const [orderToDelete, setOrderToDelete] = useState<any>(null)
   const itemsPerPage = 8
 
   useEffect(() => {
-    document.title = "Órdenes de servicio"
+    document.title = "Órdenes de servicio" 
   }, [])
 
   useEffect(() => {

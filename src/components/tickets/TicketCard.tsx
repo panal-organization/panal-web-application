@@ -10,6 +10,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
+
 /* =========================
 HELPERS
 ========================= */
@@ -72,7 +73,8 @@ const TicketCard = ({ ticket, onClick, onEdit, onDelete }: any) => {
         boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
         transition: "all 0.2s ease",
         "&:hover": {
-          transform: "scale(1.0099)"
+          transform: "scale(1.01)",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.08)"
         }
       }}
     >
@@ -110,13 +112,15 @@ const TicketCard = ({ ticket, onClick, onEdit, onDelete }: any) => {
       <Box flex={1}>
 
         {/* HEADER */}
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
 
+          {/* IZQUIERDA */}
           <Typography fontWeight="bold">
             {ticket.titulo}
           </Typography>
 
-          <Box display="flex" alignItems="center" gap={1}>
+          {/* DERECHA */}
+          <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
 
             {/* ESTADO */}
             <div className={getEstadoClass(ticket.estado)}>
@@ -124,40 +128,12 @@ const TicketCard = ({ ticket, onClick, onEdit, onDelete }: any) => {
               <span>{ticket.estado}</span>
             </div>
 
-            {/* ✏️ EDIT BUTTON */}
-            <IconButton
-              size="small"
-              onClick={(e) => {
-                e.stopPropagation() // 🔥 evita abrir detalle
-                onEdit(ticket)
-              }}
-              sx={{
-                background: "#f3f4f6",
-                "&:hover": {
-                  background: "#e5e7eb"
-                }
-              }}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
+            {/* ACCIONES */}
+            <Box display="flex" gap={1}>
 
+              
+            </Box>
 
-<IconButton
-  size="small"
-  onClick={(e) => {
-    e.stopPropagation()
-    onDelete(ticket)
-  }}
-  sx={{
-    background: "#f3f4f6",
-                "&:hover": {
-                  background: "#e5e7eb"
-    }
-
-  }}
->
-  <DeleteIcon fontSize="small" />
-</IconButton>
           </Box>
 
         </Box>
@@ -168,23 +144,63 @@ const TicketCard = ({ ticket, onClick, onEdit, onDelete }: any) => {
         </Typography>
 
         {/* BADGES */}
-        <Box
-          display="flex"
-          gap={1}
-          alignItems="center"
-          flexWrap="wrap"
-          mt={4}
-        >
+<Box display="flex" alignItems="center" mt={2}>
 
-          <div className={getPrioridadClass(ticket.prioridad)}>
-            {ticket.prioridad}
-          </div>
+  {/* IZQUIERDA: BADGES */}
+  <Box display="flex" gap={1} flexWrap="wrap">
+    <div className={getPrioridadClass(ticket.prioridad)}>
+      {ticket.prioridad}
+    </div>
 
-          <div className={getCategoriaClass(ticket.categoria)}>
-            {ticket.categoria || "SOPORTE"}
-          </div>
+    <div className={getCategoriaClass(ticket.categoria)}>
+      {ticket.categoria || "SOPORTE"}
+    </div>
+  </Box>
 
-        </Box>
+  {/* DERECHA: ICONOS */}
+  <Box
+    sx={{
+      ml: "auto",
+      display: "flex",
+      gap: 1,
+      mt:[2]
+    }}
+  >
+    <IconButton
+      size="small"
+      onClick={(e) => {
+        e.stopPropagation()
+        onEdit(ticket)
+      }}
+      sx={{
+        background: "#f3f4f6",
+        "&:hover": {
+          background: "#e5e7eb"
+        }
+      }}
+    >
+      <EditIcon fontSize="small" />
+    </IconButton>
+
+    <IconButton
+      size="small"
+      onClick={(e) => {
+        e.stopPropagation()
+        onDelete(ticket)
+      }}
+      sx={{
+        background: "#f3f4f6",
+        "&:hover": {
+          background: "#e5e7eb"
+        }
+      }}
+    >
+      <DeleteIcon fontSize="small" />
+    </IconButton>
+  </Box>
+
+</Box>        
+        
 
       </Box>
 

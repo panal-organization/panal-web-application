@@ -1,0 +1,61 @@
+.inventory-container {
+  padding: 20px;
+}
+
+.subtitle {
+  color: gray;
+  margin-bottom: 20px;
+}
+
+/* LISTA */
+.inventory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* CARD */
+.inventory-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.inventory-card:hover {
+  transform: scale(1.01);
+}
+
+/* LEFT */
+.inventory-left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon-box {
+  width: 50px;
+  height: 50px;
+  background: #eef2ff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+/* BOTÓN */
+.create-btn {
+  margin-top: 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
