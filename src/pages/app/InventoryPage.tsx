@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import AlmacenCard from "../../components/inventory/AlmacenCard"
 import { useNavigate } from "react-router-dom"
 import CreateAlmacenModal from "../../components/inventory/CreateAlmacenModal"
+import DeleteAlmacenModal from "../../components/inventory/DeleteAlmacenModal"
 
 // 🔥 CONTEXTOS
 import { useWorkspace } from "../../context/WorkspaceContext"
@@ -23,7 +24,8 @@ const InventoryPage: React.FC = () => {
   const [almacenes, setAlmacenes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-
+const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+const [almacenToDelete, setAlmacenToDelete] = useState<any>(null)
 
 const [isEditOpen, setIsEditOpen] = useState(false)
 const [almacenToEdit, setAlmacenToEdit] = useState<any>(null)
@@ -95,6 +97,18 @@ const [almacenToEdit, setAlmacenToEdit] = useState<any>(null)
     page * itemsPerPage
   )
 
+
+  const handleDeleteAlmacen = () => {
+  if (!almacenToDelete) return
+
+  setAlmacenes(prev =>
+    prev.filter(a => a._id !== almacenToDelete._id)
+  )
+
+  setIsDeleteOpen(false)
+  setAlmacenToDelete(null)
+}
+
   return (
     <Page>
       <Box>
@@ -159,9 +173,10 @@ const [almacenToEdit, setAlmacenToEdit] = useState<any>(null)
   setAlmacenToEdit(almacen)
   setIsEditOpen(true)
 }}
-                onDelete={(almacen: any) => {
-                  console.log("eliminar", almacen)
-                }}
+               onDelete={(almacen: any) => {
+  setAlmacenToDelete(almacen)
+  setIsDeleteOpen(true)
+}}
               />
             ))
           )}
@@ -245,6 +260,16 @@ const [almacenToEdit, setAlmacenToEdit] = useState<any>(null)
     )
 
   }}
+/>
+
+<DeleteAlmacenModal
+  isOpen={isDeleteOpen}
+  onClose={() => {
+    setIsDeleteOpen(false)
+    setAlmacenToDelete(null)
+  }}
+  onConfirm={handleDeleteAlmacen}
+  almacen={almacenToDelete}
 />
 
       </Box>
