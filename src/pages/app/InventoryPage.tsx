@@ -122,7 +122,7 @@ const InventoryPage: React.FC = () => {
             </div>
 
           </div>
-
+ 
           <button className="orders-create-btn">
             <AddIcon />
             Nuevo almacén
@@ -159,7 +159,7 @@ const InventoryPage: React.FC = () => {
         </Box>
 
         {/* 🔥 PAGINACIÓN */}
-        {totalPages > 0 && (
+        {totalPages >= 0 && (
           <div className="pagination-container">
 
             <button

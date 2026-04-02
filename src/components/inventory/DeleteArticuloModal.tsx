@@ -1,18 +1,17 @@
 import "../orders/CreateOrderModal.css"
-
 import { AlertTriangle } from "lucide-react"
 import { useState } from "react"
 
-const DeleteTicketModal = ({
+const DeleteArticuloModal = ({
   isOpen,
   onClose,
   onConfirm,
-  ticket
+  articulo
 }: any) => {
 
-  const [text, setText] = useState("") 
+  const [text, setText] = useState("")
 
-  if (!isOpen || !ticket) return null
+  if (!isOpen || !articulo) return null
 
   return (
     <div className="delete-modal-overlay">
@@ -21,17 +20,17 @@ const DeleteTicketModal = ({
 
         <h3 className="delete-title">
           <AlertTriangle size={20} className="delete-icon" />
-          Eliminar ticket
+          Eliminar artículo
         </h3>
 
-        <p>¿Seguro que quieres eliminar este ticket?</p>
+        <p>¿Seguro que quieres eliminar este artículo?</p>
 
         <div className="delete-order-box">
-          {ticket.titulo}
+          {articulo.nombre}
         </div>
 
         <div className="delete-warning">
-          Este ticket dejará de ser visible para otros usuarios.
+          Este artículo dejará de ser visible.
           Esta acción no se puede deshacer.
         </div>
 
@@ -46,10 +45,7 @@ const DeleteTicketModal = ({
 
         <div className="modal-actions">
 
-          <button
-            className="btn-secondary"
-            onClick={onClose}
-          >
+          <button className="btn-secondary" onClick={onClose}>
             Cancelar
           </button>
 
@@ -72,4 +68,4 @@ const DeleteTicketModal = ({
   )
 }
 
-export default DeleteTicketModal
+export default DeleteArticuloModal
