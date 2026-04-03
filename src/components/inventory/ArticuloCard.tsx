@@ -3,13 +3,14 @@ import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 
-const ArticuloCard = ({ item, onEdit, onDelete }: any) => {
+const ArticuloCard = ({ item, onView, onEdit, onDelete }: any) => {
 
   const hasImage = item.foto && item.foto.startsWith("http")
 
   return (
     <Box
       className="ticket-card"
+       onClick={() => onView?.(item)} // 🔥 ESTO ES TODO
       sx={{
         cursor: "pointer",
         transition: "all 0.2s ease",

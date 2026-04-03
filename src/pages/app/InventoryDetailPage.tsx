@@ -19,6 +19,9 @@ import CategoryIcon from "@mui/icons-material/Category"
 import ViewListIcon from "@mui/icons-material/ViewList"
 import LocalShippingIcon from "@mui/icons-material/LocalShipping"
 
+
+import ArticuloDetailModal from "../../components/inventory/ArticuloDetailModal"
+
 import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows"
 import RouterIcon from "@mui/icons-material/Router"
 import PrintIcon from "@mui/icons-material/Print"
@@ -81,7 +84,8 @@ const [articuloToDelete, setArticuloToDelete] = useState<any>(null)
 
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
-
+const [selectedArticulo, setSelectedArticulo] = useState<any>(null)
+const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [articuloEdit, setArticuloEdit] = useState<any>(null)
 
@@ -92,6 +96,10 @@ const [articuloToDelete, setArticuloToDelete] = useState<any>(null)
   /* =========================
      FETCH DATA
   ========================= */
+  const handleView = (articulo: any) => {
+  setSelectedArticulo(articulo)
+  setIsDetailOpen(true)
+}
   useEffect(() => {
 
     const fetchData = async () => {
@@ -280,17 +288,18 @@ const [articuloToDelete, setArticuloToDelete] = useState<any>(null)
           {!loading && filtered.length > 0 && (
             paginated.map((item: any) => (
               <ArticuloCard
-                key={item._id}
-                item={item}
-                onEdit={(item: any) => {
-                  setArticuloEdit(item)
-                  setOpenModal(true)
-                }}
-                onDelete={(item: any) => {
-  setArticuloToDelete(item)
-  setIsDeleteOpen(true)
-}}
-              />
+  key={item._id}
+  item={item}
+  onView={handleView} // 🔥 ESTE FALTABA
+  onEdit={(item: any) => {
+    setArticuloEdit(item)
+    setOpenModal(true)
+  }}
+  onDelete={(item: any) => {
+    setArticuloToDelete(item)
+    setIsDeleteOpen(true)
+  }}
+/>
             ))
           )}
 
@@ -347,6 +356,11 @@ const [articuloToDelete, setArticuloToDelete] = useState<any>(null)
         )}
 
         {/* 🔥 MODAL (CORREGIDO COMO TICKETS) */}
+        <ArticuloDetailModal
+  isOpen={isDetailOpen}
+  onClose={() => setIsDetailOpen(false)}
+  articulo={selectedArticulo}
+/>
         <CreateArticuloModal
           isOpen={openModal}
           onClose={() => {

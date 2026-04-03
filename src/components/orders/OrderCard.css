@@ -1,0 +1,94 @@
+
+.order-card-horizontal {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.order-card-horizontal:hover {
+  transform: translateY(-2px);
+}
+
+/* IMAGEN */
+.order-card-img img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+
+/* CONTENIDO */
+.order-card-content {
+  flex: 1;
+}
+
+.order-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-sub {
+  color: gray;
+  margin-top: 4px;
+}
+
+.order-tags {
+  margin-top: 8px;
+}
+
+.tag {
+  background: #eef2ff;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+/* ACCIONES */
+.order-card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* BADGES */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.pendiente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.en_progreso {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge.resuelto {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.orders-total {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: gray;
+  font-size: 14px;
+}
