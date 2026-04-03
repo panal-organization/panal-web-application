@@ -1,6 +1,7 @@
 import { Box } from "@mui/material"
 import { Page } from "../../templates"
 import { useEffect, useState } from "react"
+import JoinWorkspaceModal from "../../components/workspace/JoinWorkspaceModal"
 
 // 🔥 ICONOS
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
@@ -32,7 +33,7 @@ const isPremium = user?.plan_id !== FREE_PLAN_ID
 
 
   const { workspace, setWorkspace } = useWorkspace()
-
+const [openJoinModal, setOpenJoinModal] = useState(false)
   const [workspaces, setWorkspaces] = useState<any[]>([])
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
@@ -215,13 +216,13 @@ const isPremium = user?.plan_id !== FREE_PLAN_ID
               <div className="workspace-modal-body">
 
                 {/* UNIRSE */}
-                <div
-                  className="workspace-option-card"
-                  onClick={() => {
-                    console.log("Unirse a workspace")
-                    setOpenOptionsModal(false)
-                  }}
-                >
+              <div
+  className="workspace-option-card"
+  onClick={() => {
+    setOpenOptionsModal(false)
+    setOpenJoinModal(true)
+  }}
+>
                   <GroupAddIcon className="workspace-option-icon" />
 
                   <div>
@@ -280,7 +281,14 @@ const isPremium = user?.plan_id !== FREE_PLAN_ID
             </div>
           </div>
         )}
-
+<JoinWorkspaceModal
+  isOpen={openJoinModal}
+  onClose={() => setOpenJoinModal(false)}
+  user={user}
+  onJoined={() => {
+  //  window.location.reload()
+  }}
+/>
       </Box>
     </Page>
   )
