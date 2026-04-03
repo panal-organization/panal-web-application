@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material"
 import { Page } from "../../templates"
 import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useWorkspace } from "../../context/WorkspaceContext"
 
 import DeleteArticuloModal from "../../components/inventory/DeleteArticuloModal"
 // 🔥 COMPONENTES
@@ -68,9 +69,10 @@ const iconMap: any = {
 const getIcon = (icono: string) => {
   return iconMap[icono] || <WidgetsIcon sx={{ fontSize: 20 }} />
 }
-
 const InventoryDetailPage: React.FC = () => {
 
+  
+const { workspace } = useWorkspace()
   const { id } = useParams()
   const navigate = useNavigate()
     useEffect(() => {
@@ -121,14 +123,31 @@ const [isDetailOpen, setIsDetailOpen] = useState(false)
         const articulosLista = articulosData.data || articulosData
         const almacenesLista = almacenesData.data || almacenesData
 
-        setAlmacenes(almacenesLista)
-
-        const filtrados = articulosLista.filter(
-  (a: any) =>
-    String(a.almacen_id) === String(id) &&
-    a.estatus !== false
+      const almacenesFiltrados = almacenesLista.filter((a: any) =>
+  String(a.workspace_id) === String(workspace?._id)
 )
-        setArticulos(filtrados)
+
+setAlmacenes(almacenesFiltrados)
+
+
+
+
+const filtrados = articulosLista.filter((a: any) => {
+
+  let almacenId = a.almacen_id
+
+  // 🔥 normalizar
+  if (typeof almacenId === "object" && almacenId !== null) {
+    almacenId = almacenId._id || almacenId
+  }
+
+  return (
+    String(almacenId) === String(id) &&
+    a.estatus !== false
+  )
+})        
+
+setArticulos(filtrados)
 
         const actual = almacenesLista.find(
           (a: any) => String(a._id) === String(id)
@@ -145,7 +164,7 @@ const [isDetailOpen, setIsDetailOpen] = useState(false)
 
     fetchData()
 
-  }, [id])
+  }, [id, workspace])
 
   /* =========================
      FILTRO
@@ -374,8 +393,14 @@ onSuccess={(newArticulo: any) => {
 
     const exists = prev.find(a => String(a._id) === String(newArticulo._id))
 
+
     // 🔥 SI CAMBIÓ DE ALMACÉN → LO QUITAS
-    if (exists && String(newArticulo.almacen_id) !== String(id)) {
+    let newAlmacenId = newArticulo.almacen_id
+
+if (typeof newAlmacenId === "object" && newAlmacenId !== null) {
+  newAlmacenId = newAlmacenId._id || newAlmacenId
+}
+    if (exists && String(newAlmacenId) !== String(id)) {
       return prev.filter(a => String(a._id) !== String(newArticulo._id))
     }
 

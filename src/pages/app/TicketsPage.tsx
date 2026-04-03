@@ -18,8 +18,8 @@ import "./TicketsPage.css"
 const TicketsPage: React.FC = () => {
 
   const { workspace } = useWorkspace()
-const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-const [ticketToDelete, setTicketToDelete] = useState<any>(null)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [ticketToDelete, setTicketToDelete] = useState<any>(null)
   const [usuarios, setUsuarios] = useState<any[]>([])
 
   // 🔥 CREATE
@@ -49,32 +49,32 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
 
 
   const handleDeleteTicket = async () => {
-  if (!ticketToDelete) return
+    if (!ticketToDelete) return
 
-  try {
-    await fetch(`/api/tickets/${ticketToDelete._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        is_deleted: true
+    try {
+      await fetch(`/api/tickets/${ticketToDelete._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          is_deleted: true
+        })
       })
-    })
 
-    // 🔥 quitar de la UI
-    setTickets(prev =>
-      prev.filter(t => t._id !== ticketToDelete._id)
-    )
+      // 🔥 quitar de la UI
+      setTickets(prev =>
+        prev.filter(t => t._id !== ticketToDelete._id)
+      )
 
-    // 🔥 cerrar modal
-    setIsDeleteOpen(false)
-    setTicketToDelete(null)
+      // 🔥 cerrar modal
+      setIsDeleteOpen(false)
+      setTicketToDelete(null)
 
-  } catch (error) {
-    console.error("Error eliminando ticket:", error)
+    } catch (error) {
+      console.error("Error eliminando ticket:", error)
+    }
   }
-}
   const openDetail = (ticket: any) => {
     if (!usuarios.length) return
 
@@ -177,7 +177,7 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
         {/* HEADER */}
         <div className="orders-header">
           <h2 className="orders-title">
-            <AssignmentIcon className="orders-title-icon"/>
+            <AssignmentIcon className="orders-title-icon" />
             Gestión de tickets
           </h2>
         </div>
@@ -188,7 +188,7 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
           <div className="orders-filters">
 
             <div className="orders-search-container">
-              <SearchIcon className="orders-search-icon"/>
+              <SearchIcon className="orders-search-icon" />
               <input
                 type="text"
                 placeholder="Buscar tickets..."
@@ -235,7 +235,7 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
 
           </div>
 
-          <button 
+          <button
             className="orders-create-btn"
             onClick={() => setIsCreateOpen(true)}
           >
@@ -267,19 +267,19 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
 
           {!loading && ticketsFiltrados.length > 0 && (
             paginatedTickets.map(t => (
-             <TicketCard
-  key={t._id}
-  ticket={t}
-  onClick={openDetail}
-  onEdit={(ticket: any) => {
-    setTicketToEdit(ticket)
-    setIsEditOpen(true)
-  }}
-  onDelete={(ticket: any) => {
-    setTicketToDelete(ticket)
-    setIsDeleteOpen(true)
-  }}
-/>
+              <TicketCard
+                key={t._id}
+                ticket={t}
+                onClick={openDetail}
+                onEdit={(ticket: any) => {
+                  setTicketToEdit(ticket)
+                  setIsEditOpen(true)
+                }}
+                onDelete={(ticket: any) => {
+                  setTicketToDelete(ticket)
+                  setIsDeleteOpen(true)
+                }}
+              />
             ))
           )}
 
@@ -345,9 +345,19 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
         <CreateTicketModal
           isOpen={isCreateOpen}
           onClose={() => setIsCreateOpen(false)}
+
+
           onSuccess={(newTicket: any) => {
+
+            // 🔥 validar workspace
+            if (String(newTicket.workspace_id) !== String(workspace?._id)) {
+              return
+            }
+
             setTickets(prev => [newTicket, ...prev])
           }}
+
+
         />
 
         {/* EDIT 🔥 */}
@@ -358,24 +368,36 @@ const [ticketToDelete, setTicketToDelete] = useState<any>(null)
             setTicketToEdit(null)
           }}
           ticketToEdit={ticketToEdit}
+
+
+
+
           onSuccess={(updatedTicket: any) => {
+            if (String(updatedTicket.workspace_id) !== String(workspace?._id)) return
+
             setTickets(prev =>
               prev.map(t =>
                 t._id === updatedTicket._id ? updatedTicket : t
               )
             )
           }}
+
+
+
+
+
+
         />
 
         <DeleteTicketModal
-  isOpen={isDeleteOpen}
-  onClose={() => {
-    setIsDeleteOpen(false)
-    setTicketToDelete(null)
-  }}
-  onConfirm={handleDeleteTicket}
-  ticket={ticketToDelete}
-/>
+          isOpen={isDeleteOpen}
+          onClose={() => {
+            setIsDeleteOpen(false)
+            setTicketToDelete(null)
+          }}
+          onConfirm={handleDeleteTicket}
+          ticket={ticketToDelete}
+        />
 
       </Box>
     </Page>

@@ -92,14 +92,41 @@ const [orderToDelete, setOrderToDelete] = useState<any>(null)
 ])
 
 
-const almacenesData = await almacenesRes.json()
-setAlmacenes(almacenesData.data || almacenesData)
+const almacenesRaw = await almacenesRes.json()
+const almacenesData = almacenesRaw.data || almacenesRaw
+
+// 🔥 FILTRAR ALMACENES POR WORKSPACE
+const almacenesFiltrados = almacenesData.filter((a: any) =>
+  String(a.workspace_id) === String(workspace._id)
+)
+
+setAlmacenes(almacenesFiltrados)
+
 
 const usuariosData = await usuariosRes.json()
 setUsuarios(usuariosData)
         const ordersData = await ordersRes.json()
         const tiposData = await tiposRes.json()
+
         const articulosData = await articulosRes.json()
+        
+        // 🔥 FILTRAR ARTICULOS POR ALMACENES
+const almacenesIds = almacenesFiltrados.map((a: any) =>
+  String(a._id)
+)
+
+const articulosFiltrados = articulosData.filter((art: any) => {
+  const almacenId =
+    typeof art.almacen_id === "object"
+      ? art.almacen_id._id
+      : art.almacen_id
+
+  return almacenesIds.includes(String(almacenId))
+})
+
+
+
+
 
         const filtered = ordersData.filter((o: any) => {
 
@@ -116,7 +143,7 @@ console.log("Órdenes filtradas:", filtered.length)
 
         setOrders(filtered)
         setTipos(tiposData)
-        setArticulos(articulosData)
+        setArticulos(articulosFiltrados)
 
       } catch (err) {
         console.error("❌ Error:", err)

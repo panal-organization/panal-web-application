@@ -89,12 +89,41 @@ const MaintenancePage: React.FC = () => {
 
         const ordersData = await ordersRes.json()
         const tiposData = await tiposRes.json()
+
+
         const articulosData = await articulosRes.json()
-        const usuariosData = await usuariosRes.json()
+
         const almacenesData = await almacenesRes.json()
 
+
+        // 🔥 FILTRAR ALMACENES POR WORKSPACE
+        const almacenesFiltrados = (almacenesData.data || almacenesData).filter((a: any) =>
+          String(a.workspace_id) === String(workspace._id)
+        )
+
+        setAlmacenes(almacenesFiltrados)
+
+        // 🔥 OBTENER IDS
+        const almacenesIds = almacenesFiltrados.map((a: any) =>
+          String(a._id)
+        )
+
+        // 🔥 FILTRAR ARTICULOS
+        const articulosFiltrados = articulosData.filter((art: any) => {
+          const almacenId =
+            typeof art.almacen_id === "object"
+              ? art.almacen_id._id
+              : art.almacen_id
+
+          return almacenesIds.includes(String(almacenId))
+        })
+        const usuariosData = await usuariosRes.json()
+
         setUsuarios(usuariosData)
-        setAlmacenes(almacenesData.data || almacenesData)
+
+
+
+
 
         const tipoMantenimiento = tiposData.find(
           (t: Tipo) => t.nombre.toLowerCase() === "mantenimiento"
@@ -116,8 +145,7 @@ const MaintenancePage: React.FC = () => {
 
         setOrders(filtered)
         setTipos(tiposData)
-        setArticulos(articulosData)
-
+        setArticulos(articulosFiltrados)
       } catch (err) {
         console.error("❌ Error:", err)
       } finally {
@@ -207,68 +235,68 @@ const MaintenancePage: React.FC = () => {
       {/* HEADER */}
       <div className="orders-header">
         <h2 className="orders-title">
-          <BuildIcon  className="orders-title-icon"/>
+          <BuildIcon className="orders-title-icon" />
           Órdenes de mantenimiento
         </h2>
       </div>
 
       {/* TOOLBAR */}
       {/* TOOLBAR */}
-<div className="orders-toolbar">
+      <div className="orders-toolbar">
 
-  <div className="orders-filters">
+        <div className="orders-filters">
 
-    <div className="orders-search-container">
-      <SearchIcon className="orders-search-icon"/>
-      <input
-        type="text"
-        placeholder="Buscar..."
-        className="orders-search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-    </div>
+          <div className="orders-search-container">
+            <SearchIcon className="orders-search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar..."
+              className="orders-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-    <select
-      className="orders-select"
-      value={estadoFiltro}
-      onChange={(e) => setEstadoFiltro(e.target.value)}
-    >
-      <option value="ALL">Todos</option>
-      <option value="PENDIENTE">Pendiente</option>
-      <option value="EN_PROGRESO">En progreso</option>
-      <option value="RESUELTO">Resuelto</option>
-    </select>
+          <select
+            className="orders-select"
+            value={estadoFiltro}
+            onChange={(e) => setEstadoFiltro(e.target.value)}
+          >
+            <option value="ALL">Todos</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROGRESO">En progreso</option>
+            <option value="RESUELTO">Resuelto</option>
+          </select>
 
-  </div>
+        </div>
 
-  <button
-    className="orders-create-btn"
-    onClick={() => setIsCreateOpen(true)}
-  >
-    <AddIcon />
-    Crear orden
-  </button>
+        <button
+          className="orders-create-btn"
+          onClick={() => setIsCreateOpen(true)}
+        >
+          <AddIcon />
+          Crear orden
+        </button>
 
-</div>
+      </div>
 
-{/* ✅ AQUÍ VA EL TOTAL */}
-<div
-  className="tickets-total"
-  style={{ marginTop: "0px", marginBottom: "12px" }}
->
-  Total de órdenes: <strong>{filteredOrders.length}</strong>
-</div>
+      {/* ✅ AQUÍ VA EL TOTAL */}
+      <div
+        className="tickets-total"
+        style={{ marginTop: "0px", marginBottom: "12px" }}
+      >
+        Total de órdenes: <strong>{filteredOrders.length}</strong>
+      </div>
 
 
       {/* CARDS */}
       <div className="orders-list">
 
         {loading ? (
-            <div className="tickets-loading">Cargando órdenes...</div>
-        ) : paginatedOrders.length === 0 ? ( 
-         
-            <div className="tickets-empty">No hay órdenes de mantenimiento</div>
+          <div className="tickets-loading">Cargando órdenes...</div>
+        ) : paginatedOrders.length === 0 ? (
+
+          <div className="tickets-empty">No hay órdenes de mantenimiento</div>
 
         ) : (
 
@@ -297,38 +325,38 @@ const MaintenancePage: React.FC = () => {
       </div>
 
       {/* PAGINACIÓN */}
-     <div className="pagination-container">
+      <div className="pagination-container">
 
-  {/* BOTÓN ANTERIOR */}
-  <button
-    className="page-btn"
-    disabled={page === 1}
-    onClick={() => setPage(page - 1)}
-  >
-    {"<"}
-  </button>
+        {/* BOTÓN ANTERIOR */}
+        <button
+          className="page-btn"
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+        >
+          {"<"}
+        </button>
 
-  {/* NÚMEROS */}
-  {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map(p => (
-    <button
-      key={p}
-      className={`page-btn ${page === p ? "active" : ""}`}
-      onClick={() => setPage(p)}
-    >
-      {p}
-    </button>
-  ))}
+        {/* NÚMEROS */}
+        {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map(p => (
+          <button
+            key={p}
+            className={`page-btn ${page === p ? "active" : ""}`}
+            onClick={() => setPage(p)}
+          >
+            {p}
+          </button>
+        ))}
 
-  {/* BOTÓN SIGUIENTE */}
-  <button
-    className="page-btn"
-    disabled={page === totalPages || totalPages === 0}
-    onClick={() => setPage(page + 1)}
-  >
-    {">"}
-  </button>
+        {/* BOTÓN SIGUIENTE */}
+        <button
+          className="page-btn"
+          disabled={page === totalPages || totalPages === 0}
+          onClick={() => setPage(page + 1)}
+        >
+          {">"}
+        </button>
 
-</div>
+      </div>
 
       {/* MODALES */}
       <OrderDetailModal
@@ -347,17 +375,28 @@ const MaintenancePage: React.FC = () => {
         articulos={articulos}
         onSuccess={(newOrder: any) => {
 
-  const tipoMantenimiento = tipos.find(
-    (t) => t.nombre.toLowerCase() === "mantenimiento"
-  )
 
-  const isMantenimiento =
-    tipoMantenimiento && newOrder.tipo_id === tipoMantenimiento._id
 
-  if (!isMantenimiento) return // 🚫 NO LO METAS
 
-  setOrders(prev => [newOrder, ...prev])
-}}
+          const tipoMantenimiento = tipos.find(
+            (t) => t.nombre.toLowerCase() === "mantenimiento"
+          )
+
+          const isMantenimiento =
+            tipoMantenimiento && newOrder.tipo_id === tipoMantenimiento._id
+
+          if (!isMantenimiento) return // 🚫 NO LO METAS
+
+
+          // 🔥 AGREGA ESTO
+          if (String(newOrder.workspace_id) !== String(workspace?._id)) return
+
+          setOrders(prev => [newOrder, ...prev])
+
+
+
+
+        }}
       />
 
       <CreateOrderModal
@@ -369,9 +408,15 @@ const MaintenancePage: React.FC = () => {
         tipos={tipos}
         articulos={articulos}
         orderToEdit={orderToEdit}
+
+
+
         onSuccess={(updated: any) => {
+          if (String(updated.workspace_id) !== String(workspace?._id)) return
           setOrders(prev =>
             prev.map(o => o._id === updated._id ? updated : o)
+
+
           )
         }}
       />

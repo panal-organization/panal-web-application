@@ -49,7 +49,7 @@ const CreateOrderModal = ({
   const [preview, setPreview] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<any>({})
+  const [errors, setErrors] = useState<any>({}) 
 
   //NO BORRRAR ERRORS AUNQUE NO SE USE!!!
   //NO BORRAR SI NO NO SE ACTUALIZA EN ORDERS!!!!!
@@ -287,18 +287,24 @@ onClose()
                 <Package size={16} />
                 <span>Artículo</span>
               </div>
-              <select
-                name="articulo_id"
-                value={form.articulo_id}
-                onChange={handleChange}
-              >
-                <option value="">Seleccionar artículo</option>
-                {articulos.map((a: any) => (
-                  <option key={a._id} value={a._id}>
-                    {a.nombre}
-                  </option>
-                ))}
-              </select>
+             <select
+  name="articulo_id"
+  value={form.articulo_id}
+  onChange={handleChange}
+>
+  {articulos.length === 0 ? (
+    <option value="">Sin artículos, crea uno en almacenes</option>
+  ) : (
+    <>
+      <option value="">Seleccionar artículo</option>
+      {articulos.map((a: any) => (
+        <option key={a._id} value={a._id}>
+          {a.nombre}
+        </option>
+      ))}
+    </>
+  )}
+</select>
             </div>
 
             {/* TIPO */}

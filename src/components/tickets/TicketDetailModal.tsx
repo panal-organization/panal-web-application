@@ -100,7 +100,7 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }: any) => {
             </div>
             <p>{fechaCreacion.toLocaleString()}</p>
           </div>
-
+ 
           {/* 🔄 ACTUALIZADO */}
           <div className="modal-card">
             <div className="modal-card-header">
