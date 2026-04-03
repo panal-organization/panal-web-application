@@ -1,23 +1,30 @@
-import { Box } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import { useAuth } from "../../context/AuthContext"
 
 // 🔥 ICONOS MUI
 import PersonIcon from "@mui/icons-material/Person"
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter"
 import VpnKeyIcon from "@mui/icons-material/VpnKey"
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import GroupsIcon from "@mui/icons-material/Groups"
+import EditIcon from "@mui/icons-material/Edit"
+import DeleteIcon from "@mui/icons-material/Delete"
 
 interface Props {
-  workspace: any
+  workspace: any 
   isActive: boolean
   onClick: () => void
+  onEdit: (ws: any) => void
+  onDelete: (ws: any) => void
+  canEdit: boolean // 👈 IMPORTANTE
 }
 
 const WorkCard: React.FC<Props> = ({
   workspace,
   isActive,
-  onClick
+  onClick,
+  onEdit,
+  onDelete,
+  canEdit
 }) => {
 
   const { user } = useAuth()
@@ -29,6 +36,7 @@ const WorkCard: React.FC<Props> = ({
       className="workspace-card"
       onClick={onClick}
       sx={{
+        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -40,14 +48,59 @@ const WorkCard: React.FC<Props> = ({
         border: isActive
           ? "2px solid #1976d2"
           : "1px solid #e0e0e0",
-        transition: "0.2s"
+        transition: "all 0.2s ease",
+        "&:hover": {
+          transform: "scale(1.01)",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.08)"
+        }
       }}
     >
+
+      {/* 🔥 BOTONES SOLO SI ES ADMIN */}
+      {canEdit && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 14,
+            right: 14,
+            display: "flex",
+            gap: 1
+          }}
+        >
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation()
+              onEdit(workspace)
+            }}
+            sx={{
+              background: "#f3f4f6",
+              "&:hover": { background: "#e5e7eb" }
+            }}
+          >
+            <EditIcon fontSize="small" />
+          </IconButton>
+
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete(workspace)
+            }}
+            sx={{
+              background: "#f3f4f6",
+              "&:hover": { background: "#e5e7eb" }
+            }}
+          >
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      )}
 
       {/* IZQUIERDA */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
 
-        {/* ICONO GRANDE */}
+        {/* ICONO */}
         <div className="workspace-icon">
           {isPersonal ? (
             <PersonIcon fontSize="small" />
@@ -99,11 +152,6 @@ const WorkCard: React.FC<Props> = ({
 
         </div>
 
-      </div>
-
-      {/* DERECHA */}
-      <div className="workspace-arrow">
-        <ChevronRightIcon />
       </div>
 
     </Box>

@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { useAuth } from "../context/AuthContext" // 🔥 AJUSTA RUTA SI ES NECESARIO
+import { useAuth } from "../context/AuthContext"
 
 interface Workspace {
   _id: string
   nombre: string
+  admin_id?: string
   tipo?: "personal" | "team"
+  is_deleted?: boolean
 }
 
 interface WorkspaceContextType {
@@ -17,61 +19,27 @@ const WorkspaceContext = createContext<WorkspaceContextType | null>(null)
 
 export const WorkspaceProvider = ({ children }: { children: React.ReactNode }) => {
 
-  const { user } = useAuth() // 🔥 FALTABA ESTO
+  const { user } = useAuth()
 
   const [workspace, setWorkspaceState] = useState<Workspace | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // 🔥 función pública
-  const setWorkspace = (workspace: Workspace) => {
-    localStorage.setItem("workspace", JSON.stringify(workspace))
-    setWorkspaceState(workspace)
+  // 🔥 setter global
+  const setWorkspace = (ws: Workspace) => {
+    localStorage.setItem("workspace", JSON.stringify(ws))
+    setWorkspaceState(ws)
   }
 
+  // ===============================
+  // 🔥 INIT (LOGIN / REFRESH)
+  // ===============================
   useEffect(() => {
 
     const initWorkspace = async () => {
 
-      // 🔥 1. localStorage
-      const savedWorkspace = localStorage.getItem("workspace")
-
-      if (savedWorkspace && user?._id) {
-  const parsed = JSON.parse(savedWorkspace)
-
-  // 🔥 validar que pertenece al usuario
-  const relRes = await fetch(`/api/workspaces-usuarios`, {
-    headers: { "ngrok-skip-browser-warning": "true" }
-  })
-
-  const relaciones = await relRes.json()
-
-  const misRelaciones = relaciones.filter(
-    (r: any) => r.usuario_id === user._id
-  )
-
-  const workspaceIds = misRelaciones.map(
-    (r: any) => r.workspace_id
-  )
-
-  if (workspaceIds.includes(parsed._id)) {
-    console.log("✅ Workspace válido desde localStorage:", parsed)
-    setWorkspaceState(parsed)
-    setLoading(false)
-    return
-  } else {
-    console.log("⚠️ Workspace inválido, limpiando localStorage")
-    localStorage.removeItem("workspace")
-  }
-}
-
-      // 🔥 2. esperar usuario
-      if (!user?._id) {
-        return
-      }
+      if (!user?._id) return
 
       try {
-
-        console.log("🌍 Buscando workspace automáticamente...")
 
         // 🔹 relaciones
         const relRes = await fetch(`/api/workspaces-usuarios`, {
@@ -95,27 +63,54 @@ export const WorkspaceProvider = ({ children }: { children: React.ReactNode }) =
 
         const allWorkspaces = await wsRes.json()
 
-        const misWorkspaces = allWorkspaces.filter((ws: any) =>
-          workspaceIds.includes(ws._id)
-        )
+        // 🔥 FILTRO IMPORTANTE
+        const misWorkspaces = allWorkspaces
+          .filter((ws: any) => workspaceIds.includes(ws._id))
+          .filter((ws: any) => !ws.is_deleted)
 
-        console.log("✅ Workspaces encontrados:", misWorkspaces)
+        console.log("✅ Workspaces válidos:", misWorkspaces)
 
+        // ===============================
+        // 🔥 VALIDAR LOCALSTORAGE
+        // ===============================
+        const savedWorkspace = localStorage.getItem("workspace")
+
+        if (savedWorkspace) {
+          const parsed = JSON.parse(savedWorkspace)
+
+          const stillExists = misWorkspaces.find(
+            (w: any) => String(w._id) === String(parsed._id)
+          )
+
+          if (stillExists) {
+            console.log("✅ Workspace válido desde localStorage")
+            setWorkspaceState(stillExists)
+            setLoading(false)
+            return
+          }
+
+          console.log("⚠️ Workspace eliminado o inválido, limpiando...")
+          localStorage.removeItem("workspace")
+        }
+
+        // ===============================
+        // 🔥 FALLBACK AUTOMÁTICO
+        // ===============================
         if (misWorkspaces.length > 0) {
 
           const personal = misWorkspaces.find(
-            (ws: any) => ws.tipo === "personal"
+            (ws: any) => String(ws.admin_id) === String(user._id)
           )
 
           const seleccionado = personal || misWorkspaces[0]
 
-          console.log("🎯 Workspace auto-seleccionado:", seleccionado)
+          console.log("🎯 Workspace fallback:", seleccionado)
 
           setWorkspace(seleccionado)
         }
 
       } catch (err) {
-        console.error("❌ Error auto workspace:", err)
+        console.error("❌ Error inicializando workspace:", err)
       }
 
       setLoading(false)
@@ -124,6 +119,48 @@ export const WorkspaceProvider = ({ children }: { children: React.ReactNode }) =
     initWorkspace()
 
   }, [user])
+
+  // ===============================
+  // 🔥 VALIDACIÓN CONTINUA (CLAVE)
+  // ===============================
+  useEffect(() => {
+
+    if (!workspace) return
+
+    const checkIfStillValid = async () => {
+
+      try {
+        const wsRes = await fetch(`/api/workspaces`, {
+          headers: { "ngrok-skip-browser-warning": "true" }
+        })
+
+        const allWorkspaces = await wsRes.json()
+
+        const stillExists = allWorkspaces.find(
+          (w: any) =>
+            String(w._id) === String(workspace._id) &&
+            !w.is_deleted
+        )
+
+        if (!stillExists) {
+          console.log("🚨 Workspace actual eliminado → reseteando...")
+
+          localStorage.removeItem("workspace")
+
+          // 🔥 fuerza re-evaluación completa
+          window.location.reload()
+        }
+
+      } catch (err) {
+        console.error("Error validando workspace activo:", err)
+      }
+    }
+
+    const interval = setInterval(checkIfStillValid, 5000)
+
+    return () => clearInterval(interval)
+
+  }, [workspace])
 
   return (
     <WorkspaceContext.Provider value={{ workspace, setWorkspace, loading }}>

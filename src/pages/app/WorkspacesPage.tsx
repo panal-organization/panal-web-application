@@ -3,7 +3,9 @@ import { Page } from "../../templates"
 import { useEffect, useState } from "react"
 import JoinWorkspaceModal from "../../components/workspace/JoinWorkspaceModal"
 import CreateWorkspaceModal from "../../components/workspace/CreateWorkspaceModal"
-
+import EditWorkspaceModal from "../../components/workspace/EditWorkspaceModal"
+import DeleteWorkspaceModal from "../../components/workspace/DeleteWorkspaceModal"
+import AlertModal from "../../components/ui/AlertModal"
 // ICONOS
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
 import StorefrontIcon from "@mui/icons-material/Storefront"
@@ -25,10 +27,14 @@ import "./TicketsPage.css"
 import "../../components/workspace/Workspace.css"
 
 const WorkspacesPage: React.FC = () => {
-
+const [alertMessage, setAlertMessage] = useState("")
+const [openAlert, setOpenAlert] = useState(false)
+const [workspaceToDelete, setWorkspaceToDelete] = useState<any>(null)
+const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const { user } = useAuth()
   const { workspace, setWorkspace } = useWorkspace()
-
+const [workspaceToEdit, setWorkspaceToEdit] = useState<any>(null)
+const [openEditModal, setOpenEditModal] = useState(false)
   const [openCreateModal, setOpenCreateModal] = useState(false)
   const [openJoinModal, setOpenJoinModal] = useState(false)
   const [openOptionsModal, setOpenOptionsModal] = useState(false)
@@ -45,7 +51,6 @@ const WorkspacesPage: React.FC = () => {
 
   const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
   const isPremium = user?.plan_id !== FREE_PLAN_ID
-
   useEffect(() => {
     document.title = "Workspaces"
   }, [])
@@ -81,9 +86,9 @@ const WorkspacesPage: React.FC = () => {
 
         const allWorkspaces = await wsRes.json()
 
-        const misWorkspaces = allWorkspaces.filter((ws: any) =>
-          workspaceIds.includes(ws._id)
-        )
+        const misWorkspaces = allWorkspaces
+  .filter((ws: any) => workspaceIds.includes(ws._id))
+  .filter((ws: any) => !ws.is_deleted)
 
         setWorkspaces(misWorkspaces)
 
@@ -204,15 +209,75 @@ const WorkspacesPage: React.FC = () => {
           )}
 
           {!loading && paginated.map((ws) => (
-            <WorkCard
-              key={ws._id}
-              workspace={ws}
-              isActive={workspace?._id === ws._id}
-              onClick={() => {
-                setWorkspace(ws)
-                console.log("🔄 Workspace cambiado:", ws)
-              }}
-            />
+<WorkCard
+  key={ws._id}
+  workspace={ws}
+  isActive={workspace?._id === ws._id}
+
+  // 👇 SOLO AGREGA ESTO
+  canEdit={String(ws.admin_id) === String(user?._id)}
+
+  onClick={() => {
+    setWorkspace(ws)
+    console.log("🔄 Workspace cambiado:", ws)
+  }}
+
+  onEdit={(ws) => {
+
+    const isAdmin = String(ws.admin_id) === String(user?._id)
+    const isPersonal = ws.nombre === "Espacio Personal"
+    const isPremium = user?.plan_id !== FREE_PLAN_ID
+
+    if (!isAdmin) {
+      setAlertMessage("No tienes privilegios para editar este workspace")
+      setOpenAlert(true)
+      return
+    }
+
+    if (isPersonal) {
+      setAlertMessage("El espacio personal principal tiene un nombre fijo y no puede modificarse. Puedes crear otros espacios personalizados si tienes plan premium.")
+      setOpenAlert(true)
+      return
+    }
+
+    if (!isPremium) {
+      setAlertMessage("Esta función está disponible solo en el plan premium")
+      setOpenAlert(true)
+      return
+    }
+
+    setWorkspaceToEdit(ws)
+    setOpenEditModal(true)
+  }}
+
+  onDelete={(ws) => {
+
+    const isAdmin = String(ws.admin_id) === String(user?._id)
+    const isPersonal = ws.nombre === "Espacio Personal"
+    const isPremium = user?.plan_id !== FREE_PLAN_ID
+
+    if (!isAdmin) {
+      setAlertMessage("No tienes privilegios para eliminar este workspace")
+      setOpenAlert(true)
+      return
+    }
+
+    if (isPersonal) {
+      setAlertMessage("El espacio personal principal no puede eliminarse")
+      setOpenAlert(true)
+      return
+    }
+
+    if (!isPremium) {
+      setAlertMessage("Esta función está disponible solo en el plan premium")
+      setOpenAlert(true)
+      return
+    }
+
+    setWorkspaceToDelete(ws)
+    setOpenDeleteModal(true)
+  }}
+/>
           ))}
 
         </Box>
@@ -348,7 +413,61 @@ const WorkspacesPage: React.FC = () => {
 
           }}
         />
+<AlertModal
+  isOpen={openAlert}
+  message={alertMessage}
+  onClose={() => setOpenAlert(false)}
+/>
 
+<EditWorkspaceModal
+  isOpen={openEditModal}
+  onClose={() => setOpenEditModal(false)}
+  workspace={workspaceToEdit}
+  onUpdated={(updated) => {
+
+    setWorkspaces(prev =>
+      prev.map(ws =>
+        ws._id === updated._id ? updated : ws
+      )
+    )
+
+  }}
+/> 
+
+<DeleteWorkspaceModal
+  isOpen={openDeleteModal}
+  onClose={() => setOpenDeleteModal(false)}
+  workspace={workspaceToDelete}
+  onConfirm={async () => {
+
+    try {
+
+      await fetch(`/api/workspaces/${workspaceToDelete._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true"
+        },
+        body: JSON.stringify({
+          is_deleted: true
+        })
+      })
+
+      // 🔥 quitar de la lista (UX inmediato)
+      setWorkspaces(prev =>
+        prev.filter(ws => ws._id !== workspaceToDelete._id)
+      )
+
+      setOpenDeleteModal(false)
+
+    } catch (err) {
+      console.error(err)
+      setAlertMessage("Error al eliminar el workspace")
+      setOpenAlert(true)
+    }
+
+  }}
+/>
       </Box>
     </Page>
   )
