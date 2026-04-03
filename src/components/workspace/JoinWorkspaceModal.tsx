@@ -57,6 +57,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
       const workspaces = await res.json()
 
       const found = workspaces.find((ws: any) => ws.codigo === code)
+      
 
       if (!found) {
         setMessage("Código inválido")
@@ -64,6 +65,12 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
         return
       }
 
+      
+if (found.nombre === "Espacio Personal") {
+  setMessage("Este espacio es personal y no admite invitados")
+  setMessageType("error")
+  return
+}
       // 🔥 FETCH RELACIONES
       const relRes = await fetch(`${BASE_URL}/workspaces-usuarios`, {
         headers: {

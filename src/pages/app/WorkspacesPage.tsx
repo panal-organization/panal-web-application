@@ -2,8 +2,9 @@ import { Box } from "@mui/material"
 import { Page } from "../../templates"
 import { useEffect, useState } from "react"
 import JoinWorkspaceModal from "../../components/workspace/JoinWorkspaceModal"
+import CreateWorkspaceModal from "../../components/workspace/CreateWorkspaceModal"
 
-// 🔥 ICONOS
+// ICONOS
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
 import StorefrontIcon from "@mui/icons-material/Storefront"
 import CloseIcon from "@mui/icons-material/Close"
@@ -11,14 +12,14 @@ import GroupsIcon from "@mui/icons-material/Groups"
 import AddIcon from "@mui/icons-material/Add"
 import SearchIcon from "@mui/icons-material/Search"
 
-// 🔥 CONTEXTOS
+// CONTEXTOS
 import { useWorkspace } from "../../context/WorkspaceContext"
 import { useAuth } from "../../context/AuthContext"
 
-// 🔥 COMPONENTE
+// COMPONENTE
 import WorkCard from "../../components/workspace/WorkCard"
 
-// 🔥 estilos
+// estilos
 import "./OrdersPage.css"
 import "./TicketsPage.css"
 import "../../components/workspace/Workspace.css"
@@ -26,22 +27,24 @@ import "../../components/workspace/Workspace.css"
 const WorkspacesPage: React.FC = () => {
 
   const { user } = useAuth()
-
-  const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
-
-const isPremium = user?.plan_id !== FREE_PLAN_ID
-
-
   const { workspace, setWorkspace } = useWorkspace()
-const [openJoinModal, setOpenJoinModal] = useState(false)
+
+  const [openCreateModal, setOpenCreateModal] = useState(false)
+  const [openJoinModal, setOpenJoinModal] = useState(false)
+  const [openOptionsModal, setOpenOptionsModal] = useState(false)
+
   const [workspaces, setWorkspaces] = useState<any[]>([])
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
 
   const [typeFilter, setTypeFilter] = useState<"all" | "personal" | "team">("all")
 
-  // 🔥 MODAL
-  const [openOptionsModal, setOpenOptionsModal] = useState(false)
+  // 🔥 PAGINACIÓN
+  const [page, setPage] = useState(1)
+  const itemsPerPage = 4
+
+  const FREE_PLAN_ID = "69a3de4281a5be4cb1bd8bc0"
+  const isPremium = user?.plan_id !== FREE_PLAN_ID
 
   useEffect(() => {
     document.title = "Workspaces"
@@ -116,6 +119,20 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
     })
     .sort((a, b) => a.nombre.localeCompare(b.nombre))
 
+  /* =========================
+     PAGINACIÓN
+  ========================= */
+  useEffect(() => {
+    setPage(1)
+  }, [search, typeFilter])
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage)
+
+  const paginated = filtered.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  )
+
   return (
     <Page>
       <Box>
@@ -144,7 +161,6 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
             </div>
           </div>
 
-          {/* SELECT FILTRO */}
           <div className="workspace-select-filter">
             <select
               className="workspace-select"
@@ -159,7 +175,6 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
             </select>
           </div>
 
-          {/* BOTÓN */}
           <button 
             className="orders-create-btn"
             onClick={() => setOpenOptionsModal(true)}
@@ -188,7 +203,7 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
             </div>
           )}
 
-          {!loading && filtered.map((ws) => (
+          {!loading && paginated.map((ws) => (
             <WorkCard
               key={ws._id}
               workspace={ws}
@@ -202,9 +217,40 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
 
         </Box>
 
-        {/* =========================
-           MODAL OPCIONES
-        ========================= */}
+        {/* PAGINACIÓN */}
+        {totalPages > 1 && (
+          <div className="pagination-container">
+
+            <button
+              className="page-btn"
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+            >
+              {"<"}
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+              <button
+                key={p}
+                className={`page-btn ${page === p ? "active" : ""}`}
+                onClick={() => setPage(p)}
+              >
+                {p}
+              </button>
+            ))}
+
+            <button
+              className="page-btn"
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              {">"}
+            </button>
+
+          </div>
+        )}
+
+        {/* MODAL OPCIONES */}
         {openOptionsModal && (
           <div className="workspace-modal-overlay">
             <div className="workspace-modal">
@@ -215,16 +261,14 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
 
               <div className="workspace-modal-body">
 
-                {/* UNIRSE */}
-              <div
-  className="workspace-option-card"
-  onClick={() => {
-    setOpenOptionsModal(false)
-    setOpenJoinModal(true)
-  }}
->
+                <div
+                  className="workspace-option-card"
+                  onClick={() => {
+                    setOpenOptionsModal(false)
+                    setOpenJoinModal(true)
+                  }}
+                >
                   <GroupAddIcon className="workspace-option-icon" />
-
                   <div>
                     <div className="workspace-option-title">
                       Unirse a un espacio existente
@@ -235,36 +279,33 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
                   </div>
                 </div>
 
-               {/* CREAR */}
-<div
-  className="workspace-option-card"
-  onClick={() => {
-    if (!isPremium) return
-
-    console.log("Crear workspace")
-    setOpenOptionsModal(false)
-  }}
-  style={{
-    opacity: isPremium ? 1 : 0.5,
-    cursor: isPremium ? "pointer" : "not-allowed"
-  }}
->
+                <div
+                  className="workspace-option-card"
+                  onClick={() => {
+                    if (!isPremium) return
+                    setOpenOptionsModal(false)
+                    setOpenCreateModal(true)
+                  }}
+                  style={{
+                    opacity: isPremium ? 1 : 0.5,
+                    cursor: isPremium ? "pointer" : "not-allowed"
+                  }}
+                >
                   <StorefrontIcon className="workspace-option-icon" />
-
                   <div>
                     <div className="workspace-option-title">
                       Crear un nuevo espacio
                     </div>
                     <div
-  className="workspace-option-sub"
-  style={{
-    color: isPremium ? "#666" : "#e53935"
-  }}
->
-  {isPremium
-    ? "Conviértete en el administrador de tu nuevo grupo de trabajo"
-    : "Disponible solo en Plan Premium"}
-</div>
+                      className="workspace-option-sub"
+                      style={{
+                        color: isPremium ? "#666" : "#e53935"
+                      }}
+                    >
+                      {isPremium
+                        ? "Conviértete en el administrador de tu nuevo grupo de trabajo"
+                        : "Disponible solo en Plan Premium"}
+                    </div>
                   </div>
                 </div>
 
@@ -281,14 +322,33 @@ const [openJoinModal, setOpenJoinModal] = useState(false)
             </div>
           </div>
         )}
-<JoinWorkspaceModal
-  isOpen={openJoinModal}
-  onClose={() => setOpenJoinModal(false)}
-  user={user}
-  onJoined={() => {
-  //  window.location.reload()
-  }}
-/>
+
+        {/* MODALES */}
+        <JoinWorkspaceModal
+          isOpen={openJoinModal}
+          onClose={() => setOpenJoinModal(false)}
+          user={user}
+          onJoined={() => {}}
+        />
+
+        <CreateWorkspaceModal
+          isOpen={openCreateModal}
+          onClose={() => setOpenCreateModal(false)}
+          user={user}
+          onCreated={(newWorkspace: any) => {
+
+            setWorkspaces(prev => {
+
+              const exists = prev.find(w => w._id === newWorkspace._id)
+
+              if (exists) return prev
+
+              return [newWorkspace, ...prev]
+            })
+
+          }}
+        />
+
       </Box>
     </Page>
   )
