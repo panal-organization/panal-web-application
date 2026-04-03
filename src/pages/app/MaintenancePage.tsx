@@ -265,9 +265,11 @@ const MaintenancePage: React.FC = () => {
       <div className="orders-list">
 
         {loading ? (
-          <div>Cargando órdenes...</div>
-        ) : paginatedOrders.length === 0 ? (
-          <div>No hay órdenes de mantenimiento</div>
+            <div className="tickets-loading">Cargando órdenes...</div>
+        ) : paginatedOrders.length === 0 ? ( 
+         
+            <div className="tickets-empty">No hay órdenes de mantenimiento</div>
+
         ) : (
 
           paginatedOrders.map(order => (

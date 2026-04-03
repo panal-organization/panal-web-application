@@ -31,7 +31,7 @@ const [isEditOpen, setIsEditOpen] = useState(false)
 const [almacenToEdit, setAlmacenToEdit] = useState<any>(null)
   const [page, setPage] = useState(1)
   const itemsPerPage = 4
-
+ 
   const { workspace } = useWorkspace()
   const navigate = useNavigate()
 
