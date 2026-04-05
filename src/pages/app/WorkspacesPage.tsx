@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import GroupsIcon from "@mui/icons-material/Groups"
 import AddIcon from "@mui/icons-material/Add"
 import SearchIcon from "@mui/icons-material/Search"
-
+import MembersWorkspaceModal from "../../components/workspace/MembersWorkspaceModal"
 // CONTEXTOS
 import { useWorkspace } from "../../context/WorkspaceContext"
 import { useAuth } from "../../context/AuthContext"
@@ -38,6 +38,8 @@ const [openEditModal, setOpenEditModal] = useState(false)
   const [openCreateModal, setOpenCreateModal] = useState(false)
   const [openJoinModal, setOpenJoinModal] = useState(false)
   const [openOptionsModal, setOpenOptionsModal] = useState(false)
+const [openMembersModal, setOpenMembersModal] = useState(false)
+
 
   const [workspaces, setWorkspaces] = useState<any[]>([])
   const [search, setSearch] = useState("")
@@ -179,6 +181,14 @@ const [openEditModal, setOpenEditModal] = useState(false)
               <option value="team">Equipos</option>
             </select>
           </div>
+
+          <button 
+  className="orders-create-btn2"
+  onClick={() => setOpenMembersModal(true)}
+>
+  <GroupsIcon />
+  Miembros del workspace
+</button>
 
           <button 
             className="orders-create-btn"
@@ -433,6 +443,11 @@ const [openEditModal, setOpenEditModal] = useState(false)
 
   }}
 /> 
+
+<MembersWorkspaceModal
+  isOpen={openMembersModal}
+  onClose={() => setOpenMembersModal(false)}
+/>
 
 <DeleteWorkspaceModal
   isOpen={openDeleteModal}
