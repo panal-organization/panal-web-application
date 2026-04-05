@@ -69,7 +69,9 @@ const [openMembersModal, setOpenMembersModal] = useState(false)
       try {
 
         const relRes = await fetch(`/api/workspaces-usuarios`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const relaciones = await relRes.json()
@@ -83,7 +85,9 @@ const [openMembersModal, setOpenMembersModal] = useState(false)
         )
 
         const wsRes = await fetch(`/api/workspaces`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const allWorkspaces = await wsRes.json()
@@ -460,8 +464,7 @@ const [openMembersModal, setOpenMembersModal] = useState(false)
       await fetch(`/api/workspaces/${workspaceToDelete._id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           is_deleted: true

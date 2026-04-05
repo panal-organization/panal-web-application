@@ -43,7 +43,9 @@ export const WorkspaceProvider = ({ children }: { children: React.ReactNode }) =
 
         // 🔹 relaciones
         const relRes = await fetch(`/api/workspaces-usuarios`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+         headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const relaciones = await relRes.json()
@@ -58,7 +60,9 @@ export const WorkspaceProvider = ({ children }: { children: React.ReactNode }) =
 
         // 🔹 workspaces
         const wsRes = await fetch(`/api/workspaces`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const allWorkspaces = await wsRes.json()
@@ -131,7 +135,9 @@ export const WorkspaceProvider = ({ children }: { children: React.ReactNode }) =
 
       try {
         const wsRes = await fetch(`/api/workspaces`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const allWorkspaces = await wsRes.json()

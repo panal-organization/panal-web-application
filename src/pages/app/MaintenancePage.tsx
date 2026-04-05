@@ -80,11 +80,21 @@ const MaintenancePage: React.FC = () => {
       try {
 
         const [ordersRes, tiposRes, articulosRes, usuariosRes, almacenesRes] = await Promise.all([
-          fetch(`/api/ordenes-servicio`, { headers: { "ngrok-skip-browser-warning": "true" } }),
-          fetch(`/api/tipo-ordenes`, { headers: { "ngrok-skip-browser-warning": "true" } }),
-          fetch(`/api/articulos`, { headers: { "ngrok-skip-browser-warning": "true" } }),
-          fetch(`/api/usuarios`, { headers: { "ngrok-skip-browser-warning": "true" } }),
-          fetch(`/api/almacen`, { headers: { "ngrok-skip-browser-warning": "true" } })
+          fetch(`/api/ordenes-servicio`, { headers: {
+  "Content-Type": "application/json"
+} }),
+          fetch(`/api/tipo-ordenes`, { headers: {
+  "Content-Type": "application/json"
+} }),
+          fetch(`/api/articulos`, { headers: {
+  "Content-Type": "application/json"
+} }),
+          fetch(`/api/usuarios`, { headers: {
+  "Content-Type": "application/json"
+} }),
+          fetch(`/api/almacen`, { headers: {
+  "Content-Type": "application/json"
+} })
         ])
 
         const ordersData = await ordersRes.json()

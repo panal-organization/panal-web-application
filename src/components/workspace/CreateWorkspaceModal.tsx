@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useWorkspace } from "../../context/WorkspaceContext"
+import { API_BASE_URL } from "../../config/api"
 
-const BASE_URL = "https://waggish-unsecludedly-jong.ngrok-free.dev/api"
 
 interface Props {
   isOpen: boolean
@@ -38,11 +38,10 @@ const CreateWorkspaceModal = ({ isOpen, onClose, user, onCreated }: Props) => {
       const codigo = generateCode()
 
       // 🔥 CREAR WORKSPACE
-      const res = await fetch(`${BASE_URL}/workspaces`, {
+      const res = await fetch(`${API_BASE_URL}/workspaces`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           nombre: name,
@@ -56,11 +55,10 @@ const CreateWorkspaceModal = ({ isOpen, onClose, user, onCreated }: Props) => {
       const newWorkspace = await res.json()
 
       // 🔥 CREAR RELACIÓN
-      const relRes = await fetch(`${BASE_URL}/workspaces-usuarios`, {
+      const relRes = await fetch(`${API_BASE_URL}/workspaces-usuarios`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           workspace_id: newWorkspace._id,

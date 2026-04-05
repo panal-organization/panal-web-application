@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 
-const BASE_URL = "https://waggish-unsecludedly-jong.ngrok-free.dev/api"
-
+import { API_BASE_URL } from "../../config/api"
 interface Props {
   isOpen: boolean
   onClose: () => void
@@ -37,11 +36,10 @@ const EditWorkspaceModal = ({ isOpen, onClose, workspace, onUpdated }: Props) =>
       setLoading(true)
       setMessage("Guardando cambios...")
 
-      const res = await fetch(`${BASE_URL}/workspaces/${workspace._id}`, {
+      const res = await fetch(`${API_BASE_URL}/workspaces/${workspace._id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           nombre: name

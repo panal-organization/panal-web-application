@@ -110,10 +110,14 @@ const [isDetailOpen, setIsDetailOpen] = useState(false)
 
         const [articulosRes, almacenesRes] = await Promise.all([
           fetch(`/api/articulos`, {
-            headers: { "ngrok-skip-browser-warning": "true" }
+        headers: {
+  "Content-Type": "application/json"
+}
           }),
           fetch(`/api/almacen`, {
-            headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
           })
         ])
 

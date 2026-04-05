@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useWorkspace } from "../../context/WorkspaceContext"
 
 // 🔥 AJUSTA TU URL AQUÍ
-const BASE_URL = "https://waggish-unsecludedly-jong.ngrok-free.dev/api"
+import { API_BASE_URL } from "../../config/api"
 
 interface Props {
   isOpen: boolean
@@ -46,11 +46,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
       setMessageType("loading")
 
       // 🔥 FETCH WORKSPACES
-      const res = await fetch(`${BASE_URL}/workspaces`, {
-        headers: {
-          "ngrok-skip-browser-warning": "true"
-        }
-      })
+      const res = await fetch(`${API_BASE_URL}/workspaces`)
 
       if (!res.ok) throw new Error("Error en API workspaces")
 
@@ -72,11 +68,7 @@ if (found.nombre === "Espacio Personal") {
   return
 }
       // 🔥 FETCH RELACIONES
-      const relRes = await fetch(`${BASE_URL}/workspaces-usuarios`, {
-        headers: {
-          "ngrok-skip-browser-warning": "true"
-        }
-      })
+      const relRes = await fetch(`${API_BASE_URL}/workspaces-usuarios`)
 
       if (!relRes.ok) throw new Error("Error en relaciones")
 
@@ -95,11 +87,10 @@ if (found.nombre === "Espacio Personal") {
       }
 
       // 🔥 CREAR RELACIÓN
-      const createRes = await fetch(`${BASE_URL}/workspaces-usuarios`, {
+      const createRes = await fetch(`${API_BASE_URL}/workspaces-usuarios`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           workspace_id: found._id,
@@ -124,7 +115,7 @@ console.log("REDIRIGIENDO A DASHBOARD")
 
     } catch (err) {
       console.error("JOIN ERROR:", err)
-      setMessage("Error al unirse (revisa conexión o ngrok)")
+      setMessage("Error al unirse (revisa conexión)")
       setMessageType("error")
     } finally {
       setLoading(false)

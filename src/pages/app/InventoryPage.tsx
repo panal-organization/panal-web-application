@@ -53,7 +53,9 @@ const [almacenToEdit, setAlmacenToEdit] = useState<any>(null)
         if (!workspace?._id) return
 
         const res = await fetch(`/api/almacen`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+    headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const data = await res.json()

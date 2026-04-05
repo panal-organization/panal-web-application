@@ -75,19 +75,29 @@ const [orderToDelete, setOrderToDelete] = useState<any>(null)
 
   const [ordersRes, tiposRes, articulosRes, usuariosRes, almacenesRes] = await Promise.all([
   fetch(`/api/ordenes-servicio`, {
-    headers: { "ngrok-skip-browser-warning": "true" }
+    headers: {
+  "Content-Type": "application/json"
+}
   }),
   fetch(`/api/tipo-ordenes`, {
-    headers: { "ngrok-skip-browser-warning": "true" }
+    headers: {
+  "Content-Type": "application/json"
+}
   }),
   fetch(`/api/articulos`, {
-    headers: { "ngrok-skip-browser-warning": "true" }
+    headers: {
+  "Content-Type": "application/json"
+}
   }),
   fetch(`/api/usuarios`, {
-    headers: { "ngrok-skip-browser-warning": "true" }
+    headers: {
+  "Content-Type": "application/json"
+}
   }),
   fetch(`/api/almacen`, {
-    headers: { "ngrok-skip-browser-warning": "true" }
+    headers: {
+  "Content-Type": "application/json"
+}
   })
 ])
 

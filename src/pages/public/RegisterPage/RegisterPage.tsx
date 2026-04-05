@@ -10,7 +10,7 @@ import robot from "../../../assets/images/Robot3.png"
 import { FiMail, FiLock, FiEye, FiEyeOff, FiUser } from "react-icons/fi"
 import { useAuth } from "../../../context/AuthContext" // 🔥 IMPORTANTE
 
-const BASE_URL = "https://waggish-unsecludedly-jong.ngrok-free.dev/api";
+import { API_BASE_URL } from "../../../config/api"
 
 const RegisterPage = () => {
 
@@ -45,7 +45,7 @@ const RegisterPage = () => {
       setLoading(true)
 
       // 🔹 1. REGISTRO
-      const response = await fetch(`${BASE_URL}/auth/sign-up`, {
+      const response = await fetch(`${API_BASE_URL}/auth/sign-up`, {
         method:"POST",
         headers:{
           "Content-Type":"application/json"
@@ -68,7 +68,7 @@ const RegisterPage = () => {
       }
 
       // 🔥 2. AUTOLOGIN REAL (MISMO QUE LOGINPAGE)
-      const loginResponse = await fetch(`${BASE_URL}/auth/sign-in`, {
+      const loginResponse = await fetch(`${API_BASE_URL}/auth/sign-in`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -68,7 +68,9 @@ export const Sidemenu = () => {
 
     try {
       const res = await fetch(`/api/usuarios/${user._id}`, {
-        headers: { "ngrok-skip-browser-warning": "true" }
+     headers: {
+  "Content-Type": "application/json"
+}
       })
 
       const data = await res.json()

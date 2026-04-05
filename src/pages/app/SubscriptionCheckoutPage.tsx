@@ -49,7 +49,9 @@ const SubscriptionCheckoutPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const userRes = await fetch(`/api/usuarios/${user._id}`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
         const userData = await userRes.json()
         setUserData(userData)
@@ -57,7 +59,9 @@ const SubscriptionCheckoutPage: React.FC = () => {
         if (!userData?.plan_id) return
 
         const plansRes = await fetch(`/api/plan`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
         const plans = await plansRes.json()
 
@@ -131,8 +135,7 @@ const SubscriptionCheckoutPage: React.FC = () => {
             await fetch(`/api/usuarios/${user._id}`, {
               method: "PUT",
               headers: {
-                "Content-Type": "application/json",
-                "ngrok-skip-browser-warning": "true"
+                "Content-Type": "application/json"
               },
               body: JSON.stringify({
                 nombre: userData.nombre,

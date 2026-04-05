@@ -49,7 +49,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       try {
         const res = await fetch(`/api/usuarios/${user._id}`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const fullUser = await res.json()

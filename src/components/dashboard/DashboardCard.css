@@ -1,0 +1,33 @@
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  min-height: 120px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+}
+
+.dashboard-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dashboard-card-header h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.dashboard-card-icon {
+  font-size: 20px;
+}
+
+.dashboard-card-content {
+  font-size: 14px;
+  color: #444;
+}

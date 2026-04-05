@@ -20,13 +20,17 @@ const MembersWorkspaceModal = ({ isOpen, onClose }: any) => {
         setLoading(true)
 
         const relRes = await fetch(`/api/workspaces-usuarios`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+          headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const relaciones = await relRes.json()
 
         const usersRes = await fetch(`/api/usuarios`, {
-          headers: { "ngrok-skip-browser-warning": "true" }
+        headers: {
+  "Content-Type": "application/json"
+}
         })
 
         const usuariosData = await usersRes.json()

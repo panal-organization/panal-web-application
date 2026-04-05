@@ -101,10 +101,14 @@ const TicketsPage: React.FC = () => {
 
         const [ticketsRes, usuariosRes] = await Promise.all([
           fetch(`/api/tickets`, {
-            headers: { "ngrok-skip-browser-warning": "true" }
+            headers: {
+  "Content-Type": "application/json"
+}
           }),
           fetch(`/api/usuarios`, {
-            headers: { "ngrok-skip-browser-warning": "true" }
+            headers: {
+  "Content-Type": "application/json"
+}
           })
         ])
 
