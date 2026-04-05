@@ -1,0 +1,46 @@
+.card-button {
+  align-self: flex-end;
+  margin-top: 10px;
+  padding: 6px 14px;
+  background-color: #2563eb; /* 🔥 mismo azul */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+/* hover suave */
+.card-button:hover {
+  background-color: #1d4ed8;
+}
+
+
+
+.card:hover {
+  transform: none !important;
+}
+
+.card-button {
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.card-button:hover {
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+}
+
+/* 📦 CONTENIDO FLEX */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* (opcional) espacio entre textos */
+.card-content p {
+  margin: 4px 0;
+}
