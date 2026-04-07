@@ -170,7 +170,7 @@ const HomePage: React.FC = () => {
           </DashboardCard>
 
           {/* 🛠️ MANTENIMIENTO */}
-          <DashboardCard title="Mantenimiento reciente" icon={<BuildIcon />} iconColor="blue">
+          <DashboardCard title="Mantenimiento reciente" icon={<BuildIcon />} iconColor="orange">
             <div className="card-content">
               {loading ? <p>Cargando...</p> :
                 maintenance ? <p>{maintenance.descripcion}</p> : <p>Sin datos</p>}
@@ -197,7 +197,7 @@ const HomePage: React.FC = () => {
 <DashboardCard
   title="Último almacén"
   icon={<InventoryIcon />} // 🔥 deja uno fijo arriba
-  iconColor="blue"
+  iconColor="orange"
 >
   <div className="card-content">
     {loading ? <p>Cargando...</p> :
