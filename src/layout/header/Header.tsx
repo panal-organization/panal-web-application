@@ -69,7 +69,7 @@ const isPremium = user?.plan_id && user.plan_id !== FREE_PLAN_ID
         {/* NOTIFICATIONS */}
     <button
   className="header-icon notification-button"
-  onClick={() => navigate("/notifications")}
+    /*onClick={() => navigate("/notifications")}*/
 >
   <FiBell />
 
