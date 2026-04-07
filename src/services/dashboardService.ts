@@ -16,7 +16,16 @@ const fetchData = async (endpoint: string) => {
   }
 }
 
-// 🔥 Obtener último item por workspace
+// 🔥 Helper para ordenar por fecha (reutilizable)
+const sortByDateDesc = (arr: any[]) => {
+  return arr.sort(
+    (a, b) =>
+      new Date(b.createdAt || 0).getTime() -
+      new Date(a.createdAt || 0).getTime()
+  )
+}
+
+// 🔥 Obtener último item por workspace (FIX)
 export const getLastItem = async (
   endpoint: string,
   workspaceId?: string
@@ -32,7 +41,9 @@ export const getLastItem = async (
 
   if (filtrados.length === 0) return null
 
-  return filtrados[filtrados.length - 1]
+  const ordenados = sortByDateDesc(filtrados)
+
+  return ordenados[0] // ✅ el más reciente real
 }
 
 // 🔥 ÚLTIMO ALMACÉN (FIX REAL)
@@ -48,7 +59,9 @@ export const getLastWarehouse = async (workspaceId?: string) => {
 
   if (filtrados.length === 0) return null
 
-  return filtrados[filtrados.length - 1]
+  const ordenados = sortByDateDesc(filtrados)
+
+  return ordenados[0] // ✅ ahora sí el último real
 }
 
 // 🔥 ÚLTIMO ARTÍCULO (RELACIONADO A ALMACÉN)
@@ -66,7 +79,9 @@ export const getLastArticle = async (workspaceId?: string) => {
     String(a.workspace_id) === String(workspaceId)
   )
 
-  const almacenIds = almacenesFiltrados.map((a: any) => String(a._id))
+  const almacenIds = almacenesFiltrados.map((a: any) =>
+    String(a._id)
+  )
 
   // 🔹 artículos ligados a esos almacenes
   const articulosFiltrados = articulos.filter((art: any) =>
@@ -75,7 +90,9 @@ export const getLastArticle = async (workspaceId?: string) => {
 
   if (articulosFiltrados.length === 0) return null
 
-  return articulosFiltrados[articulosFiltrados.length - 1]
+  const ordenados = sortByDateDesc(articulosFiltrados)
+
+  return ordenados[0] // ✅ correcto
 }
 
 // 🔥 MANTENIMIENTO
@@ -84,7 +101,6 @@ export const getMaintenanceStatus = async (workspaceId?: string) => {
 
   if (!Array.isArray(ordenes)) return null
 
-  // 🔹 ID REAL de mantenimiento (🔥 CAMBIA SI ES NECESARIO)
   const ID_MANTENIMIENTO = "69bf750fa60f4c167e8586b8"
 
   // 🔹 filtrar por workspace
@@ -95,17 +111,19 @@ export const getMaintenanceStatus = async (workspaceId?: string) => {
 
   if (filtrados.length === 0) return null
 
-  // 🔥 filtrar por tipo REAL
+  // 🔹 filtrar solo mantenimiento
   const maintenance = filtrados.filter((item: any) =>
     String(item.tipo_id) === ID_MANTENIMIENTO
   )
 
   if (maintenance.length === 0) return null
 
-  // 🔹 prioridad: pendientes
-  const pending = maintenance.find((item: any) =>
+  const ordenados = sortByDateDesc(maintenance)
+
+  // 🔥 prioridad: pendientes primero
+  const pending = ordenados.find((item: any) =>
     item.estado?.toLowerCase() !== "resuelto"
   )
 
-  return pending || maintenance[maintenance.length - 1]
+  return pending || ordenados[0]
 }

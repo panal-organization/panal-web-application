@@ -4,7 +4,33 @@ import { Page } from "../../templates"
 import { useWorkspace } from "../../context/WorkspaceContext"
 import { useNavigate } from "react-router-dom"
 
+// 🔥 ICONOS BASE
 import HomeIcon from "@mui/icons-material/Home"
+import BuildIcon from "@mui/icons-material/Build"
+import {
+  Assignment as TicketsIcon,
+  ListAlt as OrdersIcon2,
+  GridView as InventoryIcon
+} from "@mui/icons-material"
+
+
+// 🔥 ICONOS DE ALMACÉN
+import WidgetsIcon from "@mui/icons-material/Widgets"
+import InventoryIcon2 from "@mui/icons-material/Inventory2"
+import CategoryIcon from "@mui/icons-material/Category"
+import ViewListIcon from "@mui/icons-material/ViewList"
+import LocalShippingIcon from "@mui/icons-material/LocalShipping"
+import LaptopMacIcon from "@mui/icons-material/LaptopMac"
+import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows"
+import RouterIcon from "@mui/icons-material/Router"
+import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone"
+import PrintIcon from "@mui/icons-material/Print"
+import MemoryIcon from "@mui/icons-material/Memory"
+import SettingsIcon from "@mui/icons-material/Settings"
+import FactoryIcon from "@mui/icons-material/Factory"
+import AppsIcon from "@mui/icons-material/Apps"
+import ScienceIcon from "@mui/icons-material/Science"
+import Inventory2Icon from "@mui/icons-material/Inventory2"
 import DashboardCard from "../../components/dashboard/DashboardCard"
 
 import {
@@ -15,6 +41,35 @@ import {
 } from "../../services/dashboardService"
 
 import "./HomePage.css"
+
+// 🔥 MAPA DE ICONOS
+const iconMap: any = {
+  widgets: <WidgetsIcon />,
+  inventory: <Inventory2Icon />,
+  category: <CategoryIcon />,
+  list: <ViewListIcon />,
+  truck: <LocalShippingIcon />,
+  laptop: <LaptopMacIcon />,
+  desktop: <DesktopWindowsIcon />,
+  router: <RouterIcon />,
+  mobile: <PhoneIphoneIcon />,
+  printer: <PrintIcon />,
+  chip: <MemoryIcon />,
+  settings: <SettingsIcon />,
+  tools: <BuildIcon />,
+  factory: <FactoryIcon />,
+  apps: <AppsIcon />,
+  lab: <ScienceIcon />
+}
+
+// 🔥 helper seguro para iconos
+const getWarehouseIcon = (iconName?: string) => {
+  if (!iconName) return <InventoryIcon  />
+
+  const key = iconName.trim().toLowerCase()
+
+  return iconMap[key] || <InventoryIcon  />
+}
 
 const HomePage: React.FC = () => {
   const { workspace } = useWorkspace()
@@ -90,13 +145,15 @@ const HomePage: React.FC = () => {
               sm: "repeat(2, 1fr)",
               md: "repeat(3, 1fr)"
             },
-            gap: 2,
-            mt: 2
+            gap: 3,
+            rowGap: "60px",
+            mt: 2,
+            mb: 4
           }}
         >
 
           {/* 🎫 TICKET */}
-          <DashboardCard title="Último ticket">
+          <DashboardCard title="Ticket más reciente" icon={<TicketsIcon  />} iconColor="orange">
             <div className="card-content">
               {loading ? <p>Cargando...</p> :
                 lastTicket ? (
@@ -106,85 +163,102 @@ const HomePage: React.FC = () => {
                   </>
                 ) : <p>Sin datos</p>}
 
-              <button
-                className="card-button"
-                onClick={() => navigate("/tickets")}
-              >
-                Ver tickets
+              <button className="card-button" onClick={() => navigate("/tickets")}>
+                Ver más
               </button>
             </div>
           </DashboardCard>
 
           {/* 🛠️ MANTENIMIENTO */}
-          <DashboardCard title="Mantenimiento">
+          <DashboardCard title="Mantenimiento reciente" icon={<BuildIcon />} iconColor="blue">
             <div className="card-content">
               {loading ? <p>Cargando...</p> :
-                maintenance ? (
-                  <>
-                    <p><strong>{maintenance.descripcion}</strong></p>
-                    <p>{maintenance.estado}</p>
-                  </>
-                ) : <p>Sin datos</p>}
+                maintenance ? <p>{maintenance.descripcion}</p> : <p>Sin datos</p>}
 
-              <button
-                className="card-button"
-                onClick={() => navigate("/maintenance")}
-              >
-                Ver mantenimiento
+              <button className="card-button" onClick={() => navigate("/maintenance")}>
+                Ver más
               </button>
             </div>
           </DashboardCard>
 
           {/* 📦 ORDEN */}
-          <DashboardCard title="Última orden">
+          <DashboardCard title="Orden más reciente" icon={<OrdersIcon2  />} iconColor="orange">
             <div className="card-content">
               {loading ? <p>Cargando...</p> :
-                lastOrder ? (
-                  <p><strong>{lastOrder.descripcion}</strong></p>
-                ) : <p>Sin datos</p>}
+                lastOrder ? <p>{lastOrder.descripcion}</p> : <p>Sin datos</p>}
 
-              <button
-                className="card-button"
-                onClick={() => navigate("/orders")}
-              >
-                Ver órdenes
+              <button className="card-button" onClick={() => navigate("/orders")}>
+                Ver más
               </button>
             </div>
           </DashboardCard>
 
-          {/* 🏢 ALMACÉN */}
-          <DashboardCard title="Último almacén">
-            <div className="card-content">
-              {loading ? <p>Cargando...</p> :
-                lastWarehouse ? (
-                  <p><strong>{lastWarehouse.nombre}</strong></p>
-                ) : <p>Sin datos</p>}
+{/* 🏢 ALMACÉN */}
+<DashboardCard
+  title="Último almacén"
+  icon={<InventoryIcon />} // 🔥 deja uno fijo arriba
+  iconColor="blue"
+>
+  <div className="card-content">
+    {loading ? <p>Cargando...</p> :
+      lastWarehouse ? (
+    <div className="card-warehouse-preview">
 
-              <button
-                className="card-button"
-                onClick={() => navigate("/inventory")}
-              >
-                Ver almacén
-              </button>
-            </div>
-          </DashboardCard>
+  <div>
+    <p><strong>{lastWarehouse.nombre}</strong></p>
+  </div>
+
+  <div className="card-warehouse-icon-bottom">
+    {getWarehouseIcon(lastWarehouse.icono)}
+  </div>
+
+</div>
+      ) : <p>Sin datos</p>}
+
+    <button
+      className="card-button"
+      onClick={() => navigate("/inventory")}
+    >
+      Ver más
+    </button>
+  </div>
+</DashboardCard>
+
+
 
           {/* 📦 ARTÍCULO */}
-          <DashboardCard title="Último artículo">
-            <div className="card-content">
-              {loading ? <p>Cargando...</p> :
-                lastArticle ? (
-                  <p><strong>{lastArticle.nombre}</strong></p>
-                ) : <p>Sin datos</p>}
+          <DashboardCard title="Último artículo" icon={<InventoryIcon2 />} iconColor="orange">
+          <div className="card-content">
+  {loading ? (
+    <p>Cargando...</p>
+  ) : lastArticle ? (
+    <>
+      <p><strong>{lastArticle.nombre}</strong></p>
 
-              <button
-                className="card-button"
-                onClick={() => navigate("/articulos")}
-              >
-                Ver artículos
-              </button>
-            </div>
-          </DashboardCard>
+      {/* 🔥 IMAGEN ABAJO IZQUIERDA */}
+      {lastArticle.foto && (
+        <img
+          src={lastArticle.foto}
+          alt={lastArticle.nombre}
+          className="card-article-img-bottom"
+        />
+      )}
+    </>
+  ) : (
+    <p>Sin datos</p>
+  )}
+
+  <button
+    className="card-button"
+    onClick={() => {
+      if (!lastArticle) return
+      navigate(`/inventory/${lastArticle.almacen_id}?article=${lastArticle._id}`)
+    }}
+  >
+    Ver más
+  </button>
+</div>
+</DashboardCard>
 
         </Box>
       </Box>

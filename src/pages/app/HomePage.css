@@ -1,17 +1,26 @@
 .card-button {
+  margin-top: auto;
   align-self: flex-end;
-  margin-top: 10px;
-  padding: 6px 14px;
-  background-color: #2563eb; /* 🔥 mismo azul */
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 13px;
-  cursor: pointer;
+
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+
+  background: #0d6efd;
+  color: white;
+
+  border: none;
+  padding: 8px 14px; /* 🔥 más pequeño que create */
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+
+}
+
+.card-button:hover {
+  background: #0b5ed7;
 }
 
 /* hover suave */
@@ -21,26 +30,84 @@
 
 
 
-.card:hover {
-  transform: none !important;
-}
 
-.card-button {
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
-}
-
-.card-button:hover {
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
-}
 
 /* 📦 CONTENIDO FLEX */
 .card-content {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1; /* 🔥 IMPORTANTE */
 }
-
 /* (opcional) espacio entre textos */
 .card-content p {
   margin: 4px 0;
+}
+
+
+.card-article-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-article-img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card-article-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+/* 🔥 CONTENEDOR GENERAL */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative; /* 🔥 CLAVE */
+}
+
+/* 🔥 ARTÍCULO */
+.card-article-img-bottom {
+  position: absolute;
+  bottom: -5px;
+  left: 0px;
+
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 🔥 ALMACÉN (ICONO) */
+.card-warehouse-icon-bottom {
+  position: absolute;
+  bottom: -5px;
+  left: 0px;
+
+  width: 150px;
+  height: 150px;
+
+  border-radius: 10px;
+  background: #e0ecff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-warehouse-icon-bottom svg {
+  font-size: 80px;
+  color: #2563eb;
 }
