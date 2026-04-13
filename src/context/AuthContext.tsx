@@ -11,6 +11,7 @@ interface AuthContextType {
   token: string | null
   login: (token: string, user: User) => void
   logout: () => void
+  updateToken: (token: string) => void // ✅ AGREGADO
   loading: boolean
 }
 
@@ -44,22 +45,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (!user?._id) return
 
-      // ⚠️ si ya tiene plan_id, no vuelvas a pedirlo
       if (user.plan_id) return
 
       try {
         const res = await fetch(`/api/usuarios/${user._id}`, {
           headers: {
-  "Content-Type": "application/json"
-}
+            "Content-Type": "application/json"
+          }
         })
 
         const fullUser = await res.json()
 
-        // 🔥 actualiza user con plan
         setUser(fullUser)
-
-        // 🔥 guarda actualizado
         localStorage.setItem("user", JSON.stringify(fullUser))
 
       } catch (err) {
@@ -80,6 +77,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(user)
   }
 
+  // ✅ AQUÍ VA (DENTRO DEL COMPONENTE)
+  const updateToken = (newToken: string) => {
+    localStorage.setItem("token", newToken)
+    setToken(newToken)
+  }
+
   const logout = () => {
 
     localStorage.removeItem("token")
@@ -90,7 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateToken, loading }}>
       {children}
     </AuthContext.Provider>
   )
